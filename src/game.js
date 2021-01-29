@@ -2,6 +2,9 @@ import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import logger from "./logger";
 import constants from "./constants";
+import assets from "./assets";
+
+const avatarParts = Object.keys(assets);
 
 const state = {
   DOMContentLoaded: false,
@@ -10,7 +13,8 @@ const state = {
   scene: null,
   camera: null,
   renderer: null,
-  hairStyleNode: null,
+  // TODO: Important to initialize each part to null?
+  avatarNodes: {},
   avatarConfig: {},
   newAvatarConfig: {},
   shouldApplyNewAvatarConfig: false,
@@ -75,12 +79,10 @@ function init() {
   // TODO: Square this with react
   document.body.appendChild(renderer.domElement);
 
-  loadGLTF("assets/DefaultAvatar.glb").then(function (gltf) {
-    scene.add(gltf.scene);
-  });
-
-  state.hairStyleNode = new THREE.Group();
-  scene.add(state.hairStyleNode);
+  for (const part of avatarParts) {
+    state.avatarNodes[part] = new THREE.Group();
+    scene.add(state.avatarNodes[part]);
+  }
 }
 
 function tick(time) {
@@ -114,13 +116,25 @@ function tick(time) {
 
   {
     if (state.shouldApplyNewAvatarConfig) {
-      if (state.newAvatarConfig.hairStyle !== state.avatarConfig.hairStyle) {
-        state.hairStyleNode.clear();
-        if (state.newAvatarConfig.hairStyle !== null) {
-          loadGLTF(`assets/${state.newAvatarConfig.hairStyle}.glb`).then((gltf) => state.hairStyleNode.add(gltf.scene));
+      for (const part of avatarParts) {
+        if (state.newAvatarConfig[part] !== state.avatarConfig[part]) {
+          state.avatarNodes[part].clear();
+          if (state.newAvatarConfig[part] !== null) {
+            loadGLTF(`assets/${state.newAvatarConfig[part]}.glb`).then((gltf) =>
+              // TODO: Multiple of these might be in flight at any given time.
+              state.avatarNodes[part].add(gltf.scene)
+            );
+          }
+          state.avatarConfig[part] = state.newAvatarConfig[part];
         }
-        state.avatarConfig.hairStyle = state.newAvatarConfig.hairStyle;
       }
+      // if (state.newAvatarConfig.hairStyle !== state.avatarConfig.hairStyle) {
+      //   state.hairStyleNode.clear();
+      //   if (state.newAvatarConfig.hairStyle !== null) {
+      //     loadGLTF(`assets/${state.newAvatarConfig.hairStyle}.glb`).then((gltf) => state.hairStyleNode.add(gltf.scene));
+      //   }
+      //   state.avatarConfig.hairStyle = state.newAvatarConfig.hairStyle;
+      // }
       state.shouldApplyNewAvatarConfig = false;
     }
   }
