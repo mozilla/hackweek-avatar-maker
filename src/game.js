@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import logger from "./logger";
+import constants from "./constants";
 
 const state = {
   DOMContentLoaded: false,
@@ -9,6 +10,10 @@ const state = {
   scene: null,
   camera: null,
   renderer: null,
+  hairStyleNode: null,
+  avatarConfig: {},
+  newAvatarConfig: {},
+  shouldApplyNewAvatarConfig: false,
 };
 window.gameState = state;
 
@@ -18,6 +23,10 @@ window.addEventListener("DOMContentLoaded", () => {
 window.onresize = () => {
   state.shouldResize = true;
 };
+document.body.addEventListener(constants.avatarConfigChanged, (e) => {
+  state.newAvatarConfig = e.detail.avatarConfig;
+  state.shouldApplyNewAvatarConfig = true;
+});
 
 const loadGLTF = (function () {
   const loader = new GLTFLoader();
@@ -46,14 +55,10 @@ const loadGLTF = (function () {
 })();
 
 function init() {
+  THREE.Cache.enabled = true;
   const scene = new THREE.Scene();
   state.scene = scene;
-  const camera = new THREE.PerspectiveCamera(
-    75,
-    window.innerWidth / window.innerHeight,
-    0.1,
-    1000
-  );
+  const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
   camera.position.set(0, 0.25, 1.5);
   state.camera = camera;
 
@@ -73,6 +78,9 @@ function init() {
   loadGLTF("assets/DefaultAvatar.glb").then(function (gltf) {
     scene.add(gltf.scene);
   });
+
+  state.hairStyleNode = new THREE.Group();
+  scene.add(state.hairStyleNode);
 }
 
 function tick(time) {
@@ -102,6 +110,19 @@ function tick(time) {
     const { renderer, scene, camera } = state;
     renderer.render(scene, camera);
     // TODO: Do we need to update the camera aspect and call updateProjectionMatrix?
+  }
+
+  {
+    if (state.shouldApplyNewAvatarConfig) {
+      if (state.newAvatarConfig.hairStyle !== state.avatarConfig.hairStyle) {
+        state.hairStyleNode.clear();
+        if (state.newAvatarConfig.hairStyle !== null) {
+          loadGLTF(`assets/${state.newAvatarConfig.hairStyle}.glb`).then((gltf) => state.hairStyleNode.add(gltf.scene));
+        }
+        state.avatarConfig.hairStyle = state.newAvatarConfig.hairStyle;
+      }
+      state.shouldApplyNewAvatarConfig = false;
+    }
   }
 }
 
