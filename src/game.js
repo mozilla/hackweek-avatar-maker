@@ -124,6 +124,8 @@ function tick(time) {
     if (state.shouldResize) {
       state.shouldResize = false;
       state.renderer.setSize(window.innerWidth, window.innerHeight);
+      state.camera.aspect = window.innerWidth / window.innerHeight;
+      state.camera.updateProjectionMatrix();
     }
   }
 
