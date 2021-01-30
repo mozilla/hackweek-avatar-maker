@@ -31,13 +31,16 @@ function App() {
   const [avatarConfig, setAvatarConfig] = useState(initialAvatarConfig);
 
   useEffect(() => {
-    document.body.dispatchEvent(new CustomEvent(constants.avatarConfigChanged, { detail: { avatarConfig } }));
+    document.dispatchEvent(new CustomEvent(constants.avatarConfigChanged, { detail: { avatarConfig } }));
   });
 
   function updateAvatarConfig(newConfig) {
     setAvatarConfig({ ...avatarConfig, ...newConfig });
   }
 
+  function dispatchExport() {
+    document.dispatchEvent(new CustomEvent(constants.exportAvatar));
+  }
 
   return (
     <>
@@ -50,6 +53,7 @@ function App() {
           parts={assets[part]}
         />
       ))}
+      <button onClick={dispatchExport}>export</button>
     </>
   );
 }

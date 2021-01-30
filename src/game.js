@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import { GLTFExporter } from "three/examples/jsm/exporters/GLTFExporter";
 import logger from "./logger";
 import constants from "./constants";
 import assets from "./assets";
@@ -18,6 +19,7 @@ const state = {
   avatarConfig: {},
   newAvatarConfig: {},
   shouldApplyNewAvatarConfig: false,
+  shouldExportAvatar: false,
 };
 window.gameState = state;
 
@@ -27,9 +29,12 @@ window.addEventListener("DOMContentLoaded", () => {
 window.onresize = () => {
   state.shouldResize = true;
 };
-document.body.addEventListener(constants.avatarConfigChanged, (e) => {
+document.addEventListener(constants.avatarConfigChanged, (e) => {
   state.newAvatarConfig = e.detail.avatarConfig;
   state.shouldApplyNewAvatarConfig = true;
+});
+document.addEventListener(constants.exportAvatar, () => {
+  state.shouldExportAvatar = true;
 });
 
 const loadGLTF = (function () {
@@ -79,10 +84,25 @@ function init() {
   // TODO: Square this with react
   document.body.appendChild(renderer.domElement);
 
+  state.avatarGroup = new THREE.Group();
+  scene.add(state.avatarGroup);
   for (const part of avatarParts) {
     state.avatarNodes[part] = new THREE.Group();
-    scene.add(state.avatarNodes[part]);
+    state.avatarGroup.add(state.avatarNodes[part]);
   }
+}
+
+function exportAvatar() {
+  const exporter = new GLTFExporter();
+  exporter.parse(state.avatarGroup, gltf => {
+    const blob = new Blob([gltf], {type: 'application/octet-stream'});
+    const el = document.createElement("a");
+    el.style.display = "none";
+    el.href = URL.createObjectURL(blob);
+    el.download = "custom_avatar.glb"
+    el.click();
+    el.remove();
+  }, { binary: true });
 }
 
 function tick(time) {
@@ -128,14 +148,14 @@ function tick(time) {
           state.avatarConfig[part] = state.newAvatarConfig[part];
         }
       }
-      // if (state.newAvatarConfig.hairStyle !== state.avatarConfig.hairStyle) {
-      //   state.hairStyleNode.clear();
-      //   if (state.newAvatarConfig.hairStyle !== null) {
-      //     loadGLTF(`assets/${state.newAvatarConfig.hairStyle}.glb`).then((gltf) => state.hairStyleNode.add(gltf.scene));
-      //   }
-      //   state.avatarConfig.hairStyle = state.newAvatarConfig.hairStyle;
-      // }
       state.shouldApplyNewAvatarConfig = false;
+    }
+  }
+
+  {
+    if(state.shouldExportAvatar) {
+      exportAvatar();
+      state.shouldExportAvatar = false;
     }
   }
 }

@@ -1,3 +1,4 @@
 export default {
-  avatarConfigChanged: "avatarConfigChanged"
+  avatarConfigChanged: "avatarConfigChanged",
+  exportAvatar: "exportAvatar"
 };
