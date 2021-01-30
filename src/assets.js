@@ -1,8 +1,8 @@
 export default {
   hairStyle: [
-    { value: null, displayName: "none" },
     { value: "hair_fauxhawk1", displayName: "Fauxhawk 1" },
     { value: "hair_male_spikey01", displayName: "Spikey" },
+    { value: null, displayName: "none" },
   ],
   earrings: [
     {

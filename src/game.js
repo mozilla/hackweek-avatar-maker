@@ -92,17 +92,74 @@ function init() {
   }
 }
 
+function removeBones(node) {
+  const childrenToRemove = [];
+  for (const child of node.children) {
+    if (child.type === "Bone") {
+      childrenToRemove.push(child);
+    } else {
+      removeBones(child);
+    }
+  }
+  for (const child of childrenToRemove) {
+    node.remove(child);
+  }
+}
+
+function findSkeleton(node) {
+  if (node.type === "SkinnedMesh") return node.skeleton;
+  for (const child of node.children) {
+    const skeleton = findSkeleton(child);
+    if (skeleton) return skeleton;
+  }
+}
+
+function setSkeleton(node, skeleton) {
+  node.traverse((child) => {
+    if (child.type === "SkinnedMesh") {
+      child.skeleton = skeleton;
+    }
+  });
+}
+
+function renameAvatarRoot(node) {
+  node.traverse((child) => {
+    if (child.name === "AvatarRoot") {
+      child.name = "";
+    }
+  });
+}
+
 function exportAvatar() {
   const exporter = new GLTFExporter();
-  exporter.parse(state.avatarGroup, gltf => {
-    const blob = new Blob([gltf], {type: 'application/octet-stream'});
-    const el = document.createElement("a");
-    el.style.display = "none";
-    el.href = URL.createObjectURL(blob);
-    el.download = "custom_avatar.glb"
-    el.click();
-    el.remove();
-  }, { binary: true });
+  const avatarGroupClone = state.avatarGroup.clone(true);
+  const childWithSkeleton = avatarGroupClone.children.find((child) => !!findSkeleton(avatarGroupClone));
+  const skeleton = findSkeleton(childWithSkeleton);
+  console.log(childWithSkeleton,  skeleton);
+  for (const child of avatarGroupClone.children) {
+    if (child === childWithSkeleton) continue;
+    removeBones(child);
+    setSkeleton(child, skeleton);
+    renameAvatarRoot(child);
+  }
+  const exportBinary = false;
+  exporter.parse(
+    avatarGroupClone,
+    (gltf) => {
+      if (exportBinary) {
+        const blob = new Blob([gltf], { type: "application/octet-stream" });
+        const el = document.createElement("a");
+        el.style.display = "none";
+        el.href = URL.createObjectURL(blob);
+        el.download = "custom_avatar.glb";
+        el.click();
+        el.remove();
+      } else {
+        console.log(gltf);
+      }
+    },
+    { binary: exportBinary }
+  );
 }
 
 function tick(time) {
@@ -155,7 +212,7 @@ function tick(time) {
   }
 
   {
-    if(state.shouldExportAvatar) {
+    if (state.shouldExportAvatar) {
       exportAvatar();
       state.shouldExportAvatar = false;
     }
