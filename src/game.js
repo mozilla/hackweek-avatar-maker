@@ -1,6 +1,5 @@
 import * as THREE from "three";
 import { GLTFExporter } from "three/examples/jsm/exporters/GLTFExporter";
-import logger from "./logger";
 import constants from "./constants";
 import assets from "./assets";
 import { exportAvatar } from "./export";
@@ -89,7 +88,6 @@ function tick(time) {
   }
 
   {
-    // Render scene
     const { renderer, scene, camera } = state;
     renderer.render(scene, camera);
   }
@@ -101,10 +99,11 @@ function tick(time) {
         if (state.newAvatarConfig[part] !== state.avatarConfig[part]) {
           state.avatarNodes[part].clear();
           if (state.newAvatarConfig[part] !== null) {
-            loadGLTF(`assets/${state.newAvatarConfig[part]}.glb`).then((gltf) =>
+            loadGLTF(`assets/${state.newAvatarConfig[part]}.glb`).then((gltf) => {
               // TODO: Multiple of these might be in flight at any given time.
-              state.avatarNodes[part].add(gltf.scene)
-            );
+              console.log(gltf);
+              state.avatarNodes[part].add(gltf.scene);
+            });
           }
           state.avatarConfig[part] = state.newAvatarConfig[part];
         }

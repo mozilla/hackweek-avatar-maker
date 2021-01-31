@@ -75,7 +75,6 @@ function cloneIntoAvatar(avatarGroup) {
       return findChildByName(o, "Scene");
     })
     .filter((o) => !!o);
-  console.log(scenes);
   const clonedScene = scenes[0].clone(false);
   for (const scene in scenes) {
     Object.assign(clonedScene.userData, scene.userData);

@@ -88,10 +88,10 @@ export const loadGLTF = (function () {
           // gltf.asset; // Object
         },
         function (xhr) {
-          logger.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+          console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
         },
         function (error) {
-          logger.log("An error happened");
+          console.log("An error happened");
           reject(error);
         }
       );
