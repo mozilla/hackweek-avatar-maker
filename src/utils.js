@@ -1,3 +1,43 @@
+function findChild({ candidates, predicate }) {
+  if (!candidates.length) {
+    return null;
+  }
+
+  const candidate = candidates.shift();
+  if (predicate(candidate)) return candidate;
+
+  candidates = candidates.concat(candidate.children);
+  return findChild({ candidates, predicate });
+}
+
+export function findChildByName(root, name) {
+  return findChild({
+    candidates: [root],
+    predicate: (o) => o.name === name,
+  });
+}
+
+function findChildren({ candidates, predicate, results = [] }) {
+  if (!candidates.length) {
+    return results;
+  }
+
+  const candidate = candidates.shift();
+  if (predicate(candidate)) {
+    results.push(candidate);
+  }
+
+  candidates = candidates.concat(candidate.children);
+  return findChildren({ candidates, predicate, results });
+}
+
+export function findChildrenByType(root, type) {
+  return findChildren({
+    candidates: [root],
+    predicate: (o) => o.type === type,
+  });
+}
+
 function traverseWithDepth({ object3D, depth = 0, callback, result }) {
   result.push(callback(object3D, depth));
   const children = object3D.children;

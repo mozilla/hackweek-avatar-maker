@@ -1,49 +1,26 @@
+import * as THREE from "three";
 import { GLTFExporter } from "three/examples/jsm/exporters/GLTFExporter";
+import { findChildrenByType, findChildByName, describeObject3D } from "./utils";
 
-function findChild({ candidates, predicate }) {
-  if (!candidates.length) {
-    return null;
+function cloneSkeleton(skinnedMesh) {
+  const boneClones = new Map();
+
+  for (const bone of skinnedMesh.skeleton.bones) {
+    const clone = bone.clone(false);
+    boneClones.set(bone, clone);
   }
 
-  const candidate = candidates.shift();
-  if (predicate(candidate)) return candidate;
-
-  candidates = candidates.concat(candidate.children);
-  return findChild({ candidates, predicate });
-}
-
-function hasChild(container) {
-  return container.children.length > 0;
-}
-
-function deconstruct(part) {
-  const sceneNode = findChild({
-    candidates: [part],
-    predicate: (o) => {
-      return o.type === "Group" && o.name === "Scene";
-    },
+  // Preserve original bone structure
+  // Assume bones[0] is root bone
+  skinnedMesh.skeleton.bones[0].traverse((o) => {
+    if (o.type !== "Bone") return;
+    const clone = boneClones.get(o);
+    for (const child of o.children) {
+      clone.add(boneClones.get(child));
+    }
   });
 
-  const avatarRootNode = findChild({
-    candidates: [part],
-    predicate: (o) => {
-      return o.name === "AvatarRoot";
-    },
-  });
-
-  // TODO: Multiple skinned meshes (e.g. eyes)
-  const skinnedMesh = findChild({
-    candidates: [part],
-    predicate: (o) => {
-      return o.type === "SkinnedMesh";
-    },
-  });
-
-  return {
-    sceneNode,
-    avatarRootNode,
-    skinnedMesh,
-  };
+  return new THREE.Skeleton(skinnedMesh.skeleton.bones.map((b) => boneClones.get(b)));
 }
 
 function ensureHubsComponents(userData) {
@@ -56,7 +33,7 @@ function ensureHubsComponents(userData) {
   return userData;
 }
 
-function combineHubsComponents(a, b) {
+export function combineHubsComponents(a, b) {
   ensureHubsComponents(a);
   ensureHubsComponents(b);
   if (a.gltfExtensions.MOZ_hubs_components)
@@ -66,31 +43,6 @@ function combineHubsComponents(a, b) {
     );
 
   return a;
-}
-
-function addIn(avatar, firstSkinnedMesh, { sceneNode, avatarRootNode, skinnedMesh }) {
-  avatar.userData = Object.assign(avatar.userData, sceneNode.userData);
-  avatar.children[0].userData = combineHubsComponents(avatar.children[0].userData, avatarRootNode.userData);
-  skinnedMesh.bind(firstSkinnedMesh.skeleton);
-  firstSkinnedMesh.parent.add(skinnedMesh);
-  return avatar;
-}
-
-export function combineAvatarParts(avatarGroup) {
-  // TODO: Clone instead of destroying the original structure.
-  const parts = avatarGroup.children.filter(hasChild).map(deconstruct);
-  if (!parts.length) {
-    console.error("No avatar parts to combine");
-    return;
-  }
-
-  const avatar = parts[0].sceneNode;
-
-  for (let i = 1; i < parts.length; i++) {
-    addIn(avatar, parts[0].skinnedMesh, parts[i]);
-  }
-
-  return avatar;
 }
 
 export const exportGLTF = (function () {
@@ -115,3 +67,52 @@ export const exportGLTF = (function () {
     );
   };
 })();
+
+function cloneIntoAvatar(avatarGroup) {
+  // Combine the root "Scene" nodes
+  const scenes = avatarGroup.children
+    .map((o) => {
+      return findChildByName(o, "Scene");
+    })
+    .filter((o) => !!o);
+  console.log(scenes);
+  const clonedScene = scenes[0].clone(false);
+  for (const scene in scenes) {
+    Object.assign(clonedScene.userData, scene.userData);
+  }
+
+  // Combine the "AvatarRoot" nodes
+  const avatarRoots = avatarGroup.children
+    .map((o) => {
+      return findChildByName(o, "AvatarRoot");
+    })
+    .filter((o) => !!o);
+  const clonedAvatarRoot = avatarRoots[0].clone(false);
+  for (const avatarRoot of avatarRoots) {
+    clonedAvatarRoot.userData = combineHubsComponents(clonedAvatarRoot.userData, avatarRoot.userData);
+  }
+
+  // Clone skinned meshes, bind them to a new skeleton
+  const clonedSkinnedMeshes = findChildrenByType(avatarGroup, "SkinnedMesh").map((o) => {
+    return o.clone(false);
+  });
+  const clonedSkeleton = cloneSkeleton(clonedSkinnedMeshes[0]);
+  for (const skinnedMesh of clonedSkinnedMeshes) {
+    skinnedMesh.bind(clonedSkeleton);
+  }
+
+  // Combine clones
+  clonedScene.add(clonedAvatarRoot);
+  clonedAvatarRoot.add(clonedSkeleton.bones[0]); // Assume bones[0] is root bone
+  for (const skinnedMesh of clonedSkinnedMeshes) {
+    clonedAvatarRoot.add(skinnedMesh);
+  }
+  return clonedScene;
+}
+
+export function exportAvatar(avatarGroup) {
+  const avatar = cloneIntoAvatar(avatarGroup);
+  console.log(describeObject3D(avatar));
+  exportGLTF(avatar, false);
+  //exportGLTF(avatar, true);
+}

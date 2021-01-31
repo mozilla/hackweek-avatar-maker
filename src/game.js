@@ -4,8 +4,7 @@ import { GLTFExporter } from "three/examples/jsm/exporters/GLTFExporter";
 import logger from "./logger";
 import constants from "./constants";
 import assets from "./assets";
-import { describeObject3D } from "./utils";
-import { combineAvatarParts, exportGLTF } from "./export";
+import { exportAvatar } from "./export";
 
 const avatarParts = Object.keys(assets);
 
@@ -94,101 +93,6 @@ function init() {
   }
 }
 
-function removeBones(node) {
-  const childrenToRemove = [];
-  for (const child of node.children) {
-    if (child.type === "Bone") {
-      childrenToRemove.push(child);
-    } else {
-      removeBones(child);
-    }
-  }
-  for (const child of childrenToRemove) {
-    node.remove(child);
-  }
-}
-
-function findSkeleton(node) {
-  if (node.type === "SkinnedMesh") return node.skeleton;
-  for (const child of node.children) {
-    const skeleton = findSkeleton(child);
-    if (skeleton) return skeleton;
-  }
-}
-
-function setSkeleton(node, skeleton) {
-  node.traverse((child) => {
-    if (child.type === "SkinnedMesh") {
-      child.skeleton = skeleton;
-    }
-  });
-}
-
-function renameAvatarRoot(node) {
-  node.traverse((child) => {
-    if (child.name === "AvatarRoot") {
-      child.name = "";
-    }
-  });
-}
-
-function exportAvatar() {
-  const exporter = new GLTFExporter();
-  const avatarGroupClone = state.avatarGroup.clone(true);
-  const childWithSkeleton = avatarGroupClone.children.find((child) => !!findSkeleton(avatarGroupClone));
-  const skeleton = findSkeleton(childWithSkeleton);
-  console.log(childWithSkeleton,  skeleton);
-  for (const child of avatarGroupClone.children) {
-    if (child === childWithSkeleton) continue;
-    removeBones(child);
-    setSkeleton(child, skeleton);
-    renameAvatarRoot(child);
-  }
-  const exportBinary = false;
-  exporter.parse(
-    avatarGroupClone,
-    (gltf) => {
-      if (exportBinary) {
-        const blob = new Blob([gltf], { type: "application/octet-stream" });
-        const el = document.createElement("a");
-        el.style.display = "none";
-        el.href = URL.createObjectURL(blob);
-        el.download = "custom_avatar.glb";
-        el.click();
-        el.remove();
-      } else {
-        console.log(gltf);
-      }
-    },
-    { binary: exportBinary }
-  );
-}
-
-// TODO: There are a few problems with this export process.
-// 1) We do not want to destroy the avatarGroup because we want to allow future
-// edits to the avatars. However, if we try to clone an avatar part that contains
-// bones and a skinned mesh, the skinned mesh's skeleton refers to the original bones.
-// If we want to clone the part, we need to match old bones to new bones. Currently,
-// we just operate on the original avatarGroup nodes.
-//
-// 2) Currently, I only take a single skinned mesh for each avatar part.
-// However, it looks like one avatar part might contain multiple skinned meshes.
-// An example of this can be seen with the eyes.
-//
-// 3) I don't know what happens to animations.
-//
-// 4) I don't know what happens if there are supposed to be duplicate Hubs Components
-// or if the gltf export settings are _different_ for two of the parts. I think we
-// can ignore that for now.
-function exportAvatar2() {
-  console.log("BEFORE:\n", describeObject3D(state.avatarGroup));
-  const avatar = combineAvatarParts(state.avatarGroup);
-  console.log("AFTER:\n", describeObject3D(avatar));
-
-  //  exportGLTF(avatar, false);
-  exportGLTF(avatar, true);
-}
-
 function tick(time) {
   {
     if (state.DOMContentLoaded && !state.didInit) {
@@ -196,6 +100,7 @@ function tick(time) {
       init();
     }
     if (!state.didInit) {
+      requestAnimationFrame(tick);
       return;
     }
   }
@@ -237,8 +142,7 @@ function tick(time) {
   {
     if (state.shouldExportAvatar) {
       state.shouldExportAvatar = false;
-      //exportAvatar();
-      exportAvatar2();
+      exportAvatar(state.avatarGroup);
     }
   }
 
