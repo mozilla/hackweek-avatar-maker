@@ -88,4 +88,10 @@ export default {
       displayName: "union jack",
     },
   ],
+  hands: [
+    {
+      value: "character_hands_skin3",
+      displayName: "skin 3",
+    },
+  ],
 };

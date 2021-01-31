@@ -114,5 +114,5 @@ export function exportAvatar(avatarGroup) {
   const avatar = cloneIntoAvatar(avatarGroup);
   console.log(describeObject3D(avatar));
   exportGLTF(avatar, false);
-  //exportGLTF(avatar, true);
+  exportGLTF(avatar, true);
 }
