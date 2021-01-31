@@ -92,7 +92,6 @@ function tick(time) {
     // Render scene
     const { renderer, scene, camera } = state;
     renderer.render(scene, camera);
-    // TODO: Do we need to update the camera aspect and call updateProjectionMatrix?
   }
 
   {
