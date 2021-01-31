@@ -102,6 +102,7 @@ function tick(time) {
             loadGLTF(`assets/${state.newAvatarConfig[part]}.glb`).then((gltf) => {
               // TODO: Multiple of these might be in flight at any given time.
               console.log(gltf);
+              gltf.scene.animations = gltf.animations;
               state.avatarNodes[part].add(gltf.scene);
             });
           }

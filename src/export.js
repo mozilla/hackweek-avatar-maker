@@ -47,7 +47,7 @@ export function combineHubsComponents(a, b) {
 
 export const exportGLTF = (function () {
   const exporter = new GLTFExporter();
-  return function exportGLTF(object3D, binary) {
+  return function exportGLTF(object3D, { binary, animations }) {
     exporter.parse(
       object3D,
       (gltf) => {
@@ -63,10 +63,27 @@ export const exportGLTF = (function () {
           console.log(gltf);
         }
       },
-      { binary }
+      { binary, animations }
     );
   };
 })();
+
+function addNonDuplicateAnimationClips(clone, scene) {
+  const clipsToAdd = [];
+
+  for (const clip of scene.animations) {
+    const index = clone.animations.findIndex((clonedAnimation) => {
+      return clonedAnimation.name === clip.name;
+    });
+    if (index === -1) {
+      clipsToAdd.push(clip);
+    }
+  }
+
+  for (const clip of clipsToAdd) {
+    clone.animations.push(clip);
+  }
+}
 
 function cloneIntoAvatar(avatarGroup) {
   // Combine the root "Scene" nodes
@@ -76,8 +93,9 @@ function cloneIntoAvatar(avatarGroup) {
     })
     .filter((o) => !!o);
   const clonedScene = scenes[0].clone(false);
-  for (const scene in scenes) {
+  for (const scene of scenes) {
     Object.assign(clonedScene.userData, scene.userData);
+    addNonDuplicateAnimationClips(clonedScene, scene);
   }
 
   // Combine the "AvatarRoot" nodes
@@ -112,6 +130,7 @@ function cloneIntoAvatar(avatarGroup) {
 export function exportAvatar(avatarGroup) {
   const avatar = cloneIntoAvatar(avatarGroup);
   console.log(describeObject3D(avatar));
-  exportGLTF(avatar, false);
-  exportGLTF(avatar, true);
+  console.log(avatar);
+  exportGLTF(avatar, { binary: false, animations: avatar.animations });
+  exportGLTF(avatar, { binary: true, animations: avatar.animations });
 }
