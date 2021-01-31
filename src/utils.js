@@ -1,3 +1,5 @@
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+
 function findChild({ candidates, predicate }) {
   if (!candidates.length) {
     return null;
@@ -70,3 +72,29 @@ const describe = (function () {
 export function describeObject3D(root) {
   return traverseWithDepth({ object3D: root, callback: describe, result: [] }).join("\n");
 }
+
+export const loadGLTF = (function () {
+  const loader = new GLTFLoader();
+  return function loadGLTF(url) {
+    return new Promise(function (resolve, reject) {
+      loader.load(
+        url,
+        function (gltf) {
+          resolve(gltf);
+          // gltf.animations; // Array<THREE.AnimationClip>
+          // gltf.scene; // THREE.Group
+          // gltf.scenes; // Array<THREE.Group>
+          // gltf.cameras; // Array<THREE.Camera>
+          // gltf.asset; // Object
+        },
+        function (xhr) {
+          logger.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+        },
+        function (error) {
+          logger.log("An error happened");
+          reject(error);
+        }
+      );
+    });
+  };
+})();
