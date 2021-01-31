@@ -4,6 +4,8 @@ import { GLTFExporter } from "three/examples/jsm/exporters/GLTFExporter";
 import logger from "./logger";
 import constants from "./constants";
 import assets from "./assets";
+import { describeObject3D } from "./utils";
+import { combineAvatarParts, exportGLTF } from "./export";
 
 const avatarParts = Object.keys(assets);
 
@@ -162,15 +164,36 @@ function exportAvatar() {
   );
 }
 
+// TODO: There are a few problems with this export process.
+// 1) We do not want to destroy the avatarGroup because we want to allow future
+// edits to the avatars. However, if we try to clone an avatar part that contains
+// bones and a skinned mesh, the skinned mesh's skeleton refers to the original bones.
+// If we want to clone the part, we need to match old bones to new bones. Currently,
+// we just operate on the original avatarGroup nodes.
+//
+// 2) Currently, I only take a single skinned mesh for each avatar part.
+// However, it looks like one avatar part might contain multiple skinned meshes.
+// An example of this can be seen with the eyes.
+//
+// 3) I don't know what happens to animations.
+//
+// 4) I don't know what happens if there are supposed to be duplicate Hubs Components
+// or if the gltf export settings are _different_ for two of the parts. I think we
+// can ignore that for now.
+function exportAvatar2() {
+  console.log("BEFORE:\n", describeObject3D(state.avatarGroup));
+  const avatar = combineAvatarParts(state.avatarGroup);
+  console.log("AFTER:\n", describeObject3D(avatar));
+
+  //  exportGLTF(avatar, false);
+  exportGLTF(avatar, true);
+}
+
 function tick(time) {
   {
-    window.requestAnimationFrame(tick);
-  }
-
-  {
     if (state.DOMContentLoaded && !state.didInit) {
-      init();
       state.didInit = true;
+      init();
     }
     if (!state.didInit) {
       return;
@@ -195,6 +218,7 @@ function tick(time) {
 
   {
     if (state.shouldApplyNewAvatarConfig) {
+      state.shouldApplyNewAvatarConfig = false;
       for (const part of avatarParts) {
         if (state.newAvatarConfig[part] !== state.avatarConfig[part]) {
           state.avatarNodes[part].clear();
@@ -207,15 +231,19 @@ function tick(time) {
           state.avatarConfig[part] = state.newAvatarConfig[part];
         }
       }
-      state.shouldApplyNewAvatarConfig = false;
     }
   }
 
   {
     if (state.shouldExportAvatar) {
-      exportAvatar();
       state.shouldExportAvatar = false;
+      //exportAvatar();
+      exportAvatar2();
     }
+  }
+
+  {
+    window.requestAnimationFrame(tick);
   }
 }
 
