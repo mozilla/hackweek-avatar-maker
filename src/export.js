@@ -87,10 +87,8 @@ function addNonDuplicateAnimationClips(clone, scene) {
 }
 
 function cloneIntoAvatar(avatarGroup) {
-  // TODO: Do we even need userData?
-  //       If not, can we skip merging the scenes?
-  // const clonedScene = new THREE.Group();
-  // clonedScene.name = "Scene";
+  const clonedScene = new THREE.Group();
+  clonedScene.name = "Scene";
 
   // Combine the root "Scene" nodes
   const scenes = avatarGroup.children
@@ -98,10 +96,7 @@ function cloneIntoAvatar(avatarGroup) {
       return findChildByName(o, "Scene");
     })
     .filter((o) => !!o);
-  const clonedScene = scenes[0].clone(false);
   for (const scene of scenes) {
-    // TODO: Deep merge
-    Object.assign(clonedScene.userData, scene.userData);
     addNonDuplicateAnimationClips(clonedScene, scene);
   }
 
