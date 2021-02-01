@@ -1,4 +1,5 @@
 export default {
   avatarConfigChanged: "avatarConfigChanged",
-  exportAvatar: "exportAvatar"
+  exportAvatar: "exportAvatar",
+  resetView: "resetView",
 };

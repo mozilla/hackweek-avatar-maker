@@ -42,6 +42,10 @@ function App() {
     document.dispatchEvent(new CustomEvent(constants.exportAvatar));
   }
 
+  function dispatchResetView() {
+    document.dispatchEvent(new CustomEvent(constants.resetView));
+  }
+
   return (
     <>
       {avatarParts.map((part) => (
@@ -54,6 +58,7 @@ function App() {
         />
       ))}
       <button onClick={dispatchExport}>export</button>
+      <button onClick={dispatchResetView}>reset view</button>
     </>
   );
 }

@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { GLTFExporter } from "three/examples/jsm/exporters/GLTFExporter";
 import constants from "./constants";
 import assets from "./assets";
@@ -14,12 +15,14 @@ const state = {
   scene: null,
   camera: null,
   renderer: null,
+  controls: null,
   // TODO: Important to initialize each part to null?
   avatarNodes: {},
   avatarConfig: {},
   newAvatarConfig: {},
   shouldApplyNewAvatarConfig: false,
   shouldExportAvatar: false,
+  shouldResetView: false,
 };
 window.gameState = state;
 
@@ -36,6 +39,13 @@ document.addEventListener(constants.avatarConfigChanged, (e) => {
 document.addEventListener(constants.exportAvatar, () => {
   state.shouldExportAvatar = true;
 });
+document.addEventListener(constants.resetView, () => {
+  state.shouldResetView = true;
+});
+
+function resetView() {
+  state.controls.reset();
+}
 
 function init() {
   THREE.Cache.enabled = true;
@@ -45,11 +55,11 @@ function init() {
   camera.position.set(0, 0.25, 1.5);
   state.camera = camera;
 
-  const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+  const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
   scene.add(ambientLight);
 
   const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-  directionalLight.position.set(0, 2, 1);
+  directionalLight.position.set(2, 2, 1);
   scene.add(directionalLight);
 
   const renderer = new THREE.WebGLRenderer();
@@ -57,6 +67,12 @@ function init() {
   renderer.setSize(window.innerWidth, window.innerHeight);
   // TODO: Square this with react
   document.body.appendChild(renderer.domElement);
+
+  const controls = new OrbitControls(camera, renderer.domElement);
+  controls.target = new THREE.Vector3(0, 0.5, 0);
+  controls.update();
+  controls.saveState();
+  state.controls = controls;
 
   state.avatarGroup = new THREE.Group();
   scene.add(state.avatarGroup);
@@ -115,6 +131,13 @@ function tick(time) {
     if (state.shouldExportAvatar) {
       state.shouldExportAvatar = false;
       exportAvatar(state.avatarGroup);
+    }
+  }
+
+  {
+    if (state.shouldResetView) {
+      state.shouldResetView = false;
+      resetView();
     }
   }
 
