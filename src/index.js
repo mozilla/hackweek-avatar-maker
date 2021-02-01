@@ -26,10 +26,19 @@ function App() {
   const [assets, setAssets] = useState(initialAssets);
 
   const categories = Object.keys(assets);
-  const initialAvatarConfig = {};
-  for (const category of categories) {
-    initialAvatarConfig[category] = assets[category][1].value;
+
+  function generateRandomConfig() {
+    const newConfig = {};
+    for (const category of categories) {
+      const categoryAssets = assets[category].filter(part => !part.excludeFromRandomize);
+      if (categoryAssets.length === 0) continue;
+      const randomIndex = Math.floor(Math.random() * categoryAssets.length);
+      newConfig[category] = categoryAssets[randomIndex].value;
+    }
+    return newConfig;
   }
+
+  const initialAvatarConfig = generateRandomConfig();
   const [avatarConfig, setAvatarConfig] = useState(initialAvatarConfig);
 
   function onGLBUploaded(e) {
@@ -63,6 +72,10 @@ function App() {
     setAvatarConfig({ ...avatarConfig, ...newConfig });
   }
 
+  function randomizeConfig() {
+    setAvatarConfig(generateRandomConfig());
+  }
+
   function dispatchExport() {
     document.dispatchEvent(new CustomEvent(constants.exportAvatar));
   }
@@ -85,6 +98,7 @@ function App() {
           />
         </div>
       ))}
+      <button onClick={randomizeConfig}>Randomize avatar</button>
       <button onClick={dispatchExport}>Export avatar</button>
       <button onClick={dispatchResetView}>Reset camera view</button>
       <label>

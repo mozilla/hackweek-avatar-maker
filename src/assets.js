@@ -2,7 +2,8 @@ export default {
   "Earring": [
     {
       "value": null,
-      "displayName": "none"
+      "displayName": "none",
+      "excludeFromRandomize": false
     },
     {
       "value": "accessory_earring_leftHigh01-silver",
@@ -12,7 +13,8 @@ export default {
   "Sunglasses": [
     {
       "value": null,
-      "displayName": "none"
+      "displayName": "none",
+      "excludeFromRandomize": false
     },
     {
       "value": "accessory_sunglasses_arnette",
@@ -26,7 +28,8 @@ export default {
   "Eyebrows": [
     {
       "value": null,
-      "displayName": "none"
+      "displayName": "none",
+      "excludeFromRandomize": true
     },
     {
       "value": "character_eyebrows_brown",
@@ -36,7 +39,8 @@ export default {
   "Eyes": [
     {
       "value": null,
-      "displayName": "none"
+      "displayName": "none",
+      "excludeFromRandomize": true
     },
     {
       "value": "character_eyes_male01-blue",
@@ -50,7 +54,8 @@ export default {
   "Hands": [
     {
       "value": null,
-      "displayName": "none"
+      "displayName": "none",
+      "excludeFromRandomize": true
     },
     {
       "value": "character_hands_skin1",
@@ -120,7 +125,8 @@ export default {
   "HeadNeckEars": [
     {
       "value": null,
-      "displayName": "none"
+      "displayName": "none",
+      "excludeFromRandomize": true
     },
     {
       "value": "character_headNeckEars_skin1",
@@ -190,7 +196,8 @@ export default {
   "Mouth": [
     {
       "value": null,
-      "displayName": "none"
+      "displayName": "none",
+      "excludeFromRandomize": true
     },
     {
       "value": "character_mouth_smirk_skin1",
@@ -260,7 +267,8 @@ export default {
   "FacialHair": [
     {
       "value": null,
-      "displayName": "none"
+      "displayName": "none",
+      "excludeFromRandomize": false
     },
     {
       "value": "facialHair_goatee05",
@@ -270,7 +278,8 @@ export default {
   "Hair": [
     {
       "value": null,
-      "displayName": "none"
+      "displayName": "none",
+      "excludeFromRandomize": false
     },
     {
       "value": "hair_fauxhawk1",
@@ -284,7 +293,8 @@ export default {
   "Torso": [
     {
       "value": null,
-      "displayName": "none"
+      "displayName": "none",
+      "excludeFromRandomize": true
     },
     {
       "value": "torso_shirt_male_sportCoat01",

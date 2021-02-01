@@ -90,19 +90,21 @@ function init() {
   scene.add(state.avatarGroup);
 }
 
-function loadIntoGroup(url, group) {
-  loadGLTF(url).then((gltf) => {
-    // TODO: Multiple of these might be in flight at any given time.
-    gltf.scene.animations = gltf.animations;
-    group.add(gltf.scene);
+async function loadIntoGroup(category, part, group) {
+  const gltf = await loadGLTF(urlFor(part));
+  if (state.avatarConfig[category] !== part) return;
 
-    gltf.scene.traverse((obj) => {
-      forEachMaterial(obj, (material) => {
-        if (material.isMeshStandardMaterial) {
-          material.envMap = state.envMap;
-          material.needsUpdate = true;
-        }
-      });
+  // TODO: Multiple of these might be in flight at any given time.
+  gltf.scene.animations = gltf.animations;
+  group.clear();
+  group.add(gltf.scene);
+
+  gltf.scene.traverse((obj) => {
+    forEachMaterial(obj, (material) => {
+      if (material.isMeshStandardMaterial) {
+        material.envMap = state.envMap;
+        material.needsUpdate = true;
+      }
     });
   });
 }
@@ -148,9 +150,10 @@ function tick(time) {
         }
 
         if (state.newAvatarConfig[category] !== state.avatarConfig[category]) {
-          state.avatarNodes[category].clear();
           if (state.newAvatarConfig[category] !== null) {
-            loadIntoGroup(urlFor(state.newAvatarConfig[category]), state.avatarNodes[category]);
+            loadIntoGroup(category, state.newAvatarConfig[category], state.avatarNodes[category]);
+          } else {
+            state.avatarNodes[category].clear();
           }
           state.avatarConfig[category] = state.newAvatarConfig[category];
         }
