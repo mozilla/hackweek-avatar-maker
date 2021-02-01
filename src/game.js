@@ -4,7 +4,7 @@ import { GLTFExporter } from "three/examples/jsm/exporters/GLTFExporter";
 import constants from "./constants";
 import assets from "./assets";
 import { exportAvatar } from "./export";
-import { loadGLTF } from "./utils";
+import { loadGLTF, forEachMaterial, generateEnvironmentMap, createSky } from "./utils";
 
 const avatarParts = Object.keys(assets);
 
@@ -16,6 +16,7 @@ const state = {
   camera: null,
   renderer: null,
   controls: null,
+  envMap: null,
   // TODO: Important to initialize each part to null?
   avatarNodes: {},
   avatarConfig: {},
@@ -55,18 +56,17 @@ function init() {
   camera.position.set(0, 0.25, 1.5);
   state.camera = camera;
 
-  const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+  const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
   scene.add(ambientLight);
-
-  const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-  directionalLight.position.set(2, 2, 1);
-  scene.add(directionalLight);
 
   const renderer = new THREE.WebGLRenderer();
   state.renderer = renderer;
   renderer.setSize(window.innerWidth, window.innerHeight);
   // TODO: Square this with react
   document.body.appendChild(renderer.domElement);
+
+  const sky = createSky();
+  state.envMap = generateEnvironmentMap(sky, renderer);
 
   const controls = new OrbitControls(camera, renderer.domElement);
   controls.target = new THREE.Vector3(0, 0.5, 0);
@@ -119,6 +119,15 @@ function tick(time) {
               // TODO: Multiple of these might be in flight at any given time.
               gltf.scene.animations = gltf.animations;
               state.avatarNodes[part].add(gltf.scene);
+
+              gltf.scene.traverse(obj => {
+                forEachMaterial(obj, material => {
+                  if (material.isMeshStandardMaterial) {
+                    material.envMap = state.envMap;
+                    material.needsUpdate = true;
+                  }
+                });
+              });
             });
           }
           state.avatarConfig[part] = state.newAvatarConfig[part];

@@ -1,4 +1,6 @@
+import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import { Sky } from "three/examples/jsm/objects/Sky";
 
 function findChild({ candidates, predicate }) {
   if (!candidates.length) {
@@ -98,3 +100,51 @@ export const loadGLTF = (function () {
     });
   };
 })();
+
+export function forEachMaterial(object3D, fn) {
+  if (!object3D.material) return;
+
+  if (Array.isArray(object3D.material)) {
+    object3D.material.forEach(fn);
+  } else {
+    fn(object3D.material);
+  }
+}
+
+export function generateEnvironmentMap(sky, renderer) {
+  const skyScene = new THREE.Scene();
+  skyScene.add(sky);
+
+  const pmremGenerator = new THREE.PMREMGenerator(renderer);
+  const renderTarget = pmremGenerator.fromScene(skyScene);
+  pmremGenerator.dispose();
+
+  skyScene.remove(sky);
+
+  return renderTarget.texture;
+}
+
+export function createSky() {
+  const sky = new Sky();
+  sky.scale.setScalar(450000);
+
+  const uniforms = sky.material.uniforms;
+  uniforms["turbidity"].value = 10;
+  uniforms["rayleigh"].value = 3;
+  uniforms["mieCoefficient"].value = 0.005;
+  uniforms["mieDirectionalG"].value = 0.7;
+
+  const inclination = 0.70;
+  const azimuth = 0.55;
+  const theta = Math.PI * (inclination - 0.5);
+  const phi = 2 * Math.PI * (azimuth - 0.5);
+
+  const sun = new THREE.Vector3();
+  sun.x = Math.cos(phi);
+  sun.y = Math.sin(phi) * Math.sin(theta);
+  sun.z = Math.sin(phi) * Math.cos(theta);
+
+  uniforms["sunPosition"].value.copy(sun);
+
+  return sky;
+}
