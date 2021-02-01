@@ -1,9 +1,9 @@
 import * as THREE from "three";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { GLTFExporter } from "three/examples/jsm/exporters/GLTFExporter";
-import logger from "./logger";
 import constants from "./constants";
 import assets from "./assets";
+import { exportAvatar } from "./export";
+import { loadGLTF } from "./utils";
 
 const avatarParts = Object.keys(assets);
 
@@ -37,32 +37,6 @@ document.addEventListener(constants.exportAvatar, () => {
   state.shouldExportAvatar = true;
 });
 
-const loadGLTF = (function () {
-  const loader = new GLTFLoader();
-  return function loadGLTF(url) {
-    return new Promise(function (resolve, reject) {
-      loader.load(
-        url,
-        function (gltf) {
-          resolve(gltf);
-          // gltf.animations; // Array<THREE.AnimationClip>
-          // gltf.scene; // THREE.Group
-          // gltf.scenes; // Array<THREE.Group>
-          // gltf.cameras; // Array<THREE.Camera>
-          // gltf.asset; // Object
-        },
-        function (xhr) {
-          logger.log((xhr.loaded / xhr.total) * 100 + "% loaded");
-        },
-        function (error) {
-          logger.log("An error happened");
-          reject(error);
-        }
-      );
-    });
-  };
-})();
-
 function init() {
   THREE.Cache.enabled = true;
   const scene = new THREE.Scene();
@@ -92,30 +66,14 @@ function init() {
   }
 }
 
-function exportAvatar() {
-  const exporter = new GLTFExporter();
-  exporter.parse(state.avatarGroup, gltf => {
-    const blob = new Blob([gltf], {type: 'application/octet-stream'});
-    const el = document.createElement("a");
-    el.style.display = "none";
-    el.href = URL.createObjectURL(blob);
-    el.download = "custom_avatar.glb"
-    el.click();
-    el.remove();
-  }, { binary: true });
-}
-
 function tick(time) {
   {
-    window.requestAnimationFrame(tick);
-  }
-
-  {
     if (state.DOMContentLoaded && !state.didInit) {
-      init();
       state.didInit = true;
+      init();
     }
     if (!state.didInit) {
+      requestAnimationFrame(tick);
       return;
     }
   }
@@ -130,35 +88,39 @@ function tick(time) {
   }
 
   {
-    // Render scene
     const { renderer, scene, camera } = state;
     renderer.render(scene, camera);
-    // TODO: Do we need to update the camera aspect and call updateProjectionMatrix?
   }
 
   {
     if (state.shouldApplyNewAvatarConfig) {
+      state.shouldApplyNewAvatarConfig = false;
       for (const part of avatarParts) {
         if (state.newAvatarConfig[part] !== state.avatarConfig[part]) {
           state.avatarNodes[part].clear();
           if (state.newAvatarConfig[part] !== null) {
-            loadGLTF(`assets/${state.newAvatarConfig[part]}.glb`).then((gltf) =>
+            loadGLTF(`assets/${state.newAvatarConfig[part]}.glb`).then((gltf) => {
               // TODO: Multiple of these might be in flight at any given time.
-              state.avatarNodes[part].add(gltf.scene)
-            );
+              console.log(gltf);
+              gltf.scene.animations = gltf.animations;
+              state.avatarNodes[part].add(gltf.scene);
+            });
           }
           state.avatarConfig[part] = state.newAvatarConfig[part];
         }
       }
-      state.shouldApplyNewAvatarConfig = false;
     }
   }
 
   {
-    if(state.shouldExportAvatar) {
-      exportAvatar();
+    if (state.shouldExportAvatar) {
       state.shouldExportAvatar = false;
+      exportAvatar(state.avatarGroup);
     }
+  }
+
+  {
+    window.requestAnimationFrame(tick);
   }
 }
 

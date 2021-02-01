@@ -1,8 +1,8 @@
 export default {
   hairStyle: [
-    { value: null, displayName: "none" },
     { value: "hair_fauxhawk1", displayName: "Fauxhawk 1" },
     { value: "hair_male_spikey01", displayName: "Spikey" },
+    { value: null, displayName: "none" },
   ],
   earrings: [
     {
@@ -86,6 +86,12 @@ export default {
     {
       value: "torso_shirt_male_tshirt-unionJack",
       displayName: "union jack",
+    },
+  ],
+  hands: [
+    {
+      value: "character_hands_skin3",
+      displayName: "skin 3",
     },
   ],
 };
