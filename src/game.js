@@ -16,7 +16,7 @@ function urlFor(value) {
 
 const state = {
   DOMContentLoaded: false,
-  shouldResize: false,
+  shouldResize: true,
   didInit: false,
   scene: null,
   camera: null,
@@ -55,8 +55,12 @@ function resetView() {
 
 function init() {
   THREE.Cache.enabled = true;
+
   const scene = new THREE.Scene();
+  scene.fog = new THREE.FogExp2(0x8b8b8a, 0.2);
+  scene.background = new THREE.Color(0x8b8b8a);
   state.scene = scene;
+
   const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
   camera.position.set(0, 0.25, 1.5);
   state.camera = camera;
@@ -64,14 +68,17 @@ function init() {
   const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
   scene.add(ambientLight);
 
-  const renderer = new THREE.WebGLRenderer();
-  state.renderer = renderer;
-  renderer.setSize(window.innerWidth, window.innerHeight);
   // TODO: Square this with react
-  document.body.appendChild(renderer.domElement);
+  const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById("scene"), antialias: true });
+  state.renderer = renderer;
 
   const sky = createSky();
   state.envMap = generateEnvironmentMap(sky, renderer);
+
+  const floor = new THREE.Mesh(new THREE.PlaneBufferGeometry(100, 100), new THREE.MeshStandardMaterial());
+  floor.position.y = -0.2;
+  floor.rotation.x = -Math.PI / 2;
+  scene.add(floor);
 
   const controls = new OrbitControls(camera, renderer.domElement);
   controls.target = new THREE.Vector3(0, 0.5, 0);
@@ -115,8 +122,10 @@ function tick(time) {
   {
     if (state.shouldResize) {
       state.shouldResize = false;
-      state.renderer.setSize(window.innerWidth, window.innerHeight);
-      state.camera.aspect = window.innerWidth / window.innerHeight;
+      const width = state.renderer.domElement.parentNode.clientWidth;
+      const height = state.renderer.domElement.parentNode.clientHeight;
+      state.renderer.setSize(width, height, false);
+      state.camera.aspect = width / height;
       state.camera.updateProjectionMatrix();
     }
   }

@@ -1,11 +1,64 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-	<head>
-		<title>babw</title>
-		<style>body { margin: 0; overflow: hidden; }</style>
-	</head>
-	<body>
-		<div id="root"></div>
-		<script src="main.js"></script>
-	</body>
+  <head>
+    <title>babw</title>
+    <style>
+      body {
+        margin: 0;
+        overflow: hidden;
+      }
+      * {
+        font-family: sans-serif;
+        font-size: 12pt;
+      }
+
+      main {
+        display: flex;
+      }
+
+      html,
+      body,
+      main {
+        height: 100%;
+      }
+
+      #root {
+        width: 21em;
+      }
+
+      #sceneContainer {
+        flex: 1;
+      }
+
+      .category {
+        display: flex;
+      }
+      .category,
+      button,
+      label {
+        margin: 0.5em;
+      }
+      .category span {
+        flex: 1;
+        text-align: right;
+        margin-right: 0.2em;
+      }
+      .category select {
+        width: 12em;
+      }
+
+      label {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div id="root"></div>
+      <div id="sceneContainer">
+        <canvas id="scene"></canvas>
+      </div>
+    </main>
+    <script src="main.js"></script>
+  </body>
 </html>
