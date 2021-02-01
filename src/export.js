@@ -37,6 +37,7 @@ export function combineHubsComponents(a, b) {
   ensureHubsComponents(a);
   ensureHubsComponents(b);
   if (a.gltfExtensions.MOZ_hubs_components)
+    // TODO: Deep merge
     a.gltfExtensions.MOZ_hubs_components = Object.assign(
       a.gltfExtensions.MOZ_hubs_components,
       b.gltfExtensions.MOZ_hubs_components
@@ -86,6 +87,11 @@ function addNonDuplicateAnimationClips(clone, scene) {
 }
 
 function cloneIntoAvatar(avatarGroup) {
+  // TODO: Do we even need userData?
+  //       If not, can we skip merging the scenes?
+  // const clonedScene = new THREE.Group();
+  // clonedScene.name = "Scene";
+
   // Combine the root "Scene" nodes
   const scenes = avatarGroup.children
     .map((o) => {
@@ -94,6 +100,7 @@ function cloneIntoAvatar(avatarGroup) {
     .filter((o) => !!o);
   const clonedScene = scenes[0].clone(false);
   for (const scene of scenes) {
+    // TODO: Deep merge
     Object.assign(clonedScene.userData, scene.userData);
     addNonDuplicateAnimationClips(clonedScene, scene);
   }
