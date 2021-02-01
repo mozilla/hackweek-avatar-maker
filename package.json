@@ -2,7 +2,8 @@
   "private": true,
   "scripts": {
     "start": "webpack serve",
-    "build": "NODE_ENV=production webpack"
+    "build": "NODE_ENV=production webpack",
+    "gen-assets": "node scripts/generate-assets.js"
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",
