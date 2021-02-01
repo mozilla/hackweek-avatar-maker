@@ -2,11 +2,17 @@ import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { GLTFExporter } from "three/examples/jsm/exporters/GLTFExporter";
 import constants from "./constants";
-import assets from "./assets";
 import { exportAvatar } from "./export";
 import { loadGLTF, forEachMaterial, generateEnvironmentMap, createSky } from "./utils";
 
-const avatarParts = Object.keys(assets);
+// TODO: Don't do this
+function urlFor(value) {
+  if (value.startsWith("blob")) {
+    return value;
+  } else {
+    return `assets/${value}.glb`;
+  }
+}
 
 const state = {
   DOMContentLoaded: false,
@@ -17,7 +23,6 @@ const state = {
   renderer: null,
   controls: null,
   envMap: null,
-  // TODO: Important to initialize each part to null?
   avatarNodes: {},
   avatarConfig: {},
   newAvatarConfig: {},
@@ -76,10 +81,23 @@ function init() {
 
   state.avatarGroup = new THREE.Group();
   scene.add(state.avatarGroup);
-  for (const part of avatarParts) {
-    state.avatarNodes[part] = new THREE.Group();
-    state.avatarGroup.add(state.avatarNodes[part]);
-  }
+}
+
+function loadIntoGroup(url, group) {
+  loadGLTF(url).then((gltf) => {
+    // TODO: Multiple of these might be in flight at any given time.
+    gltf.scene.animations = gltf.animations;
+    group.add(gltf.scene);
+
+    gltf.scene.traverse((obj) => {
+      forEachMaterial(obj, (material) => {
+        if (material.isMeshStandardMaterial) {
+          material.envMap = state.envMap;
+          material.needsUpdate = true;
+        }
+      });
+    });
+  });
 }
 
 function tick(time) {
@@ -111,26 +129,21 @@ function tick(time) {
   {
     if (state.shouldApplyNewAvatarConfig) {
       state.shouldApplyNewAvatarConfig = false;
-      for (const part of avatarParts) {
-        if (state.newAvatarConfig[part] !== state.avatarConfig[part]) {
-          state.avatarNodes[part].clear();
-          if (state.newAvatarConfig[part] !== null) {
-            loadGLTF(`assets/${state.newAvatarConfig[part]}.glb`).then((gltf) => {
-              // TODO: Multiple of these might be in flight at any given time.
-              gltf.scene.animations = gltf.animations;
-              state.avatarNodes[part].add(gltf.scene);
 
-              gltf.scene.traverse(obj => {
-                forEachMaterial(obj, material => {
-                  if (material.isMeshStandardMaterial) {
-                    material.envMap = state.envMap;
-                    material.needsUpdate = true;
-                  }
-                });
-              });
-            });
+      const categories = new Set(Object.keys(state.newAvatarConfig).concat(Object.keys(state.avatarConfig)));
+
+      for (const category of categories) {
+        if (!state.avatarNodes[category]) {
+          state.avatarNodes[category] = new THREE.Group();
+          state.avatarGroup.add(state.avatarNodes[category]);
+        }
+
+        if (state.newAvatarConfig[category] !== state.avatarConfig[category]) {
+          state.avatarNodes[category].clear();
+          if (state.newAvatarConfig[category] !== null) {
+            loadIntoGroup(urlFor(state.newAvatarConfig[category]), state.avatarNodes[category]);
           }
-          state.avatarConfig[part] = state.newAvatarConfig[part];
+          state.avatarConfig[category] = state.newAvatarConfig[category];
         }
       }
     }

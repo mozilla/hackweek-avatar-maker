@@ -43,6 +43,10 @@ export default {
       value: "character_headNeckEars_skin3",
       displayName: "skin 3",
     },
+    {
+      value: null,
+      displayName: "none",
+    },
   ],
   eyes: [
     {
