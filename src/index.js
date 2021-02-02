@@ -17,7 +17,7 @@ function AvatarPartList({ children }) {
   return <>{children}</>;
 }
 
-function AvatarPartButton({ part, onPartSelected, onPartEnter, onPartLeave }) {
+function AvatarPartButton({ part, selected, onPartSelected, onPartEnter, onPartLeave }) {
   return (
     <>
         <button
@@ -30,7 +30,7 @@ function AvatarPartButton({ part, onPartSelected, onPartEnter, onPartLeave }) {
           onPointerLeave={() => {
             onPartLeave();
           }}
-          className="avatarPartButton"
+          className={"avatarPartButton " + (selected && "selected")}
         >
         </button>
     </>
@@ -40,13 +40,14 @@ function AvatarPartButton({ part, onPartSelected, onPartEnter, onPartLeave }) {
 function AvatarPartSelector({ onPartSelected, onPartEnter, onPartLeave, parts, selected, categoryName }) {
   const selectedPart = parts.find((part) => part.value === selected);
   return (
-    <>
+    <div className="partSelector">
       <CategoryHeading categoryName={categoryName} selectedPartName={selectedPart.displayName} />
       <AvatarPartList>
         {parts.map((part) => {
           return (
             <AvatarPartButton
               key={part.value}
+              selected={part.value === selected}
               onPartSelected={onPartSelected}
               onPartEnter={onPartEnter}
               onPartLeave={onPartLeave}
@@ -55,7 +56,7 @@ function AvatarPartSelector({ onPartSelected, onPartEnter, onPartLeave, parts, s
           );
         })}
       </AvatarPartList>
-    </>
+    </div>
   );
 }
 
@@ -153,14 +154,15 @@ function App() {
           <canvas id="scene"></canvas>
         </div>
       </div>
-      <div id="toolbar">
-        <button onClick={randomizeConfig}>Randomize avatar</button>
-        <button onClick={dispatchExport}>Export avatar</button>
-        <button onClick={dispatchResetView}>Reset camera view</button>
-        <label>
-          Upload custom part:
+      <div className="toolbar">
+        <span className="appName">babw</span>
+        <label className="uploadButton" tabIndex="0">
+          Upload custom part
           <input onChange={onGLBUploaded} type="file" id="input" accept="model/gltf-binary,.glb"></input>
         </label>
+        <button onClick={randomizeConfig}>Randomize avatar</button>
+        <button onClick={dispatchResetView}>Reset camera view</button>
+        <button onClick={dispatchExport} className="primary">Export avatar</button>
       </div>
     </>
   );

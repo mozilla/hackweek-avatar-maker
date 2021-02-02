@@ -1,13 +1,16 @@
 :root {
-  --button-bg-color: gray;
+  --primary-blue: #00a5f4;
+  --button-bg-color: lightgray;
   --button-border-color: white;
   --button-hover-border-color: lightblue;
+  --button-selected-border-color: var(--primary-blue);
   --button-size: 64px;
   --button-border-radius: 16px;
   --button-border-size: 4px;
-  --button-outer-border-size: 6px;
-  --button-outer-border-offset: -9px;
-  --button-outer-border-radius: calc(var(--button-border-radius) * 1.3);
+
+  --button-outer-border-size: 4px;
+  --button-outer-border-offset: -6px;
+  --button-outer-border-radius: calc(var(--button-border-radius) * 1.1);
 
   --font-weight-not-bold-heading: 400;
   --font-weight-bold-heading: 600;
@@ -57,7 +60,7 @@ body,
 
 button,
 label {
-  margin: 0.5em;
+  margin: 3px;
 }
 
 label {
@@ -81,6 +84,10 @@ label {
   font-weight: var(--font-weight-bold-heading);
 }
 
+.partSelector {
+  margin-bottom: 40px;
+}
+
 .avatarPartButton {
   width: var(--button-size);
   height: var(--button-size);
@@ -93,11 +100,6 @@ label {
 }
 .avatarPartButton:after {
   content: '';
-}
-
-.avatarPartButton:focus:after,
-.avatarPartButton:hover:after {
-  content: '';
   display: block;
   position: absolute;
   top: var(--button-outer-border-offset);
@@ -105,6 +107,61 @@ label {
   left: var(--button-outer-border-offset);
   right: var(--button-outer-border-offset);
   border-radius: var(--button-outer-border-radius);
-  border: var(--button-outer-border-size) solid white;
+  border: none;
+}
+
+.avatarPartButton:focus:after,
+.avatarPartButton:hover:after {
+  border: var(--button-outer-border-size) solid;
   border-color: var(--button-hover-border-color);
+}
+
+.avatarPartButton.selected:after {
+  border: var(--button-outer-border-size) solid;
+  border-color: var(--button-selected-border-color);
+}
+
+.toolbar {
+  padding: 40px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.toolbar button, .toolbar .uploadButton {
+  display: inline;
+  background-color: white;
+  border-radius: var(--button-border-radius);
+  border: 1px solid grey;
+  color: grey;
+  font-size: 10pt;
+  padding: 22px;
+  font-weight: bold;
+}
+.toolbar button:hover,
+.toolbar button:focus,
+.toolbar .uploadButton:hover,
+.toolbar .uploadButton:focus {
+  background-color: lightgrey;
+}
+
+button.primary {
+  background-color: var(--primary-blue);
+  border-color: var(--primary-blue);
+  color: white;
+}
+button.primary:hover,
+button.primary:focus {
+  background-color: lightblue;
+  border-color: lightblue;
+}
+
+.toolbar .uploadButton input {
+  display: none;
+}
+
+.appName {
+  flex: 1;
+  font-size: 24pt;
+  display: flex;
+  align-items: center;
 }
