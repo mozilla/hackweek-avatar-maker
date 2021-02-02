@@ -30,7 +30,7 @@ module.exports = {
   },
   output: {
     path: path.join(__dirname, "dist"),
-    filename: "[name]-[contenthash].js",
+    filename: "[name]-[chunkhash].js",
   },
   plugins: [
     new CleanWebpackPlugin(),
