@@ -4,6 +4,8 @@ import { GLTFExporter } from "three/examples/jsm/exporters/GLTFExporter";
 import constants from "./constants";
 import { exportAvatar } from "./export";
 import { loadGLTF, forEachMaterial, generateEnvironmentMap, createSky } from "./utils";
+import { createSnapshot, snapTo } from "./orbit-controls-utils";
+import initialSnapshots from "./snapshots";
 
 // TODO: Don't do this
 function urlFor(value) {
@@ -29,6 +31,11 @@ const state = {
   shouldApplyNewAvatarConfig: false,
   shouldExportAvatar: false,
   shouldResetView: false,
+  shouldSaveView: false,
+  shouldGoNextView: false,
+  shouldGoPreviousView: false,
+  snapshots: initialSnapshots,
+  viewIndex: 0,
 };
 window.gameState = state;
 
@@ -47,6 +54,34 @@ document.addEventListener(constants.exportAvatar, () => {
 });
 document.addEventListener(constants.resetView, () => {
   state.shouldResetView = true;
+});
+document.addEventListener(constants.saveView, () => {
+  state.shouldSaveView = true;
+});
+document.addEventListener(constants.deleteView, () => {
+  state.shouldDeleteView = true;
+});
+document.addEventListener(constants.goNextView, () => {
+  state.shouldGoNextView = true;
+});
+document.addEventListener(constants.goPreviousView, () => {
+  state.shouldGoPreviousView = true;
+});
+document.addEventListener("keydown", (e) => {
+  switch (e.key.toLowerCase()) {
+    case "s":
+      document.dispatchEvent(new CustomEvent(constants.saveView));
+      break;
+    case "d":
+      document.dispatchEvent(new CustomEvent(constants.deleteView));
+      break;
+    case "k":
+      document.dispatchEvent(new CustomEvent(constants.goPreviousView));
+      break;
+    case "j":
+      document.dispatchEvent(new CustomEvent(constants.goNextView));
+      break;
+  }
 });
 
 function resetView() {
@@ -135,11 +170,6 @@ function tick(time) {
   }
 
   {
-    const { renderer, scene, camera } = state;
-    renderer.render(scene, camera);
-  }
-
-  {
     if (state.shouldApplyNewAvatarConfig) {
       state.shouldApplyNewAvatarConfig = false;
 
@@ -175,6 +205,43 @@ function tick(time) {
       state.shouldResetView = false;
       resetView();
     }
+  }
+
+  if (state.shouldSaveView) {
+    state.shouldSaveView = false;
+    const { snapshots, controls } = state;
+    snapshots.push(createSnapshot(controls));
+    state.viewIndex = snapshots.length - 1;
+  }
+  if (state.shouldDeleteView) {
+    state.shouldDeleteView = false;
+    const { snapshots, controls } = state;
+    if (snapshots.length && state.viewIndex < snapshots.length) {
+      snapshots.splice(state.viewIndex, 1);
+      state.shouldGoPreviousView = true;
+    }
+  }
+
+  if (state.shouldGoNextView) {
+    state.shouldGoNextView = false;
+    const { snapshots, controls } = state;
+    if (snapshots.length) {
+      state.viewIndex = (state.viewIndex + 1) % snapshots.length;
+      snapTo(controls, snapshots[state.viewIndex]);
+    }
+  }
+  if (state.shouldGoPreviousView) {
+    state.shouldGoPreviousView = false;
+    const { snapshots, controls } = state;
+    if (snapshots.length) {
+      state.viewIndex = (state.viewIndex + snapshots.length - 1) % snapshots.length;
+      snapTo(controls, snapshots[state.viewIndex]);
+    }
+  }
+
+  {
+    const { renderer, scene, camera } = state;
+    renderer.render(scene, camera);
   }
 
   {
