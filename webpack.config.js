@@ -21,6 +21,7 @@ module.exports = {
   },
   devServer: {
     contentBase: "./",
+    publicPath: "/dist/",
     host: "0.0.0.0",
   },
   optimization: {
@@ -29,13 +30,14 @@ module.exports = {
     }
   },
   output: {
+    publicPath: "/dist/",
     path: path.join(__dirname, "dist"),
     filename: "[name]-[chunkhash].js",
   },
   plugins: [
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
-      filename: path.resolve("./index.html"),
+      filename: process.env.NODE_ENV === "production" ? path.resolve("./index.html") : "index.html",
       template: "src/index.html",
     }),
   ],
