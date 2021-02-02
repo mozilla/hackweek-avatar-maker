@@ -476,6 +476,66 @@ export default {
       "excludeFromRandomize": true
     },
     {
+      "value": "mouth_neutral-skin-1",
+      "displayName": "Neutral Skin 1"
+    },
+    {
+      "value": "mouth_neutral-skin-2",
+      "displayName": "Neutral Skin 2"
+    },
+    {
+      "value": "mouth_neutral-skin-3",
+      "displayName": "Neutral Skin 3"
+    },
+    {
+      "value": "mouth_neutral-skin-4",
+      "displayName": "Neutral Skin 4"
+    },
+    {
+      "value": "mouth_neutral-skin-5",
+      "displayName": "Neutral Skin 5"
+    },
+    {
+      "value": "mouth_neutral-skin-7",
+      "displayName": "Neutral Skin 7"
+    },
+    {
+      "value": "mouth_neutral-skin-8",
+      "displayName": "Neutral Skin 8"
+    },
+    {
+      "value": "mouth_neutral-skin-a",
+      "displayName": "Neutral Skin A"
+    },
+    {
+      "value": "mouth_neutral-skin-b",
+      "displayName": "Neutral Skin B"
+    },
+    {
+      "value": "mouth_neutral-skin-c",
+      "displayName": "Neutral Skin C"
+    },
+    {
+      "value": "mouth_neutral-skin-d",
+      "displayName": "Neutral Skin D"
+    },
+    {
+      "value": "mouth_neutral-skin-e",
+      "displayName": "Neutral Skin E"
+    },
+    {
+      "value": "mouth_neutral-skin-f",
+      "displayName": "Neutral Skin F"
+    },
+    {
+      "value": "mouth_neutral-skin-g",
+      "displayName": "Neutral Skin G"
+    },
+    {
+      "value": "mouth_neutral-skin-h",
+      "displayName": "Neutral Skin H"
+    },
+    {
       "value": "mouth_smirk-skin-1",
       "displayName": "Smirk Skin 1"
     },
