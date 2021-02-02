@@ -124,11 +124,13 @@ function tick(time) {
   {
     if (state.shouldResize) {
       state.shouldResize = false;
-      const width = state.renderer.domElement.parentNode.clientWidth;
-      const height = state.renderer.domElement.parentNode.clientHeight;
-      state.renderer.setSize(width, height, false);
-      state.camera.aspect = width / height;
-      state.camera.updateProjectionMatrix();
+      const { renderer, camera } = state;
+
+      const width = renderer.domElement.parentNode.clientWidth;
+      const height = renderer.domElement.parentNode.clientHeight;
+      renderer.setSize(width, height, false);
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
     }
   }
 
