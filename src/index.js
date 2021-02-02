@@ -4,33 +4,70 @@ import "./game";
 import constants from "./constants";
 import initialAssets from "./assets";
 
-function AvatarPartSelector({ onPartSelected, parts, selected }) {
+function CategoryHeading({ categoryName, selectedPartName }) {
   return (
-    <select
-      // TODO: Figure out what to do about single options
-      onChange={(e) => {
-        onPartSelected(e.target.selectedOptions[0].getAttribute("value"));
-      }}
-      value={selected || ""}
-    >
-      {parts.map((part, i) => (
-        <option key={i} value={part.value}>
-          {part.displayName}
-        </option>
-      ))}
-    </select>
+    <div className="categoryHeading">
+      <h2 className="categoryName">{categoryName}</h2>
+      <h2 className="selectedPartName">{selectedPartName}</h2>
+    </div>
+  );
+}
+
+function AvatarPartList({ children }) {
+  return <>{children}</>;
+}
+
+function AvatarPartButton({ part, onPartSelected, onPartEnter, onPartLeave }) {
+  return (
+    <>
+      <button
+        onClick={() => {
+          onPartSelected(part.value);
+        }}
+        onPointerEnter={() => {
+          onPartEnter(part.value);
+        }}
+        onPointerLeave={() => {
+          onPartLeave();
+        }}
+        className="avatarPartButton"
+      ></button>
+    </>
+  );
+}
+
+function AvatarPartSelector({ onPartSelected, onPartEnter, onPartLeave, parts, selected, categoryName }) {
+  const selectedPart = parts.find((part) => part.value === selected);
+  return (
+    <>
+      <CategoryHeading categoryName={categoryName} selectedPartName={selectedPart.displayName} />
+      <AvatarPartList>
+        {parts.map((part) => {
+          return (
+            <AvatarPartButton
+              key={part.value}
+              onPartSelected={onPartSelected}
+              onPartEnter={onPartEnter}
+              onPartLeave={onPartLeave}
+              part={part}
+            />
+          );
+        })}
+      </AvatarPartList>
+    </>
   );
 }
 
 function App() {
   const [assets, setAssets] = useState(initialAssets);
+  const [hoveredConfig, setHoveredConfig] = useState({});
 
   const categories = Object.keys(assets);
 
   function generateRandomConfig() {
     const newConfig = {};
     for (const category of categories) {
-      const categoryAssets = assets[category].filter(part => !part.excludeFromRandomize);
+      const categoryAssets = assets[category].filter((part) => !part.excludeFromRandomize);
       if (categoryAssets.length === 0) continue;
       const randomIndex = Math.floor(Math.random() * categoryAssets.length);
       newConfig[category] = categoryAssets[randomIndex].value;
@@ -65,7 +102,12 @@ function App() {
   }
 
   useEffect(() => {
-    document.dispatchEvent(new CustomEvent(constants.avatarConfigChanged, { detail: { avatarConfig } }));
+    document.dispatchEvent(
+      new CustomEvent(constants.avatarConfigChanged, {
+        detail: { avatarConfig: { ...avatarConfig, ...hoveredConfig } },
+      })
+    );
+    document.dispatchEvent(new CustomEvent(constants.reactIsLoaded));
   });
 
   function updateAvatarConfig(newConfig) {
@@ -86,25 +128,35 @@ function App() {
 
   return (
     <>
-      {categories.map((category) => (
-        <div key={category} className="category">
-          <span>{category}: </span>
+      <div className="fun">
+        {categories.map((category) => (
           <AvatarPartSelector
+            key={category}
+            categoryName={category}
             selected={avatarConfig[category]}
             onPartSelected={(selection) => {
               updateAvatarConfig({ [category]: selection });
             }}
+            onPartEnter={(selection) => {
+              setHoveredConfig({ [category]: selection });
+            }}
+            onPartLeave={() => {
+              setHoveredConfig({});
+            }}
             parts={assets[category]}
           />
-        </div>
-      ))}
-      <button onClick={randomizeConfig}>Randomize avatar</button>
-      <button onClick={dispatchExport}>Export avatar</button>
-      <button onClick={dispatchResetView}>Reset camera view</button>
-      <label>
-        Upload custom part:
-        <input onChange={onGLBUploaded} type="file" id="input" accept="model/gltf-binary,.glb"></input>
-      </label>
+        ))}
+        <button onClick={randomizeConfig}>Randomize avatar</button>
+        <button onClick={dispatchExport}>Export avatar</button>
+        <button onClick={dispatchResetView}>Reset camera view</button>
+        <label>
+          Upload custom part:
+          <input onChange={onGLBUploaded} type="file" id="input" accept="model/gltf-binary,.glb"></input>
+        </label>
+      </div>
+      <div id="sceneContainer">
+        <canvas id="scene"></canvas>
+      </div>
     </>
   );
 }

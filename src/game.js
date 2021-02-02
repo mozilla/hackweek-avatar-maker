@@ -15,7 +15,7 @@ function urlFor(value) {
 }
 
 const state = {
-  DOMContentLoaded: false,
+  reactIsLoaded: false,
   shouldResize: true,
   didInit: false,
   scene: null,
@@ -32,12 +32,12 @@ const state = {
 };
 window.gameState = state;
 
-window.addEventListener("DOMContentLoaded", () => {
-  state.DOMContentLoaded = true;
-});
 window.onresize = () => {
   state.shouldResize = true;
 };
+document.addEventListener(constants.reactIsLoaded, () => {
+  state.reactIsLoaded = true;
+});
 document.addEventListener(constants.avatarConfigChanged, (e) => {
   state.newAvatarConfig = e.detail.avatarConfig;
   state.shouldApplyNewAvatarConfig = true;
@@ -116,7 +116,7 @@ async function loadIntoGroup(category, part, group) {
 
 function tick(time) {
   {
-    if (state.DOMContentLoaded && !state.didInit) {
+    if (state.reactIsLoaded && !state.didInit) {
       state.didInit = true;
       init();
     }

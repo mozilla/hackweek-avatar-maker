@@ -1,0 +1,85 @@
+:root {
+  --button-bg-color: gray;
+  --button-hover-border-color: lightblue;
+  --button-size: 64px;
+  --button-border-radius: 16px;
+  --button-border-size: 4px;
+
+  --font-weight-not-bold-heading: 400;
+  --font-weight-bold-heading: 600;
+}
+
+body {
+  background-color: var(--main-bg-color);
+}
+
+body {
+  margin: 0;
+}
+
+* {
+  font-family: sans-serif;
+  font-size: 12pt;
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100vh;
+}
+
+.fun {
+  overflow: auto;
+  padding: 32px 64px;
+}
+
+#root {
+  display: flex;
+  overflow: hidden;
+}
+
+#root > * {
+    width: 50%;
+}
+
+#sceneContainer {
+}
+
+button,
+label {
+  margin: 0.5em;
+}
+
+label {
+  display: block;
+}
+
+.categoryHeading {
+  margin: 12px 0px;
+  display: flex;
+  flex-flow: row no-wrap;
+}
+
+.categoryHeading h2 {
+  margin: 0 12px 0 0px;
+}
+
+.categoryHeading .categoryName {
+  font-weight: var(--font-weight-not-bold-heading);
+}
+.categoryHeading .selectedPartName {
+  font-weight: var(--font-weight-bold-heading);
+}
+
+.avatarPartButton {
+  width: var(--button-size);
+  height: var(--button-size);
+  background-color: var(--button-bg-color);
+  border-radius: var(--button-border-radius);
+}
+
+.avatarPartButton:focus,
+.avatarPartButton:hover {
+  border: var(--button-border-size) solid var(--button-hover-border-color);
+}
