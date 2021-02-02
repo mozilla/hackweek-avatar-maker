@@ -402,7 +402,7 @@ export default {
     {
       "value": null,
       "displayName": "none",
-      "excludeFromRandomize": false
+      "excludeFromRandomize": true
     },
     {
       "value": "head_skin-1",
