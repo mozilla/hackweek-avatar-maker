@@ -125,13 +125,15 @@ label {
   padding: 40px;
   display: flex;
   justify-content: flex-end;
+  background-color: #f5f5f5;
+  border-top: 2px solid lightgrey;
 }
 
 .toolbar button, .toolbar .uploadButton {
   display: inline;
   background-color: white;
   border-radius: var(--button-border-radius);
-  border: 1px solid grey;
+  border: 2px solid grey;
   color: grey;
   font-size: 10pt;
   padding: 22px;
