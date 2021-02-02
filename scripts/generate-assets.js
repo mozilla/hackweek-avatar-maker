@@ -11,15 +11,15 @@ function generateAssetsStructure(directory) {
   for (const fullname of assetFileNames) {
     const filename = fullname.substring(0, fullname.lastIndexOf("."));
 
-    let cleanName = filename;
-
-    // Some of the GLBs have extra prefixes that we don't care about.
-    if (["character_", "accessory_"].some((prefix) => filename.startsWith(prefix))) {
-      cleanName = filename.substring(filename.indexOf("_") + 1);
-    }
-
-    let [category, ...nameParts] = cleanName.split("_");
-    category = capitalize(category);
+    let [hyphenatedCategory, hyphenatedName] = filename.split("_");
+    category = hyphenatedCategory
+      .split("-")
+      .map((p) => capitalize(p))
+      .join(" ");
+    displayName = hyphenatedName
+      .split("-")
+      .map((p) => capitalize(p))
+      .join(" ");
 
     if (!assets[category]) {
       assets[category] = [
@@ -29,7 +29,7 @@ function generateAssetsStructure(directory) {
 
     assets[category].push({
       value: filename,
-      displayName: capitalize(nameParts.join(" ")),
+      displayName,
     });
   }
 
