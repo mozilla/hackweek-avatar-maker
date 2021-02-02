@@ -75,36 +75,50 @@ export function describeObject3D(root) {
   return traverseWithDepth({ object3D: root, callback: describe, result: [] }).join("\n");
 }
 
-export const loadGLTF = (function () {
+const loadGLTF = (function () {
   const loader = new GLTFLoader();
-  const cache = new Map();
   return function loadGLTF(url) {
     return new Promise(function (resolve, reject) {
-      const cached = cache.get(url);
-      if (cached) {
-        resolve(cached);
-      } else {
-        loader.load(
-          url,
-          function (gltf) {
-            cache.set(url, gltf);
-            resolve(gltf);
-            // gltf.animations; // Array<THREE.AnimationClip>
-            // gltf.scene; // THREE.Group
-            // gltf.scenes; // Array<THREE.Group>
-            // gltf.cameras; // Array<THREE.Camera>
-            // gltf.asset; // Object
-          },
-          function (xhr) {
-            // console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
-          },
-          function (error) {
-            console.log("An error happened");
-            reject(error);
-          }
-        );
-      }
+      loader.load(
+        url,
+        function (gltf) {
+          resolve(gltf);
+          // gltf.animations; // Array<THREE.AnimationClip>
+          // gltf.scene; // THREE.Group
+          // gltf.scenes; // Array<THREE.Group>
+          // gltf.cameras; // Array<THREE.Camera>
+          // gltf.asset; // Object
+        },
+        function (xhr) {
+          // console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+        },
+        function (error) {
+          reject(error);
+        }
+      );
     });
+  };
+})();
+
+export const loadGLTFCached = (function () {
+  const cache = new Map();
+  return function loadGLTFCached(url) {
+    const cached = cache.get(url);
+    if (cached) {
+      return cached;
+    } else {
+      const promise = loadGLTF(url).then(
+        (gltf) => {
+          return gltf;
+        },
+        (error) => {
+          console.error(`Failed to load ${url}`, error);
+          cache.delete(url);
+        }
+      );
+      cache.set(url, promise);
+      return promise;
+    }
   };
 })();
 

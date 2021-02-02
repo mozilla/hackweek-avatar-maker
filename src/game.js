@@ -3,7 +3,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { GLTFExporter } from "three/examples/jsm/exporters/GLTFExporter";
 import constants from "./constants";
 import { exportAvatar } from "./export";
-import { loadGLTF, forEachMaterial, generateEnvironmentMap, createSky } from "./utils";
+import { loadGLTFCached, forEachMaterial, generateEnvironmentMap, createSky } from "./utils";
 
 // TODO: Don't do this
 function urlFor(value) {
@@ -91,7 +91,7 @@ function init() {
 }
 
 async function loadIntoGroup(category, part, group) {
-  const gltf = await loadGLTF(urlFor(part));
+  const gltf = await loadGLTFCached(urlFor(part));
   if (state.avatarConfig[category] !== part) return;
 
   gltf.scene.animations = gltf.animations;
