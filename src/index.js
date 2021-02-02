@@ -20,18 +20,19 @@ function AvatarPartList({ children }) {
 function AvatarPartButton({ part, onPartSelected, onPartEnter, onPartLeave }) {
   return (
     <>
-      <button
-        onClick={() => {
-          onPartSelected(part.value);
-        }}
-        onPointerEnter={() => {
-          onPartEnter(part.value);
-        }}
-        onPointerLeave={() => {
-          onPartLeave();
-        }}
-        className="avatarPartButton"
-      ></button>
+        <button
+          onClick={() => {
+            onPartSelected(part.value);
+          }}
+          onPointerEnter={() => {
+            onPartEnter(part.value);
+          }}
+          onPointerLeave={() => {
+            onPartLeave();
+          }}
+          className="avatarPartButton"
+        >
+        </button>
     </>
   );
 }
@@ -128,24 +129,31 @@ function App() {
 
   return (
     <>
-      <div className="fun">
-        {categories.map((category) => (
-          <AvatarPartSelector
-            key={category}
-            categoryName={category}
-            selected={avatarConfig[category]}
-            onPartSelected={(selection) => {
-              updateAvatarConfig({ [category]: selection });
-            }}
-            onPartEnter={(selection) => {
-              setHoveredConfig({ [category]: selection });
-            }}
-            onPartLeave={() => {
-              setHoveredConfig({});
-            }}
-            parts={assets[category]}
-          />
-        ))}
+      <div className="main">
+        <div className="selector">
+          {categories.map((category) => (
+            <AvatarPartSelector
+              key={category}
+              categoryName={category}
+              selected={avatarConfig[category]}
+              onPartSelected={(selection) => {
+                updateAvatarConfig({ [category]: selection });
+              }}
+              onPartEnter={(selection) => {
+                setHoveredConfig({ [category]: selection });
+              }}
+              onPartLeave={() => {
+                setHoveredConfig({});
+              }}
+              parts={assets[category]}
+            />
+          ))}
+        </div>
+        <div id="sceneContainer">
+          <canvas id="scene"></canvas>
+        </div>
+      </div>
+      <div id="toolbar">
         <button onClick={randomizeConfig}>Randomize avatar</button>
         <button onClick={dispatchExport}>Export avatar</button>
         <button onClick={dispatchResetView}>Reset camera view</button>
@@ -153,9 +161,6 @@ function App() {
           Upload custom part:
           <input onChange={onGLBUploaded} type="file" id="input" accept="model/gltf-binary,.glb"></input>
         </label>
-      </div>
-      <div id="sceneContainer">
-        <canvas id="scene"></canvas>
       </div>
     </>
   );

@@ -1,9 +1,13 @@
 :root {
   --button-bg-color: gray;
+  --button-border-color: white;
   --button-hover-border-color: lightblue;
   --button-size: 64px;
   --button-border-radius: 16px;
   --button-border-size: 4px;
+  --button-outer-border-size: 6px;
+  --button-outer-border-offset: -9px;
+  --button-outer-border-radius: calc(var(--button-border-radius) * 1.3);
 
   --font-weight-not-bold-heading: 400;
   --font-weight-bold-heading: 600;
@@ -29,17 +33,22 @@ body,
   height: 100vh;
 }
 
-.fun {
+#root {
+  display:flex;
+  flex-direction: column;
+}
+
+.selector {
   overflow: auto;
   padding: 32px 64px;
 }
 
-#root {
+.main {
   display: flex;
   overflow: hidden;
 }
 
-#root > * {
+.main > * {
     width: 50%;
 }
 
@@ -77,9 +86,25 @@ label {
   height: var(--button-size);
   background-color: var(--button-bg-color);
   border-radius: var(--button-border-radius);
+  border: var(--button-border-size) solid;
+  border-color: var(--button-border-color);
+  position: relative;
+  outline: none;
+}
+.avatarPartButton:after {
+  content: '';
 }
 
-.avatarPartButton:focus,
-.avatarPartButton:hover {
-  border: var(--button-border-size) solid var(--button-hover-border-color);
+.avatarPartButton:focus:after,
+.avatarPartButton:hover:after {
+  content: '';
+  display: block;
+  position: absolute;
+  top: var(--button-outer-border-offset);
+  bottom: var(--button-outer-border-offset);
+  left: var(--button-outer-border-offset);
+  right: var(--button-outer-border-offset);
+  border-radius: var(--button-outer-border-radius);
+  border: var(--button-outer-border-size) solid white;
+  border-color: var(--button-hover-border-color);
 }
