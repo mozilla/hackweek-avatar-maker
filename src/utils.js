@@ -114,6 +114,7 @@ export const loadGLTFCached = (function () {
         (error) => {
           console.error(`Failed to load ${url}`, error);
           cache.delete(url);
+          return null;
         }
       );
       cache.set(url, promise);

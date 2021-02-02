@@ -91,21 +91,27 @@ function init() {
 }
 
 async function loadIntoGroup(category, part, group) {
-  const gltf = await loadGLTFCached(urlFor(part));
-  if (state.avatarConfig[category] !== part) return;
+  try {
+    const gltf = await loadGLTFCached(urlFor(part));
+    if (state.avatarConfig[category] !== part) return;
 
-  gltf.scene.animations = gltf.animations;
-  gltf.scene.traverse((obj) => {
-    forEachMaterial(obj, (material) => {
-      if (material.isMeshStandardMaterial) {
-        material.envMap = state.envMap;
-        material.needsUpdate = true;
-      }
+    gltf.scene.animations = gltf.animations;
+    gltf.scene.traverse((obj) => {
+      forEachMaterial(obj, (material) => {
+        if (material.isMeshStandardMaterial) {
+          material.envMap = state.envMap;
+          material.needsUpdate = true;
+        }
+      });
     });
-  });
 
-  group.clear();
-  group.add(gltf.scene);
+    group.clear();
+    group.add(gltf.scene);
+  } catch (ex) {
+    if (state.avatarConfig[category] !== part) return;
+    group.clear();
+    return;
+  }
 }
 
 function tick(time) {
