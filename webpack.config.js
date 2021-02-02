@@ -2,8 +2,11 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 
+const isProd = process.env.NODE_ENV === "production";
+const publicPath = isProd ? "/dist/" : "/";
+
 module.exports = {
-  devtool: process.env.NODE_ENV === "production" ? "source-map" : "inline-source-map",
+  devtool: isProd ? "source-map" : "inline-source-map",
   mode: process.env.NODE_ENV || "development",
   module: {
     rules: [
@@ -21,7 +24,7 @@ module.exports = {
   },
   devServer: {
     contentBase: "./",
-    publicPath: "/dist/",
+    publicPath: publicPath,
     host: "0.0.0.0",
   },
   optimization: {
@@ -30,14 +33,14 @@ module.exports = {
     }
   },
   output: {
-    publicPath: "/dist/",
+    publicPath: publicPath,
     path: path.join(__dirname, "dist"),
     filename: "[name]-[chunkhash].js",
   },
   plugins: [
-    new CleanWebpackPlugin(),
+    ...(isProd ? [new CleanWebpackPlugin()] : []),
     new HtmlWebpackPlugin({
-      filename: process.env.NODE_ENV === "production" ? path.resolve("./index.html") : "index.html",
+      filename: isProd ? path.resolve("./index.html") : "index.html",
       template: "src/index.html",
     }),
   ],
