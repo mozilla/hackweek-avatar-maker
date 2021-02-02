@@ -77,26 +77,33 @@ export function describeObject3D(root) {
 
 export const loadGLTF = (function () {
   const loader = new GLTFLoader();
+  const cache = new Map();
   return function loadGLTF(url) {
     return new Promise(function (resolve, reject) {
-      loader.load(
-        url,
-        function (gltf) {
-          resolve(gltf);
-          // gltf.animations; // Array<THREE.AnimationClip>
-          // gltf.scene; // THREE.Group
-          // gltf.scenes; // Array<THREE.Group>
-          // gltf.cameras; // Array<THREE.Camera>
-          // gltf.asset; // Object
-        },
-        function (xhr) {
-          // console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
-        },
-        function (error) {
-          console.log("An error happened");
-          reject(error);
-        }
-      );
+      const cached = cache.get(url);
+      if (cached) {
+        resolve(cached);
+      } else {
+        loader.load(
+          url,
+          function (gltf) {
+            cache.set(url, gltf);
+            resolve(gltf);
+            // gltf.animations; // Array<THREE.AnimationClip>
+            // gltf.scene; // THREE.Group
+            // gltf.scenes; // Array<THREE.Group>
+            // gltf.cameras; // Array<THREE.Camera>
+            // gltf.asset; // Object
+          },
+          function (xhr) {
+            // console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+          },
+          function (error) {
+            console.log("An error happened");
+            reject(error);
+          }
+        );
+      }
     });
   };
 })();
@@ -134,7 +141,7 @@ export function createSky() {
   uniforms["mieCoefficient"].value = 0.005;
   uniforms["mieDirectionalG"].value = 0.7;
 
-  const inclination = 0.70;
+  const inclination = 0.7;
   const azimuth = 0.55;
   const theta = Math.PI * (inclination - 0.5);
   const phi = 2 * Math.PI * (azimuth - 0.5);

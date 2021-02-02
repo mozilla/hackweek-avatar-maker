@@ -94,11 +94,7 @@ async function loadIntoGroup(category, part, group) {
   const gltf = await loadGLTF(urlFor(part));
   if (state.avatarConfig[category] !== part) return;
 
-  // TODO: Multiple of these might be in flight at any given time.
   gltf.scene.animations = gltf.animations;
-  group.clear();
-  group.add(gltf.scene);
-
   gltf.scene.traverse((obj) => {
     forEachMaterial(obj, (material) => {
       if (material.isMeshStandardMaterial) {
@@ -107,6 +103,9 @@ async function loadIntoGroup(category, part, group) {
       }
     });
   });
+
+  group.clear();
+  group.add(gltf.scene);
 }
 
 function tick(time) {
