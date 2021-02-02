@@ -1,3 +1,7 @@
+const path = require("path");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+
 module.exports = {
   devtool: process.env.NODE_ENV === "production" ? "source-map" : "inline-source-map",
   mode: process.env.NODE_ENV || "development",
@@ -19,7 +23,20 @@ module.exports = {
     contentBase: "./",
     host: "0.0.0.0",
   },
-  output: {
-    path: __dirname,
+  optimization: {
+    splitChunks: {
+      chunks: "all"
+    }
   },
+  output: {
+    path: path.join(__dirname, "dist"),
+    filename: "[name]-[contenthash].js",
+  },
+  plugins: [
+    new CleanWebpackPlugin(),
+    new HtmlWebpackPlugin({
+      filename: path.resolve("./index.html"),
+      template: "src/index.html",
+    }),
+  ],
 };
