@@ -21,6 +21,13 @@ export function findChildByName(root, name) {
   });
 }
 
+export function findChildByType(root, type) {
+  return findChild({
+    candidates: [root],
+    predicate: (o) => o.type === type,
+  });
+}
+
 function findChildren({ candidates, predicate, results = [] }) {
   if (!candidates.length) {
     return results;

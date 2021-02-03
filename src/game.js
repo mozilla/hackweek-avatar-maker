@@ -4,6 +4,7 @@ import { GLTFExporter } from "three/examples/jsm/exporters/GLTFExporter";
 import constants from "./constants";
 import { exportAvatar } from "./export";
 import { loadGLTFCached, forEachMaterial, generateEnvironmentMap, createSky } from "./utils";
+import { screenshot } from "./screenshot";
 
 // TODO: Don't do this
 function urlFor(value) {
@@ -107,6 +108,8 @@ async function loadIntoGroup(category, part, group) {
 
     group.clear();
     group.add(gltf.scene);
+    // TODO Move this out of here
+    const screenshotURL = await screenshot(gltf.scene, category, part);
   } catch (ex) {
     if (state.avatarConfig[category] !== part) return;
     group.clear();
