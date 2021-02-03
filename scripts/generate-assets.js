@@ -1,7 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 
-const excludeFromRandomize = ["Torso", "Head", "Hands", "Eyes", "Mouth", "Eyebrows"];
+const neverRandomizeToNone = ["Torso", "Head", "Hands", "Eyes", "Mouth", "Eyebrows"];
 
 function generateAssetsStructure(directory) {
   const assetFileNames = fs.readdirSync(path.resolve(directory));
@@ -23,7 +23,11 @@ function generateAssetsStructure(directory) {
 
     if (!assets[category]) {
       assets[category] = [
-        { value: null, displayName: "none", excludeFromRandomize: excludeFromRandomize.includes(category) },
+        { 
+          value: null,
+          displayName: "none",
+          excludeFromRandomize: neverRandomizeToNone.includes(category) 
+        },
       ];
     }
 

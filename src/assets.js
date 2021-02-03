@@ -58,6 +58,118 @@ export default {
     {
       "value": "eyebrows_brown",
       "displayName": "Brown"
+    },
+    {
+      "value": "eyebrows_style-1-black",
+      "displayName": "Style 1 Black"
+    },
+    {
+      "value": "eyebrows_style-1-blonde",
+      "displayName": "Style 1 Blonde"
+    },
+    {
+      "value": "eyebrows_style-1-brown",
+      "displayName": "Style 1 Brown"
+    },
+    {
+      "value": "eyebrows_style-1-gray",
+      "displayName": "Style 1 Gray"
+    },
+    {
+      "value": "eyebrows_style-1-light-brown",
+      "displayName": "Style 1 Light Brown"
+    },
+    {
+      "value": "eyebrows_style-1-pink",
+      "displayName": "Style 1 Pink"
+    },
+    {
+      "value": "eyebrows_style-1-white",
+      "displayName": "Style 1 White"
+    },
+    {
+      "value": "eyebrows_style-2-black",
+      "displayName": "Style 2 Black"
+    },
+    {
+      "value": "eyebrows_style-2-blonde",
+      "displayName": "Style 2 Blonde"
+    },
+    {
+      "value": "eyebrows_style-2-brown",
+      "displayName": "Style 2 Brown"
+    },
+    {
+      "value": "eyebrows_style-2-gray",
+      "displayName": "Style 2 Gray"
+    },
+    {
+      "value": "eyebrows_style-2-light-brown",
+      "displayName": "Style 2 Light Brown"
+    },
+    {
+      "value": "eyebrows_style-2-pink",
+      "displayName": "Style 2 Pink"
+    },
+    {
+      "value": "eyebrows_style-2-white",
+      "displayName": "Style 2 White"
+    },
+    {
+      "value": "eyebrows_style-3-black",
+      "displayName": "Style 3 Black"
+    },
+    {
+      "value": "eyebrows_style-3-blonde",
+      "displayName": "Style 3 Blonde"
+    },
+    {
+      "value": "eyebrows_style-3-brown",
+      "displayName": "Style 3 Brown"
+    },
+    {
+      "value": "eyebrows_style-3-gray",
+      "displayName": "Style 3 Gray"
+    },
+    {
+      "value": "eyebrows_style-3-light-brown",
+      "displayName": "Style 3 Light Brown"
+    },
+    {
+      "value": "eyebrows_style-3-pink",
+      "displayName": "Style 3 Pink"
+    },
+    {
+      "value": "eyebrows_style-3-white",
+      "displayName": "Style 3 White"
+    },
+    {
+      "value": "eyebrows_style-4-black",
+      "displayName": "Style 4 Black"
+    },
+    {
+      "value": "eyebrows_style-4-blonde",
+      "displayName": "Style 4 Blonde"
+    },
+    {
+      "value": "eyebrows_style-4-brown",
+      "displayName": "Style 4 Brown"
+    },
+    {
+      "value": "eyebrows_style-4-gray",
+      "displayName": "Style 4 Gray"
+    },
+    {
+      "value": "eyebrows_style-4-light-brown",
+      "displayName": "Style 4 Light Brown"
+    },
+    {
+      "value": "eyebrows_style-4-pink",
+      "displayName": "Style 4 Pink"
+    },
+    {
+      "value": "eyebrows_style-4-white",
+      "displayName": "Style 4 White"
     }
   ],
   "Eyes": [
@@ -405,6 +517,198 @@ export default {
       "excludeFromRandomize": true
     },
     {
+      "value": "head_bald-skin-1",
+      "displayName": "Bald Skin 1"
+    },
+    {
+      "value": "head_bald-skin-2",
+      "displayName": "Bald Skin 2"
+    },
+    {
+      "value": "head_bald-skin-3",
+      "displayName": "Bald Skin 3"
+    },
+    {
+      "value": "head_bald-skin-4",
+      "displayName": "Bald Skin 4"
+    },
+    {
+      "value": "head_bald-skin-5",
+      "displayName": "Bald Skin 5"
+    },
+    {
+      "value": "head_bald-skin-6",
+      "displayName": "Bald Skin 6"
+    },
+    {
+      "value": "head_bald-skin-7",
+      "displayName": "Bald Skin 7"
+    },
+    {
+      "value": "head_bald-skin-8",
+      "displayName": "Bald Skin 8"
+    },
+    {
+      "value": "head_bald-skin-a",
+      "displayName": "Bald Skin A"
+    },
+    {
+      "value": "head_bald-skin-b",
+      "displayName": "Bald Skin B"
+    },
+    {
+      "value": "head_bald-skin-c",
+      "displayName": "Bald Skin C"
+    },
+    {
+      "value": "head_bald-skin-d",
+      "displayName": "Bald Skin D"
+    },
+    {
+      "value": "head_bald-skin-e",
+      "displayName": "Bald Skin E"
+    },
+    {
+      "value": "head_bald-skin-f",
+      "displayName": "Bald Skin F"
+    },
+    {
+      "value": "head_bald-skin-g",
+      "displayName": "Bald Skin G"
+    },
+    {
+      "value": "head_bald-skin-h",
+      "displayName": "Bald Skin H"
+    },
+    {
+      "value": "head_freckles-skin-1",
+      "displayName": "Freckles Skin 1"
+    },
+    {
+      "value": "head_freckles-skin-2",
+      "displayName": "Freckles Skin 2"
+    },
+    {
+      "value": "head_freckles-skin-3",
+      "displayName": "Freckles Skin 3"
+    },
+    {
+      "value": "head_freckles-skin-4",
+      "displayName": "Freckles Skin 4"
+    },
+    {
+      "value": "head_freckles-skin-5",
+      "displayName": "Freckles Skin 5"
+    },
+    {
+      "value": "head_freckles-skin-6",
+      "displayName": "Freckles Skin 6"
+    },
+    {
+      "value": "head_freckles-skin-7",
+      "displayName": "Freckles Skin 7"
+    },
+    {
+      "value": "head_freckles-skin-8",
+      "displayName": "Freckles Skin 8"
+    },
+    {
+      "value": "head_freckles-skin-a",
+      "displayName": "Freckles Skin A"
+    },
+    {
+      "value": "head_freckles-skin-b",
+      "displayName": "Freckles Skin B"
+    },
+    {
+      "value": "head_freckles-skin-c",
+      "displayName": "Freckles Skin C"
+    },
+    {
+      "value": "head_freckles-skin-d",
+      "displayName": "Freckles Skin D"
+    },
+    {
+      "value": "head_freckles-skin-e",
+      "displayName": "Freckles Skin E"
+    },
+    {
+      "value": "head_freckles-skin-f",
+      "displayName": "Freckles Skin F"
+    },
+    {
+      "value": "head_freckles-skin-g",
+      "displayName": "Freckles Skin G"
+    },
+    {
+      "value": "head_freckles-skin-h",
+      "displayName": "Freckles Skin H"
+    },
+    {
+      "value": "head_shaved-skin-1",
+      "displayName": "Shaved Skin 1"
+    },
+    {
+      "value": "head_shaved-skin-2",
+      "displayName": "Shaved Skin 2"
+    },
+    {
+      "value": "head_shaved-skin-3",
+      "displayName": "Shaved Skin 3"
+    },
+    {
+      "value": "head_shaved-skin-4",
+      "displayName": "Shaved Skin 4"
+    },
+    {
+      "value": "head_shaved-skin-5",
+      "displayName": "Shaved Skin 5"
+    },
+    {
+      "value": "head_shaved-skin-6",
+      "displayName": "Shaved Skin 6"
+    },
+    {
+      "value": "head_shaved-skin-7",
+      "displayName": "Shaved Skin 7"
+    },
+    {
+      "value": "head_shaved-skin-8",
+      "displayName": "Shaved Skin 8"
+    },
+    {
+      "value": "head_shaved-skin-a",
+      "displayName": "Shaved Skin A"
+    },
+    {
+      "value": "head_shaved-skin-b",
+      "displayName": "Shaved Skin B"
+    },
+    {
+      "value": "head_shaved-skin-c",
+      "displayName": "Shaved Skin C"
+    },
+    {
+      "value": "head_shaved-skin-d",
+      "displayName": "Shaved Skin D"
+    },
+    {
+      "value": "head_shaved-skin-e",
+      "displayName": "Shaved Skin E"
+    },
+    {
+      "value": "head_shaved-skin-f",
+      "displayName": "Shaved Skin F"
+    },
+    {
+      "value": "head_shaved-skin-g",
+      "displayName": "Shaved Skin G"
+    },
+    {
+      "value": "head_shaved-skin-h",
+      "displayName": "Shaved Skin H"
+    },
+    {
       "value": "head_skin-1",
       "displayName": "Skin 1"
     },
@@ -494,6 +798,10 @@ export default {
     {
       "value": "mouth_neutral-skin-5",
       "displayName": "Neutral Skin 5"
+    },
+    {
+      "value": "mouth_neutral-skin-6",
+      "displayName": "Neutral Skin 6"
     },
     {
       "value": "mouth_neutral-skin-7",
@@ -608,7 +916,8 @@ export default {
     },
     {
       "value": "torso-jacket_style-1-punk-leather-1-black",
-      "displayName": "Style 1 Punk Leather 1 Black"
+      "displayName": "Style 1 Punk Leather 1 Black",
+      "excludeFromRandomize": true
     }
   ],
   "Torso": [
@@ -630,6 +939,10 @@ export default {
       "displayName": "Style 1 Combat Vest Red"
     },
     {
+      "value": "torso_style-1-hoodie-1-gray",
+      "displayName": "Style 1 Hoodie 1 Gray"
+    },
+    {
       "value": "torso_style-1-ketchum",
       "displayName": "Style 1 Ketchum"
     },
@@ -640,6 +953,30 @@ export default {
     {
       "value": "torso_style-1-sport-coat-1-gray",
       "displayName": "Style 1 Sport Coat 1 Gray"
+    },
+    {
+      "value": "torso_style-1-tshirt-1-hubs-black",
+      "displayName": "Style 1 Tshirt 1 Hubs Black"
+    },
+    {
+      "value": "torso_style-1-tshirt-1-hubs-gray",
+      "displayName": "Style 1 Tshirt 1 Hubs Gray"
+    },
+    {
+      "value": "torso_style-1-tshirt-1-hubs-light-gray",
+      "displayName": "Style 1 Tshirt 1 Hubs Light Gray"
+    },
+    {
+      "value": "torso_style-1-tshirt-1-hubs-white",
+      "displayName": "Style 1 Tshirt 1 Hubs White"
+    },
+    {
+      "value": "torso_style-1-tshirt-1-moz",
+      "displayName": "Style 1 Tshirt 1 Moz"
+    },
+    {
+      "value": "torso_style-1-tshirt-1-union-jack",
+      "displayName": "Style 1 Tshirt 1 Union Jack"
     },
     {
       "value": "torso_style-1-tshirt-moz",
@@ -656,6 +993,10 @@ export default {
     {
       "value": "torso_style-1-ugly-christmas-1",
       "displayName": "Style 1 Ugly Christmas 1"
+    },
+    {
+      "value": "torso_style-2-baseball-giants",
+      "displayName": "Style 2 Baseball Giants"
     },
     {
       "value": "torso_style-2-hoodie-1-gray",
@@ -678,8 +1019,32 @@ export default {
       "displayName": "Style 2 Tshirt 1 Heart"
     },
     {
+      "value": "torso_style-2-tshirt-1-hubs-black",
+      "displayName": "Style 2 Tshirt 1 Hubs Black"
+    },
+    {
+      "value": "torso_style-2-tshirt-1-hubs-gray",
+      "displayName": "Style 2 Tshirt 1 Hubs Gray"
+    },
+    {
+      "value": "torso_style-2-tshirt-1-hubs-light-gray",
+      "displayName": "Style 2 Tshirt 1 Hubs Light Gray"
+    },
+    {
+      "value": "torso_style-2-tshirt-1-hubs-white",
+      "displayName": "Style 2 Tshirt 1 Hubs White"
+    },
+    {
       "value": "torso_style-2-tshirt-1-moz",
       "displayName": "Style 2 Tshirt 1 Moz"
+    },
+    {
+      "value": "torso_style-2-tshirt-union-jack",
+      "displayName": "Style 2 Tshirt Union Jack"
+    },
+    {
+      "value": "torso_style-2-tshirt1-reactor",
+      "displayName": "Style 2 Tshirt1 Reactor"
     }
   ]
 };
