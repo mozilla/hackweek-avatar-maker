@@ -4,7 +4,7 @@ import { GLTFExporter } from "three/examples/jsm/exporters/GLTFExporter";
 import constants from "./constants";
 import { exportAvatar } from "./export";
 import { loadGLTFCached, forEachMaterial, generateEnvironmentMap, createSky } from "./utils";
-import { screenshot } from "./screenshot";
+import { renderThumbnail } from "./render-thumbnail";
 
 // TODO: Don't do this
 function urlFor(value) {
@@ -30,6 +30,8 @@ const state = {
   shouldApplyNewAvatarConfig: false,
   shouldExportAvatar: false,
   shouldResetView: false,
+  thumbnailConfig: {},
+  shouldRenderThumbnail: false,
 };
 window.gameState = state;
 
@@ -43,12 +45,23 @@ document.addEventListener(constants.avatarConfigChanged, (e) => {
   state.newAvatarConfig = e.detail.avatarConfig;
   state.shouldApplyNewAvatarConfig = true;
 });
+document.addEventListener(constants.renderThumbnail, (e) => {
+  state.thumbnailConfig = e.detail.thumbnailConfig;
+  state.shouldRenderThumbnail = true;
+});
 document.addEventListener(constants.exportAvatar, () => {
   state.shouldExportAvatar = true;
 });
 document.addEventListener(constants.resetView, () => {
   state.shouldResetView = true;
 });
+
+function ensureAvatarNode(category) {
+  if (!state.avatarNodes[category]) {
+    state.avatarNodes[category] = new THREE.Group();
+    state.avatarGroup.add(state.avatarNodes[category]);
+  }
+}
 
 function resetView() {
   state.controls.reset();
@@ -108,8 +121,7 @@ async function loadIntoGroup(category, part, group) {
 
     group.clear();
     group.add(gltf.scene);
-    // TODO Move this out of here
-    const screenshotURL = await screenshot(gltf.scene, category, part);
+    return gltf.scene;
   } catch (ex) {
     if (state.avatarConfig[category] !== part) return;
     group.clear();
@@ -154,20 +166,33 @@ function tick(time) {
       const categories = new Set(Object.keys(state.newAvatarConfig).concat(Object.keys(state.avatarConfig)));
 
       for (const category of categories) {
-        if (!state.avatarNodes[category]) {
-          state.avatarNodes[category] = new THREE.Group();
-          state.avatarGroup.add(state.avatarNodes[category]);
-        }
+        ensureAvatarNode(category);
 
         if (state.newAvatarConfig[category] !== state.avatarConfig[category]) {
+          state.avatarConfig[category] = state.newAvatarConfig[category];
           if (state.newAvatarConfig[category] !== null) {
             loadIntoGroup(category, state.newAvatarConfig[category], state.avatarNodes[category]);
           } else {
             state.avatarNodes[category].clear();
           }
-          state.avatarConfig[category] = state.newAvatarConfig[category];
         }
       }
+    }
+  }
+
+  { 
+    if (state.shouldRenderThumbnail) {
+      state.shouldRenderThumbnail = false;
+      for (const category in state.avatarNodes) {
+        if (!state.avatarNodes.hasOwnProperty(category)) continue;
+        state.avatarNodes[category].clear();
+      }
+      const { category, part } = state.thumbnailConfig;
+      ensureAvatarNode(category);
+      state.avatarConfig[category] = part;
+      loadIntoGroup(category, part, state.avatarNodes[category]).then((gltfScene) => {
+        renderThumbnail(state.renderer, state.scene, gltfScene, category, part);
+      });
     }
   }
 

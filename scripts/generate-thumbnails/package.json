@@ -1,0 +1,10 @@
+{
+  "private": true,
+  "scripts": {
+    "gen-thumbnails": "node -r esm generate-thumbnails.js"
+  },
+  "dependencies": {
+    "esm": "^3.2.25",
+    "puppeteer": "^7.0.0"
+  }
+}

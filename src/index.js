@@ -1,12 +1,20 @@
 import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
-import SimpleBar from 'simplebar-react';
-import 'simplebar/dist/simplebar.min.css';
+import SimpleBar from "simplebar-react";
+import "simplebar/dist/simplebar.min.css";
 import "./game";
 import constants from "./constants";
 import initialAssets from "./assets";
 import { generateWave } from "./utils";
 
+function dispatch(eventName, detail) {
+  document.dispatchEvent(new CustomEvent(eventName, { detail }));
+}
+
+// Used externally by the generate-thumbnails script
+window.renderThumbnail = (category, part) => {
+  dispatch(constants.renderThumbnail, { thumbnailConfig: { category, part } });
+};
 
 function CategoryHeading({ categoryName, selectedPartName }) {
   return (
@@ -24,19 +32,18 @@ function AvatarPartList({ children }) {
 function AvatarPartButton({ part, selected, onPartSelected, onPartEnter, onPartLeave }) {
   return (
     <>
-        <button
-          onClick={() => {
-            onPartSelected(part.value);
-          }}
-          onPointerEnter={() => {
-            onPartEnter(part.value);
-          }}
-          onPointerLeave={() => {
-            onPartLeave();
-          }}
-          className={"avatarPartButton " + (selected && "selected")}
-        >
-        </button>
+      <button
+        onClick={() => {
+          onPartSelected(part.value);
+        }}
+        onPointerEnter={() => {
+          onPartEnter(part.value);
+        }}
+        onPointerLeave={() => {
+          onPartLeave();
+        }}
+        className={"avatarPartButton " + (selected && "selected")}
+      ></button>
     </>
   );
 }
@@ -65,6 +72,9 @@ function AvatarPartSelector({ onPartSelected, onPartEnter, onPartLeave, parts, s
 }
 
 function App() {
+  // Used externally by the generate-thumbnails script
+  const thumbnailMode = new URLSearchParams(location.search).get("thumbnail") !== null;
+
   const [assets, setAssets] = useState(initialAssets);
   const [hoveredConfig, setHoveredConfig] = useState({});
   const [canvasUrl, setCanvasUrl] = useState(null);
@@ -109,14 +119,13 @@ function App() {
   }
 
   useEffect(() => {
-    document.dispatchEvent(
-      new CustomEvent(constants.avatarConfigChanged, {
-        detail: { avatarConfig: { ...avatarConfig, ...hoveredConfig } },
-      })
-    );
-    document.dispatchEvent(new CustomEvent(constants.reactIsLoaded));
+    if (!thumbnailMode) {
+      dispatch(constants.avatarConfigChanged, { avatarConfig: { ...avatarConfig, ...hoveredConfig } });
+    }
+    dispatch(constants.reactIsLoaded);
   });
 
+  // TODO: Save the wave to a static image, or actually do some interesting animation with it.
   useEffect(async () => {
     if (canvasUrl === null) {
       setCanvasUrl(await generateWave());
@@ -132,52 +141,58 @@ function App() {
   }
 
   function dispatchExport() {
-    document.dispatchEvent(new CustomEvent(constants.exportAvatar));
+    dispatch(constants.exportAvatar);
   }
 
   function dispatchResetView() {
-    document.dispatchEvent(new CustomEvent(constants.resetView));
+    dispatch(constants.resetView);
   }
 
   return (
     <>
       <div className="main">
-        <div className="selector">
-          <SimpleBar style={{ height: '100%' }}>
-            {categories.map((category) => (
-              <AvatarPartSelector
-                key={category}
-                categoryName={category}
-                selected={avatarConfig[category]}
-                onPartSelected={(selection) => {
-                  updateAvatarConfig({ [category]: selection });
-                }}
-                onPartEnter={(selection) => {
-                  setHoveredConfig({ [category]: selection });
-                }}
-                onPartLeave={() => {
-                  setHoveredConfig({});
-                }}
-                parts={assets[category]}
-              />
-            ))}
-          </SimpleBar>
-        </div>
+        {!thumbnailMode && (
+          <div className="selector">
+            <SimpleBar style={{ height: "100%" }}>
+              {categories.map((category) => (
+                <AvatarPartSelector
+                  key={category}
+                  categoryName={category}
+                  selected={avatarConfig[category]}
+                  onPartSelected={(selection) => {
+                    updateAvatarConfig({ [category]: selection });
+                  }}
+                  onPartEnter={(selection) => {
+                    setHoveredConfig({ [category]: selection });
+                  }}
+                  onPartLeave={() => {
+                    setHoveredConfig({});
+                  }}
+                  parts={assets[category]}
+                />
+              ))}
+            </SimpleBar>
+          </div>
+        )}
         <div id="sceneContainer">
-          <div className="waveContainer" style={{backgroundImage: `url("${canvasUrl}")`}}></div>
+          {!thumbnailMode && <div className="waveContainer" style={{ backgroundImage: `url("${canvasUrl}")` }}></div>}
           <canvas id="scene"></canvas>
         </div>
       </div>
-      <div className="toolbar">
-        <span className="appName">babw</span>
-        <label className="uploadButton" tabIndex="0">
-          Upload custom part
-          <input onChange={onGLBUploaded} type="file" id="input" accept="model/gltf-binary,.glb"></input>
-        </label>
-        <button onClick={randomizeConfig}>Randomize avatar</button>
-        <button onClick={dispatchResetView}>Reset camera view</button>
-        <button onClick={dispatchExport} className="primary">Export avatar</button>
-      </div>
+      {!thumbnailMode && (
+        <div className="toolbar">
+          <span className="appName">babw</span>
+          <label className="uploadButton" tabIndex="0">
+            Upload custom part
+            <input onChange={onGLBUploaded} type="file" id="input" accept="model/gltf-binary,.glb"></input>
+          </label>
+          <button onClick={randomizeConfig}>Randomize avatar</button>
+          <button onClick={dispatchResetView}>Reset camera view</button>
+          <button onClick={dispatchExport} className="primary">
+            Export avatar
+          </button>
+        </div>
+      )}
     </>
   );
 }
