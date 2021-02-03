@@ -3,7 +3,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 
 const isProd = process.env.NODE_ENV === "production";
-const publicPath = isProd ? "/dist/" : "/";
+const publicPath = isProd ? "dist/" : "/";
 
 module.exports = {
   devtool: isProd ? "source-map" : "inline-source-map",
