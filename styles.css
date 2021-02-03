@@ -178,4 +178,6 @@ button.primary:focus {
   height: 100%;
   animation: wave 3s infinite;
   animation-timing-function: cubic-bezier(.2,.52,.79,.49);
+  /* Move 1 pixel to the left to workaround rendering issue in FF linux */
+  left: -1px;
 }
