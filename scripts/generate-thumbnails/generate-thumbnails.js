@@ -24,7 +24,7 @@ async function retrySelector(page, selector, timeout = 100, retries = 100) {
 }
 
 (async () => {
-  const browser = await puppeteer.launch({headless: false});
+  const browser = await puppeteer.launch({headless: true});
   const page = await browser.newPage();
   await page.goto(`http://${host}/?thumbnail`);
 
@@ -53,7 +53,7 @@ async function retrySelector(page, selector, timeout = 100, retries = 100) {
       thumbnailsToGenerate.push({ category, part: part.value });
     }
   }
-  thumbnailsToGenerate = thumbnailsToGenerate.slice(0, 10);
+  thumbnailsToGenerate = thumbnailsToGenerate;
 
   for (let i = 0; i < thumbnailsToGenerate.length; i++) {
     const { category, part } = thumbnailsToGenerate[i];

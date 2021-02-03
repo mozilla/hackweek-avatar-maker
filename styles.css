@@ -96,6 +96,7 @@ label {
   border-color: var(--button-border-color);
   position: relative;
   outline: none;
+  background-size: contain;
 }
 .avatarPartButton:after {
   content: '';

@@ -43,6 +43,7 @@ function AvatarPartButton({ part, selected, onPartSelected, onPartEnter, onPartL
           onPartLeave();
         }}
         className={"avatarPartButton " + (selected && "selected")}
+        style={{ backgroundImage: part.value ? `url("assets/thumbnails/${part.value}.png")` : "none" }}
       ></button>
     </>
   );

@@ -18,15 +18,15 @@ export function renderThumbnail(renderer, scene, gltfScene, category, part) {
   const size = box.getSize(new THREE.Vector3());
   const halfWidth = size.x / 2;
   const halfHeight = size.y / 2;
-  const maxDimension = Math.max(halfWidth, halfHeight);
-  const camera = new THREE.OrthographicCamera(-maxDimension, maxDimension, maxDimension, -maxDimension, 0.0001, 10);
+  const camSize = Math.max(halfWidth, halfHeight) * 1.1;
+  const camera = new THREE.OrthographicCamera(-camSize, camSize, camSize, -camSize, 0.0001, 10);
   const unitZ = new THREE.Vector3(0, 0, 1);
 
   camera.position.copy(new THREE.Vector3().copy(center).add(unitZ.multiplyScalar(size.z)));
 
   renderer.render(scene, camera);
 
-  renderer.domElement.toBlob(blob => {
+  renderer.domElement.toBlob((blob) => {
     const result = document.createElement("img");
     result.id = constants.thumbnailResult;
     document.body.append(result);
