@@ -44,6 +44,7 @@ body,
 .selector {
   overflow: auto;
   padding: 32px 64px;
+  width: 45%;
 }
 
 .main {
@@ -51,11 +52,9 @@ body,
   overflow: hidden;
 }
 
-.main > * {
-    width: 50%;
-}
-
 #sceneContainer {
+  position: relative;
+  width: 55%;
 }
 
 button,
@@ -166,4 +165,17 @@ button.primary:focus {
   font-size: 24pt;
   display: flex;
   align-items: center;
+}
+
+@keyframes wave {
+  from { background-position-y: 0 }
+  to { background-position-y: 400px; }
+}
+
+.waveContainer {
+  position: absolute;
+  width: 200px;
+  height: 100%;
+  animation: wave 3s infinite;
+  animation-timing-function: cubic-bezier(.2,.52,.79,.49);
 }

@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
+import SimpleBar from 'simplebar-react';
+import 'simplebar/dist/simplebar.min.css';
 import "./game";
 import constants from "./constants";
 import initialAssets from "./assets";
+import { generateWave } from "./utils";
+
 
 function CategoryHeading({ categoryName, selectedPartName }) {
   return (
@@ -63,6 +67,7 @@ function AvatarPartSelector({ onPartSelected, onPartEnter, onPartLeave, parts, s
 function App() {
   const [assets, setAssets] = useState(initialAssets);
   const [hoveredConfig, setHoveredConfig] = useState({});
+  const [canvasUrl, setCanvasUrl] = useState(null);
 
   const categories = Object.keys(assets);
 
@@ -112,6 +117,12 @@ function App() {
     document.dispatchEvent(new CustomEvent(constants.reactIsLoaded));
   });
 
+  useEffect(async () => {
+    if (canvasUrl === null) {
+      setCanvasUrl(await generateWave());
+    }
+  });
+
   function updateAvatarConfig(newConfig) {
     setAvatarConfig({ ...avatarConfig, ...newConfig });
   }
@@ -132,25 +143,28 @@ function App() {
     <>
       <div className="main">
         <div className="selector">
-          {categories.map((category) => (
-            <AvatarPartSelector
-              key={category}
-              categoryName={category}
-              selected={avatarConfig[category]}
-              onPartSelected={(selection) => {
-                updateAvatarConfig({ [category]: selection });
-              }}
-              onPartEnter={(selection) => {
-                setHoveredConfig({ [category]: selection });
-              }}
-              onPartLeave={() => {
-                setHoveredConfig({});
-              }}
-              parts={assets[category]}
-            />
-          ))}
+          <SimpleBar style={{ height: '100%' }}>
+            {categories.map((category) => (
+              <AvatarPartSelector
+                key={category}
+                categoryName={category}
+                selected={avatarConfig[category]}
+                onPartSelected={(selection) => {
+                  updateAvatarConfig({ [category]: selection });
+                }}
+                onPartEnter={(selection) => {
+                  setHoveredConfig({ [category]: selection });
+                }}
+                onPartLeave={() => {
+                  setHoveredConfig({});
+                }}
+                parts={assets[category]}
+              />
+            ))}
+          </SimpleBar>
         </div>
         <div id="sceneContainer">
+          <div className="waveContainer" style={{backgroundImage: `url("${canvasUrl}")`}}></div>
           <canvas id="scene"></canvas>
         </div>
       </div>
