@@ -141,8 +141,6 @@ function init() {
   state.envMap = generateEnvironmentMap(sky, renderer);
 
   const controls = new OrbitControls(camera, renderer.domElement);
-  controls.autoRotate = true;
-  controls.autoRotateSpeed = -1;
   controls.target = new THREE.Vector3(0, 0.5, 0);
   controls.update();
   controls.saveState();
@@ -208,8 +206,6 @@ function tick(time) {
 
   {
     const { renderer, scene, camera, controls } = state;
-
-    controls.update();
     renderer.render(scene, camera);
   }
 
