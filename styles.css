@@ -2,17 +2,17 @@
 
 :root {
   --primary-blue: #00a5f4;
-  --button-bg-color: lightgray;
+  --thumbnail-bg-color: lightgray;
   --button-border-color: white;
-  --button-hover-border-color: lightblue;
+  --hover-border-color: lightblue;
   --button-selected-border-color: var(--primary-blue);
-  --button-size: 64px;
-  --button-border-radius: 16px;
-  --button-border-size: 4px;
+  --thumbnail-size: 64px;
+  --border-radius: 16px;
+  --thumbnail-border-size: 4px;
 
-  --button-outer-border-size: 4px;
-  --button-outer-border-offset: -6px;
-  --button-outer-border-radius: calc(var(--button-border-radius) * 1.1);
+  --outer-border-size: 4px;
+  --outer-border-offset: -6px;
+  --outer-border-radius: calc(var(--border-radius) * 1.1);
 
   --font-weight-not-bold-heading: 400;
   --font-weight-bold-heading: 600;
@@ -73,57 +73,114 @@ label {
 }
 
 .categoryHeading {
-  margin: 12px 0px;
   display: flex;
   flex-flow: row no-wrap;
+  align-items: center;
+  padding: 6px 24px;
 }
 
-.categoryHeading h2 {
-  margin: 0 12px 0 0px;
+.categoryHeading h2, .categoryHeading .chevron {
+  margin-right: 12px;
+}
+.categoryHeading:hover .categoryName,
+.categoryHeading:hover .chevron {
+  color: var(--primary-blue);
+}
+
+.categoryHeading .chevron {
+  flex: 1;
+  text-align: left;
 }
 
 .categoryHeading .categoryName {
   font-weight: var(--font-weight-not-bold-heading);
+  white-space: nowrap;
 }
 .categoryHeading .selectedPartName {
   font-weight: var(--font-weight-bold-heading);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.categoryHeading .chevron {
+  flex: 1;
+  text-align: left;
 }
 
 .partSelector {
-  margin-bottom: 40px;
-}
-
-.avatarPartButton {
-  width: var(--button-size);
-  height: var(--button-size);
-  background-color: var(--button-bg-color);
-  border-radius: var(--button-border-radius);
-  border: var(--button-border-size) solid;
-  border-color: var(--button-border-color);
+  margin-bottom: 16px;
+  /* prevent margin collapse */
+  padding-bottom: 0.1px;
+  background-color: #f4f4f4;
+  border-radius: var(--border-radius);
   position: relative;
   outline: none;
-  background-size: contain;
 }
-.avatarPartButton:after {
+.partSelector:after, .avatarPartButton:after {
   content: '';
   display: block;
   position: absolute;
-  top: var(--button-outer-border-offset);
-  bottom: var(--button-outer-border-offset);
-  left: var(--button-outer-border-offset);
-  right: var(--button-outer-border-offset);
-  border-radius: var(--button-outer-border-radius);
+  top: var(--outer-border-offset);
+  bottom: var(--outer-border-offset);
+  left: var(--outer-border-offset);
+  right: var(--outer-border-offset);
+  border-radius: var(--outer-border-radius);
   border: none;
+  pointer-events: none;
+}
+.partSelector:focus:after,
+.partSelector.expanded:after,
+.partSelector.collapsed:hover:after {
+  border: var(--outer-border-size) solid;
+  border-color: var(--hover-border-color);
+}
+
+.partSelector .avatarPartList {
+  overflow: hidden;
+  margin: 14px;
+  margin-top: 4px;
+  transform: scaleY(1);
+  transform-origin: top;
+  opacity: 1;
+  transition: transform 0.2s, opacity 0.2s;
+}
+
+.partSelector.collapsed .avatarPartList {
+  transform: scaleY(0);
+  opacity: 0;
+  height: 0;
+  margin: 0;
+}
+
+.partThumbnail, .avatarPartButton {
+  min-width: var(--thumbnail-size);
+  height: var(--thumbnail-size);
+  background-color: var(--thumbnail-bg-color);
+  border-radius: var(--border-radius);
+  border: var(--thumbnail-border-size) solid;
+  border-color: #f4f4f4;
+  background-size: contain;
+}
+
+.partSelector.collapsed .avatarPartButton {
+  display: none;
+}
+
+.avatarPartButton {
+  border-color: var(--button-border-color);
+  position: relative;
+  outline: none;
 }
 
 .avatarPartButton:focus:after,
 .avatarPartButton:hover:after {
-  border: var(--button-outer-border-size) solid;
-  border-color: var(--button-hover-border-color);
+  border: var(--outer-border-size) solid;
+  border-color: var(--hover-border-color);
 }
 
 .avatarPartButton.selected:after {
-  border: var(--button-outer-border-size) solid;
+  border: var(--outer-border-size) solid;
   border-color: var(--button-selected-border-color);
 }
 
@@ -138,7 +195,7 @@ label {
 .toolbar button, .toolbar .uploadButton {
   display: inline;
   background-color: white;
-  border-radius: var(--button-border-radius);
+  border-radius: var(--border-radius);
   border: 2px solid grey;
   color: grey;
   font-size: 10pt;

@@ -1,7 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import ReactDOM from "react-dom";
 import SimpleBar from "simplebar-react";
 import "simplebar/dist/simplebar.min.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronDown, faChevronRight } from "@fortawesome/free-solid-svg-icons";
+import cx from "classnames";
+
 import "./game";
 import constants from "./constants";
 import initialAssets from "./assets";
@@ -16,58 +20,128 @@ window.renderThumbnail = (category, part) => {
   dispatch(constants.renderThumbnail, { thumbnailConfig: { category, part } });
 };
 
-function CategoryHeading({ categoryName, selectedPartName }) {
+function Chevron({ expanded }) {
   return (
-    <div className="categoryHeading">
-      <h2 className="categoryName">{categoryName}</h2>
-      <h2 className="selectedPartName">{selectedPartName}</h2>
+    <div className="chevron">
+      <FontAwesomeIcon icon={expanded ? faChevronDown : faChevronRight} />
     </div>
   );
 }
 
-function AvatarPartList({ children }) {
-  return <>{children}</>;
+function PartThumbnail({ as: Component = "div", image, className, ...props }) {
+  return (
+    <Component
+      className={cx("partThumbnail", className)}
+      style={{ backgroundImage: image ? `url("assets/thumbnails/${image}.png")` : "none" }}
+      {...props}
+    ></Component>
+  );
+}
+
+function CategoryHeading({ categoryName, selectedPartInfo, onClick, expanded }) {
+  return (
+    <div className="categoryHeading" onClick={onClick}>
+      <h2 className="categoryName">{categoryName}</h2>
+      <Chevron {...{ expanded }} />
+      <h2 className="selectedPartName">{selectedPartInfo.displayName}</h2>
+      <PartThumbnail image={selectedPartInfo.value} />
+    </div>
+  );
+}
+
+function AvatarPartList({ parts, selectedPart, ...props }) {
+  return (
+    <div className="avatarPartList">
+      {parts.map((part) => {
+        return <AvatarPartButton key={part.value} selected={part.value === selectedPart} part={part} {...props} />;
+      })}
+    </div>
+  );
 }
 
 function AvatarPartButton({ part, selected, onPartSelected, onPartEnter, onPartLeave }) {
   return (
-    <>
-      <button
-        onClick={() => {
-          onPartSelected(part.value);
-        }}
-        onPointerEnter={() => {
-          onPartEnter(part.value);
-        }}
-        onPointerLeave={() => {
-          onPartLeave();
-        }}
-        className={"avatarPartButton " + (selected && "selected")}
-        style={{ backgroundImage: part.value ? `url("assets/thumbnails/${part.value}.png")` : "none" }}
-      ></button>
-    </>
+    <PartThumbnail
+      as="button"
+      onClick={() => {
+        onPartSelected(part.value);
+      }}
+      onPointerEnter={() => {
+        onPartEnter(part.value);
+      }}
+      onPointerLeave={() => {
+        onPartLeave();
+      }}
+      aria-label={part.displayName}
+      className={cx("avatarPartButton", { selected })}
+      style={{ backgroundImage: part.value ? `url("assets/thumbnails/${part.value}.png")` : "none" }}
+    />
   );
 }
 
-function AvatarPartSelector({ onPartSelected, onPartEnter, onPartLeave, parts, selected, categoryName }) {
-  const selectedPart = parts.find((part) => part.value === selected);
+const AvatarPartContainer = React.forwardRef(({ expanded, setExpanded, children }, ref) => {
   return (
-    <div className="partSelector">
-      <CategoryHeading categoryName={categoryName} selectedPartName={selectedPart.displayName} />
-      <AvatarPartList>
-        {parts.map((part) => {
-          return (
-            <AvatarPartButton
-              key={part.value}
-              selected={part.value === selected}
-              onPartSelected={onPartSelected}
-              onPartEnter={onPartEnter}
-              onPartLeave={onPartLeave}
-              part={part}
-            />
-          );
-        })}
-      </AvatarPartList>
+    <div
+      tabIndex="0"
+      role="button"
+      className={"partSelector " + (expanded ? "expanded" : "collapsed")}
+      onKeyDown={(e) => {
+        if (e.target === e.currentTarget && (e.key === "Enter" || e.key === " ")) {
+          setExpanded(!expanded);
+          e.preventDefault();
+          e.stopPropagation();
+        }
+      }}
+      ref={ref}
+    >
+      {children}
+    </div>
+  );
+});
+
+function AvatarPartSelector({
+  onPartSelected,
+  onPartEnter,
+  onPartLeave,
+  setExpanded,
+  expanded,
+  parts,
+  selectedPart,
+  categoryName,
+}) {
+  const containerEl = useRef(null);
+  useEffect(() => {
+    if (expanded) {
+      containerEl.current.scrollIntoView({behavior: "smooth", block: "nearest"});
+    } 
+  }, [containerEl, expanded]);
+  const selectedPartInfo = parts.find((part) => part.value === selectedPart);
+  return (
+    <AvatarPartContainer ref={containerEl} {...{ expanded, setExpanded }}>
+      <CategoryHeading
+        categoryName={categoryName}
+        selectedPartInfo={selectedPartInfo}
+        onClick={() => setExpanded(!expanded)}
+        expanded={expanded}
+      />
+      <AvatarPartList {...{ parts, selectedPart, onPartSelected, onPartEnter, onPartLeave }} />
+    </AvatarPartContainer>
+  );
+}
+
+function Toolbar({ onGLBUploaded, randomizeConfig, dispatchResetView, dispatchExport }) {
+  return (
+    <div className="toolbar">
+      <span className="appName">babw</span>
+      <label className="uploadButton" tabIndex="0">
+        Upload custom part
+        <input onChange={onGLBUploaded} type="file" id="input" accept="model/gltf-binary,.glb"></input>
+      </label>
+      <button onClick={randomizeConfig}>Randomize avatar</button>
+      <button onClick={dispatchResetView}>Reset camera view</button>
+      <button onClick={dispatchExport} className="primary">
+        Export avatar
+      </button>
     </div>
   );
 }
@@ -79,6 +153,7 @@ function App() {
   const [assets, setAssets] = useState(initialAssets);
   const [hoveredConfig, setHoveredConfig] = useState({});
   const [canvasUrl, setCanvasUrl] = useState(null);
+  const [expandedCategory, setExpandedCategory] = useState(null);
 
   const categories = Object.keys(assets);
 
@@ -106,7 +181,7 @@ function App() {
     const clone = { ...assets };
     clone[category] = clone[category] || [
       {
-        displayName: "none",
+        displayName: "None",
         value: null,
       },
     ];
@@ -157,9 +232,11 @@ function App() {
             <SimpleBar className="simpleBar" style={{ height: "100%" }}>
               {categories.map((category) => (
                 <AvatarPartSelector
+                  expanded={expandedCategory === category}
+                  setExpanded={(expand) => setExpandedCategory(expand ? category : null)}
                   key={category}
                   categoryName={category}
-                  selected={avatarConfig[category]}
+                  selectedPart={avatarConfig[category]}
                   onPartSelected={(selection) => {
                     updateAvatarConfig({ [category]: selection });
                   }}
@@ -180,20 +257,7 @@ function App() {
           <canvas id="scene"></canvas>
         </div>
       </div>
-      {!thumbnailMode && (
-        <div className="toolbar">
-          <span className="appName">babw</span>
-          <label className="uploadButton" tabIndex="0">
-            Upload custom part
-            <input onChange={onGLBUploaded} type="file" id="input" accept="model/gltf-binary,.glb"></input>
-          </label>
-          <button onClick={randomizeConfig}>Randomize avatar</button>
-          <button onClick={dispatchResetView}>Reset camera view</button>
-          <button onClick={dispatchExport} className="primary">
-            Export avatar
-          </button>
-        </div>
-      )}
+      {!thumbnailMode && <Toolbar {...{ onGLBUploaded, randomizeConfig, dispatchResetView, dispatchExport }} />}
     </>
   );
 }

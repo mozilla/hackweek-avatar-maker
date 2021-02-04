@@ -2,7 +2,7 @@ export default {
   "Hair": [
     {
       "value": null,
-      "displayName": "none",
+      "displayName": "None",
       "excludeFromRandomize": false
     },
     {
@@ -109,7 +109,7 @@ export default {
   "Head": [
     {
       "value": null,
-      "displayName": "none",
+      "displayName": "None",
       "excludeFromRandomize": true
     },
     {
@@ -372,7 +372,7 @@ export default {
   "Eyes": [
     {
       "value": null,
-      "displayName": "none",
+      "displayName": "None",
       "excludeFromRandomize": true
     },
     {
@@ -423,7 +423,7 @@ export default {
   "Eyebrows": [
     {
       "value": null,
-      "displayName": "none",
+      "displayName": "None",
       "excludeFromRandomize": true
     },
     {
@@ -546,7 +546,7 @@ export default {
   "Mouth": [
     {
       "value": null,
-      "displayName": "none",
+      "displayName": "None",
       "excludeFromRandomize": true
     },
     {
@@ -681,7 +681,7 @@ export default {
   "Facial Hair": [
     {
       "value": null,
-      "displayName": "none",
+      "displayName": "None",
       "excludeFromRandomize": false
     },
     {
@@ -724,7 +724,7 @@ export default {
   "Hands": [
     {
       "value": null,
-      "displayName": "none",
+      "displayName": "None",
       "excludeFromRandomize": true
     },
     {
@@ -795,7 +795,7 @@ export default {
   "Torso": [
     {
       "value": null,
-      "displayName": "none",
+      "displayName": "None",
       "excludeFromRandomize": true
     },
     {
@@ -922,7 +922,7 @@ export default {
   "Hat": [
     {
       "value": null,
-      "displayName": "none",
+      "displayName": "None",
       "excludeFromRandomize": false
     },
     {
@@ -949,7 +949,7 @@ export default {
   "Eyewear": [
     {
       "value": null,
-      "displayName": "none",
+      "displayName": "None",
       "excludeFromRandomize": false
     },
     {
@@ -988,7 +988,7 @@ export default {
   "Earring": [
     {
       "value": null,
-      "displayName": "none",
+      "displayName": "None",
       "excludeFromRandomize": false
     },
     {
@@ -1011,7 +1011,7 @@ export default {
   "Accessory": [
     {
       "value": null,
-      "displayName": "none",
+      "displayName": "None",
       "excludeFromRandomize": false
     },
     {
@@ -1038,12 +1038,13 @@ export default {
   "Torso Jacket": [
     {
       "value": null,
-      "displayName": "none",
+      "displayName": "None",
       "excludeFromRandomize": false
     },
     {
       "value": "torso-jacket_style-1-punk-leather-1-black",
-      "displayName": "Style 1 Punk Leather 1 Black"
+      "displayName": "Style 1 Punk Leather 1 Black",
+      "excludeFromRandomize": true
     }
   ]
 };

@@ -40,7 +40,7 @@ function generateAssetsStructure(directory) {
       assets[category] = [
         {
           value: null,
-          displayName: "none",
+          displayName: "None",
           excludeFromRandomize: neverRandomizeToNone.includes(category),
         },
       ];
