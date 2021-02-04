@@ -136,7 +136,7 @@ label {
   border-color: var(--hover-border-color);
 }
 
-.partSelector .avatarPartList {
+.partSelector .collapsible {
   overflow: hidden;
   margin: 14px;
   margin-top: 4px;
@@ -146,7 +146,7 @@ label {
   transition: transform 0.2s, opacity 0.2s;
 }
 
-.partSelector.collapsed .avatarPartList {
+.partSelector.collapsed .collapsible {
   transform: scaleY(0);
   opacity: 0;
   height: 0;

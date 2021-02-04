@@ -31,7 +31,7 @@ function Chevron({ expanded }) {
   );
 }
 
-const PartThumbnail = React.forwardRef(({ as: Component = "div", image, className, children, ...props }, ref) => {
+const Thumbnail = React.forwardRef(({ as: Component = "div", image, className, children, ...props }, ref) => {
   return (
     <Component
       className={cx("partThumbnail", className)}
@@ -50,53 +50,36 @@ function CategoryHeading({ categoryName, selectedPartInfo, onClick, expanded }) 
       <h2 className="categoryName">{categoryName}</h2>
       <Chevron {...{ expanded }} />
       <h2 className="selectedPartName">{selectedPartInfo.displayName}</h2>
-      <PartThumbnail image={selectedPartInfo.value} />
+      <Thumbnail image={selectedPartInfo.value} />
     </div>
   );
 }
 
-function AvatarPartList({ parts, selectedPart, ...props }) {
-  return (
-    <div className="avatarPartList">
-      {parts.map((part) => {
-        return <AvatarPartButton key={part.value} selected={part.value === selectedPart} part={part} {...props} />;
-      })}
-    </div>
-  );
-}
-function CategoryOptionsPanel({ category, selectedPart, ...props }) {
-  return (
-    <div className="avatarPartList">
-      {category.parts.map((part) => {
-        return <AvatarPartButton key={part.value} selected={part.value === selectedPart} part={part} {...props} />;
-      })}
-    </div>
-  );
+function Collapsible({ children }) {
+  return <div className="collapsible">{children}</div>;
 }
 
-function AvatarPartButton({ part, selected, onPartSelected, onPartEnter, onPartLeave }) {
+function ThumbnailButton({ tip, image, selected, onClick, onMouseOver, onMouseOut }) {
   const tipContext = useContext(TipContext);
   const buttonRef = useRef(null);
   return (
-    <PartThumbnail
+    <Thumbnail
       as="button"
-      onClick={() => {
-        onPartSelected(part.value);
-      }}
+      onClick={onClick}
       onMouseOver={() => {
-        onPartEnter(part.value);
+        onMouseOver();
         const [rect] = buttonRef.current.getClientRects();
-        tipContext.showTip(part.displayName, rect.bottom, rect.left + rect.width / 2);
+        tipContext.showTip(tip, rect.bottom, rect.left + rect.width / 2);
       }}
       onMouseOut={() => {
-        onPartLeave();
+        onMouseOut();
         tipContext.hideTip();
       }}
-      aria-label={part.displayName}
+      aria-label={tip}
       className={cx("avatarPartButton", { selected })}
-      image={part.value}
+      image={image}
       ref={buttonRef}
-    ></PartThumbnail>
+    ></Thumbnail>
   );
 }
 
@@ -129,6 +112,7 @@ function AvatarPartSelector({
   category,
   selectedPart,
   categoryName,
+  children,
 }) {
   const containerEl = useRef(null);
   useEffect(() => {
@@ -146,11 +130,7 @@ function AvatarPartSelector({
         onClick={() => setExpanded(!expanded)}
         expanded={expanded}
       />
-      {category.description ? (
-        <CategoryOptionsPanel {...{ category, selectedPart, onPartSelected, onPartEnter, onPartLeave }} />
-      ) : (
-        <AvatarPartList {...{ parts: category.parts, selectedPart, onPartSelected, onPartEnter, onPartLeave }} />
-      )}
+      {expanded && children}
     </AvatarPartContainer>
   );
 }
@@ -266,25 +246,44 @@ function App() {
           <div className="selector">
             <TipContext.Provider value={{ showTip, hideTip }}>
               <SimpleBar className="simpleBar" style={{ height: "100%" }} scrollableNodeProps={{ onScroll: hideTip }}>
-                {categories.map((category) => (
-                  <AvatarPartSelector
-                    expanded={expandedCategory === category}
-                    setExpanded={(expand) => setExpandedCategory(expand ? category : null)}
-                    key={category}
-                    categoryName={category}
-                    selectedPart={avatarConfig[category]}
-                    onPartSelected={(selection) => {
-                      updateAvatarConfig({ [category]: selection });
-                    }}
-                    onPartEnter={(selection) => {
-                      setHoveredConfig({ [category]: selection });
-                    }}
-                    onPartLeave={() => {
-                      setHoveredConfig({});
-                    }}
-                    category={assets[category]}
-                  />
-                ))}
+                {categories.map((category) => {
+                  const selectedPart = avatarConfig[category];
+                  return (
+                    <AvatarPartSelector
+                      expanded={expandedCategory === category}
+                      setExpanded={(expand) => setExpandedCategory(expand ? category : null)}
+                      key={category}
+                      categoryName={category}
+                      selectedPart={selectedPart}
+                      category={assets[category]}
+                    >
+                      {
+                        <Collapsible>
+                          {assets[category].parts.map((part) => {
+                            return (
+                              <ThumbnailButton
+                                tip={part.displayName}
+                                image={part.value}
+                                key={part.value}
+                                part={part}
+                                selected={part.value === selectedPart}
+                                onClick={() => {
+                                  updateAvatarConfig({ [category]: part.value });
+                                }}
+                                onMouseOver={() => {
+                                  setHoveredConfig({ [category]: part.value });
+                                }}
+                                onMouseOut={() => {
+                                  setHoveredConfig({});
+                                }}
+                              />
+                            );
+                          })}
+                        </Collapsible>
+                      }
+                    </AvatarPartSelector>
+                  );
+                })}
               </SimpleBar>
             </TipContext.Provider>
           </div>
