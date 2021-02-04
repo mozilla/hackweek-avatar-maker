@@ -501,30 +501,35 @@ export default {
       }
     ],
     "description": {
-      "Type": [
-        null,
-        "bald",
-        "freckles",
-        "shaved"
-      ],
-      "Skin Tone": [
-        "skin-1",
-        "skin-2",
-        "skin-3",
-        "skin-4",
-        "skin-5",
-        "skin-6",
-        "skin-7",
-        "skin-8",
-        "skin-a",
-        "skin-b",
-        "skin-c",
-        "skin-d",
-        "skin-e",
-        "skin-f",
-        "skin-g",
-        "skin-h"
-      ]
+      "Type": {
+        "options": [
+          null,
+          "bald",
+          "freckles",
+          "shaved"
+        ],
+        "isPrimaryOption": true
+      },
+      "Skin Tone": {
+        "options": [
+          "skin-1",
+          "skin-2",
+          "skin-3",
+          "skin-4",
+          "skin-5",
+          "skin-6",
+          "skin-7",
+          "skin-8",
+          "skin-a",
+          "skin-b",
+          "skin-c",
+          "skin-d",
+          "skin-e",
+          "skin-f",
+          "skin-g",
+          "skin-h"
+        ]
+      }
     }
   },
   "Eyes": {
@@ -813,22 +818,27 @@ export default {
       }
     ],
     "description": {
-      "Style": [
-        null,
-        "style-1",
-        "style-2",
-        "style-3",
-        "style-4"
-      ],
-      "Color": [
-        "black",
-        "blonde",
-        "brown",
-        "gray",
-        "light-brown",
-        "pink",
-        "white"
-      ]
+      "Style": {
+        "options": [
+          null,
+          "style-1",
+          "style-2",
+          "style-3",
+          "style-4"
+        ],
+        "isPrimaryOption": true
+      },
+      "Color": {
+        "options": [
+          "black",
+          "blonde",
+          "brown",
+          "gray",
+          "light-brown",
+          "pink",
+          "white"
+        ]
+      }
     }
   },
   "Mouth": {
@@ -1096,29 +1106,34 @@ export default {
       }
     ],
     "description": {
-      "Type": [
-        null,
-        "neutral",
-        "smirk"
-      ],
-      "Skin Tone": [
-        "skin-1",
-        "skin-2",
-        "skin-3",
-        "skin-4",
-        "skin-5",
-        "skin-6",
-        "skin-7",
-        "skin-8",
-        "skin-a",
-        "skin-b",
-        "skin-c",
-        "skin-d",
-        "skin-e",
-        "skin-f",
-        "skin-g",
-        "skin-h"
-      ]
+      "Type": {
+        "options": [
+          null,
+          "neutral",
+          "smirk"
+        ],
+        "isPrimaryOption": true
+      },
+      "Skin Tone": {
+        "options": [
+          "skin-1",
+          "skin-2",
+          "skin-3",
+          "skin-4",
+          "skin-5",
+          "skin-6",
+          "skin-7",
+          "skin-8",
+          "skin-a",
+          "skin-b",
+          "skin-c",
+          "skin-d",
+          "skin-e",
+          "skin-f",
+          "skin-g",
+          "skin-h"
+        ]
+      }
     }
   },
   "Facial Hair": {
@@ -1488,34 +1503,39 @@ export default {
       }
     ],
     "description": {
-      "Type": [
-        null,
-        "style-1",
-        "style-2"
-      ],
-      "Outfit": [
-        "baseball-giants",
-        "bowling-shirt-1-red",
-        "combat-vest-red",
-        "hoodie-1-gray",
-        "ketchum",
-        "sport-coat-1-dark",
-        "sport-coat-1-gray",
-        "tshirt-1-hubs-black",
-        "tshirt-1-hubs-gray",
-        "tshirt-1-hubs-light-gray",
-        "tshirt-1-hubs-white",
-        "tshirt-1-moz",
-        "tshirt-1-union-jack",
-        "tshirt-moz",
-        "tshirt-union-jack",
-        "tshirt1-reactor",
-        "ugly-christmas-1",
-        "hoodie-2-purple",
-        "tshirt-1-baby-unicorn",
-        "tshirt-1-heart-animated",
-        "tshirt-1-heart"
-      ]
+      "Type": {
+        "options": [
+          null,
+          "style-1",
+          "style-2"
+        ],
+        "isPrimaryOption": true
+      },
+      "Outfit": {
+        "options": [
+          "baseball-giants",
+          "bowling-shirt-1-red",
+          "combat-vest-red",
+          "hoodie-1-gray",
+          "ketchum",
+          "sport-coat-1-dark",
+          "sport-coat-1-gray",
+          "tshirt-1-hubs-black",
+          "tshirt-1-hubs-gray",
+          "tshirt-1-hubs-light-gray",
+          "tshirt-1-hubs-white",
+          "tshirt-1-moz",
+          "tshirt-1-union-jack",
+          "tshirt-moz",
+          "tshirt-union-jack",
+          "tshirt1-reactor",
+          "ugly-christmas-1",
+          "hoodie-2-purple",
+          "tshirt-1-baby-unicorn",
+          "tshirt-1-heart-animated",
+          "tshirt-1-heart"
+        ]
+      }
     }
   },
   "Hat": {
@@ -1651,7 +1671,8 @@ export default {
       },
       {
         "value": "torso-jacket_style-1-punk-leather-1-black",
-        "displayName": "Style 1 Punk Leather 1 Black"
+        "displayName": "Style 1 Punk Leather 1 Black",
+        "excludeFromRandomize": true
       }
     ]
   }

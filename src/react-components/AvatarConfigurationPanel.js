@@ -23,22 +23,32 @@ export function configForCategory({ category, categoryName, selectedPart, update
   const optionNames = Object.keys(category.description);
 
   return optionNames.map((optionName) => {
-    const options = category.description[optionName];
+    const options = category.description[optionName].options;
     const parts = options
       .map((option) => {
         if (option === null) {
           const part = category.parts.find((part) => part.value === null);
           return { part, tip: "None" };
         }
+
         const description = Object.assign({}, wholeSelectedPart.description);
         description[optionName] = option;
-        const part = category.parts.find((part) => {
+
+        let part = category.parts.find((part) => {
           return match({ description, part });
         });
+
+        if (!part && category.description[optionName].isPrimaryOption) {
+          part = category.parts.find(
+            (part) => part.value !== null && part.description[optionName] === option
+          );
+        }
+
         const tip = option
           .split("-")
           .map((p) => capitalize(p))
           .join(" ");
+
         return { part, tip };
       })
       .filter(({ part }) => !!part);

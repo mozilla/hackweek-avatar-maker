@@ -22,41 +22,37 @@ const categoryDescription = {
   Head: {
     Type: {
       regExp: /head_(.+)-skin/,
-      hasNoneOption: true,
+      isPrimaryOption: true,
     },
     "Skin Tone": {
       regExp: /skin-[0-9a-z]/,
-      hasNoneOption: false,
     }
   },
   Eyebrows: {
     Style: {
       regExp: /style-[0-9a-z]/,
-      hasNoneOption: true,
+      isPrimaryOption: true,
     },
     Color: {
       regExp: /style-[0-9a-z]-(.+)/,
-      hasNoneOption: false,
     }
   },
   Mouth: {
     Type: {
       regExp: /mouth_(.+)-skin/,
-      hasNoneOption: true,
+      isPrimaryOption: true,
     },
     "Skin Tone": {
       regExp: /skin-[0-9a-z]/,
-      hasNoneOption: false,
     }
   },
   Torso: {
     Type: {
       regExp: /style-[0-9a-z]/,
-      hasNoneOption: true,
+      isPrimaryOption: true,
     },
     Outfit: {
       regExp: /style-[0-9a-z]-(.+)/,
-      hasNoneOption: false,
     }
   },
 };
@@ -83,16 +79,17 @@ function descriptionForCategory(categoryName, parts) {
   for (const part of parts) {
     if (part.description) {
       for (const prop of Object.keys(part.description)) {
-        description[prop] = description[prop] || new Set();
-        description[prop].add(part.description[prop]);
+        description[prop] = description[prop] || {options: new Set()};
+        description[prop].options.add(part.description[prop]);
       }
     }
   }
 
   for (const prop of Object.keys(description)) {
-    description[prop] = Array.from(description[prop]);
-    if (categoryDescription[categoryName][prop].hasNoneOption) {
-      description[prop].unshift(null);
+    description[prop].options = Array.from(description[prop].options);
+    if (categoryDescription[categoryName][prop].isPrimaryOption) {
+      description[prop].isPrimaryOption = true;
+      description[prop].options.unshift(null);
     }
   }
 
