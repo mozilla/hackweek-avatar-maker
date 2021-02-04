@@ -160,6 +160,10 @@ async function loadIntoGroup(category, part, group) {
       forEachMaterial(obj, (material) => {
         if (material.isMeshStandardMaterial) {
           material.envMap = state.envMap;
+          material.envMapIntensity = 0.8;
+          if (material.map) {
+            material.map.anisotropy = state.renderer.capabilities.getMaxAnisotropy();
+          }
           material.needsUpdate = true;
         }
       });
