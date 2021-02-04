@@ -126,7 +126,7 @@ label {
 }
 
 .toolbar {
-  padding: 40px;
+  padding: 20px 40px;
   display: flex;
   justify-content: flex-end;
   background-color: #f5f5f5;
