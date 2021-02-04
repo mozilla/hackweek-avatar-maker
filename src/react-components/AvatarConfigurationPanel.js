@@ -24,18 +24,27 @@ export function configForCategory({ category, categoryName, selectedPart, update
 
   return optionNames.map((optionName) => {
     const options = category.description[optionName];
-    const parts = options.map((option) => {
-      const description = Object.assign({}, wholeSelectedPart.description);
-      description[optionName] = option;
-      const part = category.parts.find((part) => {
-        return match({ description, part });
-      });
-      const tip = option.split("-").map((p) => capitalize(p)).join(" ");
-      return { part, tip };
-    });
+    const parts = options
+      .map((option) => {
+        if (option === null) {
+          const part = category.parts.find((part) => part.value === null);
+          return { part, tip: "None" };
+        }
+        const description = Object.assign({}, wholeSelectedPart.description);
+        description[optionName] = option;
+        const part = category.parts.find((part) => {
+          return match({ description, part });
+        });
+        const tip = option
+          .split("-")
+          .map((p) => capitalize(p))
+          .join(" ");
+        return { part, tip };
+      })
+      .filter(({ part }) => !!part);
 
     return (
-      <>
+      <div key={optionName}>
         <h2>{optionName}</h2>
         {parts.map(({ part, tip }) => {
           return (
@@ -57,7 +66,7 @@ export function configForCategory({ category, categoryName, selectedPart, update
             />
           );
         })}
-      </>
+      </div>
     );
   });
 }

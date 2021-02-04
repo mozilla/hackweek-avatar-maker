@@ -20,8 +20,44 @@ const assetOrder = [
 
 const categoryDescription = {
   Head: {
-    skinTone: /skin-[0-9a-z]/,
-    type: /bald|freckles|shaved/,
+    Type: {
+      regExp: /head_(.+)-skin/,
+      hasNoneOption: true,
+    },
+    "Skin Tone": {
+      regExp: /skin-[0-9a-z]/,
+      hasNoneOption: false,
+    }
+  },
+  Eyebrows: {
+    Style: {
+      regExp: /style-[0-9a-z]/,
+      hasNoneOption: true,
+    },
+    Color: {
+      regExp: /style-[0-9a-z]-(.+)/,
+      hasNoneOption: false,
+    }
+  },
+  Mouth: {
+    Type: {
+      regExp: /mouth_(.+)-skin/,
+      hasNoneOption: true,
+    },
+    "Skin Tone": {
+      regExp: /skin-[0-9a-z]/,
+      hasNoneOption: false,
+    }
+  },
+  Torso: {
+    Type: {
+      regExp: /style-[0-9a-z]/,
+      hasNoneOption: true,
+    },
+    Outfit: {
+      regExp: /style-[0-9a-z]-(.+)/,
+      hasNoneOption: false,
+    }
   },
 };
 
@@ -32,12 +68,16 @@ function descriptionForPart({ category, filename }) {
 
   const description = {};
   for (const prop of Object.keys(template)) {
-    description[prop] = filename.match(template[prop])[0];
+    const matches = filename.match(template[prop].regExp);
+    if (!matches) {
+      throw new Error(`Cannot generate description for part. "${filename}" does not match "${template[prop].regExp}".`);
+    }
+    description[prop] = matches.length > 1 ? matches[1] : matches[0];
   }
   return description;
 }
 
-function descriptionForCategory(parts) {
+function descriptionForCategory(categoryName, parts) {
   const description = {};
 
   for (const part of parts) {
@@ -51,6 +91,9 @@ function descriptionForCategory(parts) {
 
   for (const prop of Object.keys(description)) {
     description[prop] = Array.from(description[prop]);
+    if (categoryDescription[categoryName][prop].hasNoneOption) {
+      description[prop].unshift(null);
+    }
   }
 
   return description;
@@ -100,10 +143,10 @@ function generateAssetsStructure(directory) {
     assets[category].parts.push(part);
   }
 
-  for (const category of Object.keys(assets)) {
-    const description = descriptionForCategory(assets[category].parts);
+  for (const categoryName of Object.keys(assets)) {
+    const description = descriptionForCategory(categoryName, assets[categoryName].parts);
     if (Object.keys(description).length) {
-      assets[category].description = description;
+      assets[categoryName].description = description;
     }
   }
 
