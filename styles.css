@@ -43,8 +43,11 @@ body,
 
 .selector {
   overflow: auto;
-  padding: 32px 64px;
   width: 45%;
+}
+
+.selector .simpleBar {
+  padding: 32px 64px;
 }
 
 .main {

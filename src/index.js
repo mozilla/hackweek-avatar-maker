@@ -154,7 +154,7 @@ function App() {
       <div className="main">
         {!thumbnailMode && (
           <div className="selector">
-            <SimpleBar style={{ height: "100%" }}>
+            <SimpleBar className="simpleBar" style={{ height: "100%" }}>
               {categories.map((category) => (
                 <AvatarPartSelector
                   key={category}

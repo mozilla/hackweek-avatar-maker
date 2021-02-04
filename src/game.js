@@ -67,13 +67,62 @@ function resetView() {
   state.controls.reset();
 }
 
+function createSkydome() {
+  const vertexShader = `
+varying vec3 vWorldPosition;
+
+void main() {
+
+  vec4 worldPosition = modelMatrix * vec4( position, 1.0 );
+  vWorldPosition = worldPosition.xyz;
+
+  gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+
+}
+`;
+  const fragmentShader = `
+uniform vec3 topColor;
+uniform vec3 bottomColor;
+uniform float offset;
+uniform float exponent;
+
+varying vec3 vWorldPosition;
+
+void main() {
+
+  float h = normalize( vWorldPosition + offset ).y;
+  gl_FragColor = vec4( mix( bottomColor, topColor, max( pow( max( h , 0.0), exponent ), 0.0 ) ), 1.0 );
+
+}
+`;
+  const uniforms = {
+    topColor: { value: new THREE.Color(0x0096db) }, // TODO: match primary color
+    bottomColor: { value: new THREE.Color(0xc6dde5) },
+    offset: { value: 33 },
+    exponent: { value: 1.0 },
+  };
+
+  // TODO Pixel push these values to perfection!!!
+  const geometry = new THREE.SphereGeometry(400, 16, 16);
+  const material = new THREE.ShaderMaterial({
+    uniforms: uniforms,
+    vertexShader: vertexShader,
+    fragmentShader: fragmentShader,
+    side: THREE.BackSide,
+  });
+
+  return new THREE.Mesh(geometry, material);
+}
+
 function init() {
   THREE.Cache.enabled = true;
 
   const scene = new THREE.Scene();
-  scene.fog = new THREE.FogExp2(0x8b8b8a, 0.2);
-  scene.background = new THREE.Color(0x8b8b8a);
   state.scene = scene;
+
+  // TODO: Consider removing this for thumbnails
+  const skydome = createSkydome();
+  scene.add(skydome);
 
   const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
   camera.position.set(0, 0.25, 1.5);
@@ -89,12 +138,9 @@ function init() {
   const sky = createSky();
   state.envMap = generateEnvironmentMap(sky, renderer);
 
-  const floor = new THREE.Mesh(new THREE.PlaneBufferGeometry(100, 100), new THREE.MeshStandardMaterial());
-  floor.position.y = -0.2;
-  floor.rotation.x = -Math.PI / 2;
-  scene.add(floor);
-
   const controls = new OrbitControls(camera, renderer.domElement);
+  controls.autoRotate = true;
+  controls.autoRotateSpeed = -1;
   controls.target = new THREE.Vector3(0, 0.5, 0);
   controls.update();
   controls.saveState();
@@ -155,7 +201,9 @@ function tick(time) {
   }
 
   {
-    const { renderer, scene, camera } = state;
+    const { renderer, scene, camera, controls } = state;
+
+    controls.update();
     renderer.render(scene, camera);
   }
 
@@ -180,7 +228,7 @@ function tick(time) {
     }
   }
 
-  { 
+  {
     if (state.shouldRenderThumbnail) {
       state.shouldRenderThumbnail = false;
       for (const category in state.avatarNodes) {
