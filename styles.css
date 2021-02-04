@@ -184,6 +184,20 @@ label {
   border-color: var(--button-selected-border-color);
 }
 
+.buttonTip {
+  border-radius: 6px;
+  position: absolute;
+  background: var(--primary-blue);
+  white-space: nowrap;
+  padding: 3px 10px;
+  color: white;
+  font-weight: bold;
+  margin-top: 6px;
+  transform-origin: center center;
+  transform: translate(-50%, 0);
+  pointer-events: none;
+}
+
 .toolbar {
   padding: 20px 40px;
   display: flex;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import ReactDOM from "react-dom";
 import SimpleBar from "simplebar-react";
 import "simplebar/dist/simplebar.min.css";
@@ -20,6 +20,8 @@ window.renderThumbnail = (category, part) => {
   dispatch(constants.renderThumbnail, { thumbnailConfig: { category, part } });
 };
 
+const TipContext = React.createContext();
+
 function Chevron({ expanded }) {
   return (
     <div className="chevron">
@@ -28,15 +30,18 @@ function Chevron({ expanded }) {
   );
 }
 
-function PartThumbnail({ as: Component = "div", image, className, ...props }) {
+const PartThumbnail = React.forwardRef(({ as: Component = "div", image, className, children, ...props }, ref) => {
   return (
     <Component
       className={cx("partThumbnail", className)}
       style={{ backgroundImage: image ? `url("assets/thumbnails/${image}.jpg")` : "none" }}
       {...props}
-    ></Component>
+      ref={ref}
+    >
+      {children}
+    </Component>
   );
-}
+});
 
 function CategoryHeading({ categoryName, selectedPartInfo, onClick, expanded }) {
   return (
@@ -60,22 +65,28 @@ function AvatarPartList({ parts, selectedPart, ...props }) {
 }
 
 function AvatarPartButton({ part, selected, onPartSelected, onPartEnter, onPartLeave }) {
+  const tipContext = useContext(TipContext);
+  const buttonRef = useRef(null);
   return (
     <PartThumbnail
       as="button"
       onClick={() => {
         onPartSelected(part.value);
       }}
-      onPointerEnter={() => {
+      onMouseOver={() => {
         onPartEnter(part.value);
+        const [rect] = buttonRef.current.getClientRects();
+        tipContext.showTip(part.displayName, rect.bottom, rect.left + rect.width / 2);
       }}
-      onPointerLeave={() => {
+      onMouseOut={() => {
         onPartLeave();
+        tipContext.hideTip();
       }}
       aria-label={part.displayName}
       className={cx("avatarPartButton", { selected })}
       image={part.value}
-    />
+      ref={buttonRef}
+    ></PartThumbnail>
   );
 }
 
@@ -112,8 +123,8 @@ function AvatarPartSelector({
   const containerEl = useRef(null);
   useEffect(() => {
     if (expanded) {
-      containerEl.current.scrollIntoView({behavior: "smooth", block: "nearest"});
-    } 
+      containerEl.current.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
   }, [containerEl, expanded]);
   const selectedPartInfo = parts.find((part) => part.value === selectedPart);
   return (
@@ -224,37 +235,54 @@ function App() {
     dispatch(constants.resetView);
   }
 
+  const [tipState, setTipState] = useState({ visible: false, text: "", top: 0, left: 0 });
+  function showTip(text, top, left) {
+    setTipState({ visible: true, text, top, left });
+  }
+
+  function hideTip() {
+    setTipState({ visible: false });
+  }
+
   return (
     <>
       <div className="main">
         {!thumbnailMode && (
           <div className="selector">
-            <SimpleBar className="simpleBar" style={{ height: "100%" }}>
-              {categories.map((category) => (
-                <AvatarPartSelector
-                  expanded={expandedCategory === category}
-                  setExpanded={(expand) => setExpandedCategory(expand ? category : null)}
-                  key={category}
-                  categoryName={category}
-                  selectedPart={avatarConfig[category]}
-                  onPartSelected={(selection) => {
-                    updateAvatarConfig({ [category]: selection });
-                  }}
-                  onPartEnter={(selection) => {
-                    setHoveredConfig({ [category]: selection });
-                  }}
-                  onPartLeave={() => {
-                    setHoveredConfig({});
-                  }}
-                  parts={assets[category]}
-                />
-              ))}
-            </SimpleBar>
+            <TipContext.Provider value={{ showTip, hideTip }}>
+              <SimpleBar className="simpleBar" style={{ height: "100%" }} scrollableNodeProps={{ onScroll: hideTip }}>
+                {categories.map((category) => (
+                  <AvatarPartSelector
+                    expanded={expandedCategory === category}
+                    setExpanded={(expand) => setExpandedCategory(expand ? category : null)}
+                    key={category}
+                    categoryName={category}
+                    selectedPart={avatarConfig[category]}
+                    onPartSelected={(selection) => {
+                      updateAvatarConfig({ [category]: selection });
+                    }}
+                    onPartEnter={(selection) => {
+                      setHoveredConfig({ [category]: selection });
+                    }}
+                    onPartLeave={() => {
+                      setHoveredConfig({});
+                    }}
+                    parts={assets[category]}
+                  />
+                ))}
+              </SimpleBar>
+            </TipContext.Provider>
           </div>
         )}
         <div id="sceneContainer">
           {!thumbnailMode && <div className="waveContainer" style={{ backgroundImage: `url("${canvasUrl}")` }}></div>}
           <canvas id="scene"></canvas>
+        </div>
+        <div
+          className="buttonTip"
+          style={{ display: tipState.visible ? "block" : "none", top: tipState.top, left: tipState.left }}
+        >
+          {tipState.text}
         </div>
       </div>
       {!thumbnailMode && <Toolbar {...{ onGLBUploaded, randomizeConfig, dispatchResetView, dispatchExport }} />}
