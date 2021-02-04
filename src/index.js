@@ -1,16 +1,14 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
 import ReactDOM from "react-dom";
-import SimpleBar from "simplebar-react";
-import "simplebar/dist/simplebar.min.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronDown, faChevronRight } from "@fortawesome/free-solid-svg-icons";
-import cx from "classnames";
 
 import "./styles.css";
 import "./game";
 import constants from "./constants";
 import initialAssets from "./assets";
 import { generateWave, isThumbnailMode } from "./utils";
+//import { PageLayout } from "./react-components/PageLayout";
+import { Thumbnail } from "./react-components/Thumbnail";
+import { AvatarConfigurationPanel } from "./react-components/AvatarConfigurationPanel";
 
 function dispatch(eventName, detail) {
   document.dispatchEvent(new CustomEvent(eventName, { detail }));
@@ -20,120 +18,6 @@ function dispatch(eventName, detail) {
 window.renderThumbnail = (category, part) => {
   dispatch(constants.renderThumbnail, { thumbnailConfig: { category, part } });
 };
-
-const TipContext = React.createContext();
-
-function Chevron({ expanded }) {
-  return (
-    <div className="chevron">
-      <FontAwesomeIcon icon={expanded ? faChevronDown : faChevronRight} />
-    </div>
-  );
-}
-
-const Thumbnail = React.forwardRef(({ as: Component = "div", image, className, children, ...props }, ref) => {
-  return (
-    <Component
-      className={cx("partThumbnail", className)}
-      style={{ backgroundImage: image ? `url("assets/thumbnails/${image}.jpg")` : "none" }}
-      {...props}
-      ref={ref}
-    >
-      {children}
-    </Component>
-  );
-});
-
-function CategoryHeading({ categoryName, selectedPartInfo, onClick, expanded }) {
-  return (
-    <div className="categoryHeading" onClick={onClick}>
-      <h2 className="categoryName">{categoryName}</h2>
-      <Chevron {...{ expanded }} />
-      <h2 className="selectedPartName">{selectedPartInfo.displayName}</h2>
-      <Thumbnail image={selectedPartInfo.value} />
-    </div>
-  );
-}
-
-function Collapsible({ children }) {
-  return <div className="collapsible">{children}</div>;
-}
-
-function ThumbnailButton({ tip, image, selected, onClick, onMouseOver, onMouseOut }) {
-  const tipContext = useContext(TipContext);
-  const buttonRef = useRef(null);
-  return (
-    <Thumbnail
-      as="button"
-      onClick={onClick}
-      onMouseOver={() => {
-        onMouseOver();
-        const [rect] = buttonRef.current.getClientRects();
-        tipContext.showTip(tip, rect.bottom, rect.left + rect.width / 2);
-      }}
-      onMouseOut={() => {
-        onMouseOut();
-        tipContext.hideTip();
-      }}
-      aria-label={tip}
-      className={cx("avatarPartButton", { selected })}
-      image={image}
-      ref={buttonRef}
-    ></Thumbnail>
-  );
-}
-
-const AvatarPartContainer = React.forwardRef(({ expanded, setExpanded, children }, ref) => {
-  return (
-    <div
-      tabIndex="0"
-      role="button"
-      className={"partSelector " + (expanded ? "expanded" : "collapsed")}
-      onKeyDown={(e) => {
-        if (e.target === e.currentTarget && (e.key === "Enter" || e.key === " ")) {
-          setExpanded(!expanded);
-          e.preventDefault();
-          e.stopPropagation();
-        }
-      }}
-      ref={ref}
-    >
-      {children}
-    </div>
-  );
-});
-
-function AvatarPartSelector({
-  onPartSelected,
-  onPartEnter,
-  onPartLeave,
-  setExpanded,
-  expanded,
-  category,
-  selectedPart,
-  categoryName,
-  children,
-}) {
-  const containerEl = useRef(null);
-  useEffect(() => {
-    if (expanded) {
-      containerEl.current.scrollIntoView({ behavior: "smooth", block: "nearest" });
-    }
-  }, [containerEl, expanded]);
-  const selectedPartInfo = category.parts.find((part) => part.value === selectedPart);
-
-  return (
-    <AvatarPartContainer ref={containerEl} {...{ expanded, setExpanded }}>
-      <CategoryHeading
-        categoryName={categoryName}
-        selectedPartInfo={selectedPartInfo}
-        onClick={() => setExpanded(!expanded)}
-        expanded={expanded}
-      />
-      {expanded && children}
-    </AvatarPartContainer>
-  );
-}
 
 function Toolbar({ onGLBUploaded, randomizeConfig, dispatchResetView, dispatchExport }) {
   return (
@@ -159,7 +43,6 @@ function App() {
   const [assets, setAssets] = useState(initialAssets);
   const [hoveredConfig, setHoveredConfig] = useState({});
   const [canvasUrl, setCanvasUrl] = useState(null);
-  const [expandedCategory, setExpandedCategory] = useState(null);
 
   const categories = Object.keys(assets);
 
@@ -243,50 +126,15 @@ function App() {
     <>
       <div className="main">
         {!thumbnailMode && (
-          <div className="selector">
-            <TipContext.Provider value={{ showTip, hideTip }}>
-              <SimpleBar className="simpleBar" style={{ height: "100%" }} scrollableNodeProps={{ onScroll: hideTip }}>
-                {categories.map((category) => {
-                  const selectedPart = avatarConfig[category];
-                  return (
-                    <AvatarPartSelector
-                      expanded={expandedCategory === category}
-                      setExpanded={(expand) => setExpandedCategory(expand ? category : null)}
-                      key={category}
-                      categoryName={category}
-                      selectedPart={selectedPart}
-                      category={assets[category]}
-                    >
-                      {
-                        <Collapsible>
-                          {assets[category].parts.map((part) => {
-                            return (
-                              <ThumbnailButton
-                                tip={part.displayName}
-                                image={part.value}
-                                key={part.value}
-                                part={part}
-                                selected={part.value === selectedPart}
-                                onClick={() => {
-                                  updateAvatarConfig({ [category]: part.value });
-                                }}
-                                onMouseOver={() => {
-                                  setHoveredConfig({ [category]: part.value });
-                                }}
-                                onMouseOut={() => {
-                                  setHoveredConfig({});
-                                }}
-                              />
-                            );
-                          })}
-                        </Collapsible>
-                      }
-                    </AvatarPartSelector>
-                  );
-                })}
-              </SimpleBar>
-            </TipContext.Provider>
-          </div>
+          <AvatarConfigurationPanel
+            showTip={showTip}
+            hideTip={hideTip}
+            categories={categories}
+            avatarConfig={avatarConfig}
+            updateAvatarConfig={updateAvatarConfig}
+            assets={assets}
+            setHoveredConfig={setHoveredConfig}
+          />
         )}
         <div id="sceneContainer">
           {!thumbnailMode && <div className="waveContainer" style={{ backgroundImage: `url("${canvasUrl}")` }}></div>}
