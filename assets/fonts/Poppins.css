@@ -2,29 +2,29 @@
   font-family: 'Poppins';
   font-style: normal;
   font-weight: 300;
-  src: url(Poppins-Light.ttf) format('truetype');
+  src: url(./Poppins-Light.ttf) format('truetype');
 }
 @font-face {
   font-family: 'Poppins';
   font-style: normal;
   font-weight: 400;
-  src: url(Poppins-Regular.ttf) format('truetype');
+  src: url(./Poppins-Regular.ttf) format('truetype');
 }
 @font-face {
   font-family: 'Poppins';
   font-style: normal;
   font-weight: 500;
-  src: url(Poppins-Medium.ttf) format('truetype');
+  src: url(./Poppins-Medium.ttf) format('truetype');
 }
 @font-face {
   font-family: 'Poppins';
   font-style: normal;
   font-weight: 600;
-  src: url(Poppins-SemiBold.ttf) format('truetype');
+  src: url(./Poppins-SemiBold.ttf) format('truetype');
 }
 @font-face {
   font-family: 'Poppins';
   font-style: normal;
   font-weight: 700;
-  src: url(Poppins-Bold.ttf) format('truetype');
+  src: url(./Poppins-Bold.ttf) format('truetype');
 }
