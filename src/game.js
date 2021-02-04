@@ -128,7 +128,7 @@ function init() {
   camera.position.set(0, 0.6, 1);
   state.camera = camera;
 
-  const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+  const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
   scene.add(ambientLight);
 
   // TODO: Square this with react
