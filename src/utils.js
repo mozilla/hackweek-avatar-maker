@@ -180,23 +180,26 @@ export function createSky() {
 
 export function generateWave() {
   return new Promise(resolve => {
+    const center = 30;
+    const amplitude = 15;
+    const height = 200;
+    const halfHeight = height / 2;
+    const quarterHeight = height / 4;
+
     const canvas = document.createElement('canvas');
-    canvas.width = 200;
-    canvas.height = 400;
+    canvas.width = center + amplitude;
+    canvas.height = height;
 
     const ctx = canvas.getContext('2d');
     ctx.fillStyle = "white";
     ctx.lineWidth = 4;
 
-    const center = 30;
-    const offset = 30;
-
     ctx.beginPath();
     ctx.moveTo(0, 0);
     ctx.lineTo(center, 0);
-    ctx.quadraticCurveTo(center + offset, 100, center, 200);
-    ctx.quadraticCurveTo(center - offset, 300, center, 400);
-    ctx.lineTo(0, 400);
+    ctx.quadraticCurveTo(center + amplitude, quarterHeight, center, halfHeight);
+    ctx.quadraticCurveTo(center - amplitude, quarterHeight * 3, center, height);
+    ctx.lineTo(0, height);
     ctx.closePath();
 
     ctx.fill();

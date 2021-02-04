@@ -178,8 +178,10 @@ button.primary:focus {
 
 .waveContainer {
   position: absolute;
-  width: 200px;
+  width: 60px;
   height: 100%;
+  pointer-events: none;
+  background-repeat: repeat-y;
   animation: wave 3s infinite;
   animation-timing-function: cubic-bezier(.2,.52,.79,.49);
   /* Move 1 pixel to the left to workaround rendering issue in FF linux */
