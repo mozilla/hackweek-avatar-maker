@@ -64,6 +64,15 @@ function AvatarPartList({ parts, selectedPart, ...props }) {
     </div>
   );
 }
+function CategoryOptionsPanel({ category, selectedPart, ...props }) {
+  return (
+    <div className="avatarPartList">
+      {category.parts.map((part) => {
+        return <AvatarPartButton key={part.value} selected={part.value === selectedPart} part={part} {...props} />;
+      })}
+    </div>
+  );
+}
 
 function AvatarPartButton({ part, selected, onPartSelected, onPartEnter, onPartLeave }) {
   const tipContext = useContext(TipContext);
@@ -117,7 +126,7 @@ function AvatarPartSelector({
   onPartLeave,
   setExpanded,
   expanded,
-  parts,
+  category,
   selectedPart,
   categoryName,
 }) {
@@ -127,7 +136,8 @@ function AvatarPartSelector({
       containerEl.current.scrollIntoView({ behavior: "smooth", block: "nearest" });
     }
   }, [containerEl, expanded]);
-  const selectedPartInfo = parts.find((part) => part.value === selectedPart);
+  const selectedPartInfo = category.parts.find((part) => part.value === selectedPart);
+
   return (
     <AvatarPartContainer ref={containerEl} {...{ expanded, setExpanded }}>
       <CategoryHeading
@@ -136,7 +146,11 @@ function AvatarPartSelector({
         onClick={() => setExpanded(!expanded)}
         expanded={expanded}
       />
-      <AvatarPartList {...{ parts, selectedPart, onPartSelected, onPartEnter, onPartLeave }} />
+      {category.description ? (
+        <CategoryOptionsPanel {...{ category, selectedPart, onPartSelected, onPartEnter, onPartLeave }} />
+      ) : (
+        <AvatarPartList {...{ parts: category.parts, selectedPart, onPartSelected, onPartEnter, onPartLeave }} />
+      )}
     </AvatarPartContainer>
   );
 }
@@ -172,7 +186,7 @@ function App() {
   function generateRandomConfig() {
     const newConfig = {};
     for (const category of categories) {
-      const categoryAssets = assets[category].filter((part) => !part.excludeFromRandomize);
+      const categoryAssets = assets[category].parts.filter((part) => !part.excludeFromRandomize);
       if (categoryAssets.length === 0) continue;
       const randomIndex = Math.floor(Math.random() * categoryAssets.length);
       newConfig[category] = categoryAssets[randomIndex].value;
@@ -268,7 +282,7 @@ function App() {
                     onPartLeave={() => {
                       setHoveredConfig({});
                     }}
-                    parts={assets[category]}
+                    category={assets[category]}
                   />
                 ))}
               </SimpleBar>

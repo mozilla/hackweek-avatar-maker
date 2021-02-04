@@ -18,6 +18,44 @@ const assetOrder = [
   "Torso Jacket",
 ];
 
+const categoryDescription = {
+  Head: {
+    skinTone: /skin-[0-9a-z]/,
+    type: /bald|freckles|shaved/,
+  },
+};
+
+function descriptionForPart({ category, filename }) {
+  if (!categoryDescription[category]) return null;
+
+  const template = categoryDescription[category];
+
+  const description = {};
+  for (const prop of Object.keys(template)) {
+    description[prop] = filename.match(template[prop])[0];
+  }
+  return description;
+}
+
+function descriptionForCategory(parts) {
+  const description = {};
+
+  for (const part of parts) {
+    if (part.description) {
+      for (const prop of Object.keys(part.description)) {
+        description[prop] = description[prop] || new Set();
+        description[prop].add(part.description[prop]);
+      }
+    }
+  }
+
+  for (const prop of Object.keys(description)) {
+    description[prop] = Array.from(description[prop]);
+  }
+
+  return description;
+}
+
 function generateAssetsStructure(directory) {
   const assetFileNames = fs.readdirSync(path.resolve(directory));
 
@@ -37,7 +75,11 @@ function generateAssetsStructure(directory) {
       .join(" ");
 
     if (!assets[category]) {
-      assets[category] = [
+      assets[category] = {};
+    }
+
+    if (!assets[category].parts) {
+      assets[category].parts = [
         {
           value: null,
           displayName: "None",
@@ -46,10 +88,23 @@ function generateAssetsStructure(directory) {
       ];
     }
 
-    assets[category].push({
+    const part = {
       value: filename,
       displayName,
-    });
+    };
+    const description = descriptionForPart({ category, filename });
+    if (description) {
+      part.description = description;
+    }
+
+    assets[category].parts.push(part);
+  }
+
+  for (const category of Object.keys(assets)) {
+    const description = descriptionForCategory(assets[category].parts);
+    if (Object.keys(description).length) {
+      assets[category].description = description;
+    }
   }
 
   const orderedAssets = {};
