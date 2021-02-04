@@ -43,7 +43,7 @@ async function retrySelector(page, selector, timeout = 100, retries = 100) {
     const result = await retrySelector(page, `#${constants.thumbnailResult}`);
     await page.evaluate((result) => result.scrollIntoView(), result);
 
-    await result.screenshot({ path: path.join(outputPath, `${part}.png`) });
+    await result.screenshot({ type: "jpeg", quality: 95, path: path.join(outputPath, `${part}.jpg`) });
   }
 
   let thumbnailsToGenerate = [];

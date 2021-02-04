@@ -3,7 +3,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { GLTFExporter } from "three/examples/jsm/exporters/GLTFExporter";
 import constants from "./constants";
 import { exportAvatar } from "./export";
-import { loadGLTFCached, forEachMaterial, generateEnvironmentMap, createSky } from "./utils";
+import { loadGLTFCached, forEachMaterial, generateEnvironmentMap, createSky, isThumbnailMode } from "./utils";
 import { renderThumbnail } from "./render-thumbnail";
 
 // TODO: Don't do this
@@ -67,7 +67,7 @@ function resetView() {
   state.controls.reset();
 }
 
-function createSkydome() {
+function createSkydome(radius) {
   const vertexShader = `
 varying vec3 vWorldPosition;
 
@@ -95,15 +95,18 @@ void main() {
 
 }
 `;
+
+  const offset = radius / 12;
+
   const uniforms = {
     topColor: { value: new THREE.Color(0x0096db) }, // TODO: match primary color
     bottomColor: { value: new THREE.Color(0xc6dde5) },
-    offset: { value: 33 },
+    offset: { value: offset },
     exponent: { value: 1.0 },
   };
 
   // TODO Pixel push these values to perfection!!!
-  const geometry = new THREE.SphereGeometry(400, 16, 16);
+  const geometry = new THREE.SphereGeometry(radius, 16, 16);
   const material = new THREE.ShaderMaterial({
     uniforms: uniforms,
     vertexShader: vertexShader,
@@ -120,8 +123,7 @@ function init() {
   const scene = new THREE.Scene();
   state.scene = scene;
 
-  // TODO: Consider removing this for thumbnails
-  const skydome = createSkydome();
+  const skydome = createSkydome(isThumbnailMode() ? 2 : 400);
   scene.add(skydome);
 
   const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);

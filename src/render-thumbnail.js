@@ -3,7 +3,7 @@ import { findChildrenByType, findChildByType } from "./utils";
 import constants from "./constants";
 
 export function renderThumbnail(renderer, scene, gltfScene, category, part) {
-  const thumbnailSize = 512;
+  const thumbnailSize = 128;
   renderer.setSize(thumbnailSize, thumbnailSize);
 
   const angle = -Math.PI / 6;

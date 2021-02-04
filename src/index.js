@@ -9,7 +9,7 @@ import cx from "classnames";
 import "./game";
 import constants from "./constants";
 import initialAssets from "./assets";
-import { generateWave } from "./utils";
+import { generateWave, isThumbnailMode } from "./utils";
 
 function dispatch(eventName, detail) {
   document.dispatchEvent(new CustomEvent(eventName, { detail }));
@@ -32,7 +32,7 @@ function PartThumbnail({ as: Component = "div", image, className, ...props }) {
   return (
     <Component
       className={cx("partThumbnail", className)}
-      style={{ backgroundImage: image ? `url("assets/thumbnails/${image}.png")` : "none" }}
+      style={{ backgroundImage: image ? `url("assets/thumbnails/${image}.jpg")` : "none" }}
       {...props}
     ></Component>
   );
@@ -74,7 +74,7 @@ function AvatarPartButton({ part, selected, onPartSelected, onPartEnter, onPartL
       }}
       aria-label={part.displayName}
       className={cx("avatarPartButton", { selected })}
-      style={{ backgroundImage: part.value ? `url("assets/thumbnails/${part.value}.png")` : "none" }}
+      image={part.value}
     />
   );
 }
@@ -148,7 +148,7 @@ function Toolbar({ onGLBUploaded, randomizeConfig, dispatchResetView, dispatchEx
 
 function App() {
   // Used externally by the generate-thumbnails script
-  const thumbnailMode = new URLSearchParams(location.search).get("thumbnail") !== null;
+  const thumbnailMode = isThumbnailMode();
 
   const [assets, setAssets] = useState(initialAssets);
   const [hoveredConfig, setHoveredConfig] = useState({});

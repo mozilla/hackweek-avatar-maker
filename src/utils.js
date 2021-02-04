@@ -209,3 +209,7 @@ export function generateWave() {
     });
   });
 }
+
+export function isThumbnailMode() {
+  return new URLSearchParams(location.search).get("thumbnail") !== null
+}
