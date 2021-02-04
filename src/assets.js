@@ -54,10 +54,6 @@ export default {
       "displayName": "French Braids Double"
     },
     {
-      "value": "hair_male_taperAfro1",
-      "displayName": "Male"
-    },
-    {
       "value": "hair_mohawk-1-blue",
       "displayName": "Mohawk 1 Blue"
     },
@@ -104,6 +100,10 @@ export default {
     {
       "value": "hair_starter-locs-red",
       "displayName": "Starter Locs Red"
+    },
+    {
+      "value": "hair_taper-afro-1",
+      "displayName": "Taper Afro 1"
     }
   ],
   "Head": [
