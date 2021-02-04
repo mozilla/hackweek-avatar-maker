@@ -44,15 +44,15 @@ function App() {
   const [hoveredConfig, setHoveredConfig] = useState({});
   const [canvasUrl, setCanvasUrl] = useState(null);
 
-  const categories = Object.keys(assets);
+  const categoryNames = Object.keys(assets);
 
   function generateRandomConfig() {
     const newConfig = {};
-    for (const category of categories) {
-      const categoryAssets = assets[category].parts.filter((part) => !part.excludeFromRandomize);
+    for (const categoryName of categoryNames) {
+      const categoryAssets = assets[categoryName].parts.filter((part) => !part.excludeFromRandomize);
       if (categoryAssets.length === 0) continue;
       const randomIndex = Math.floor(Math.random() * categoryAssets.length);
-      newConfig[category] = categoryAssets[randomIndex].value;
+      newConfig[categoryName] = categoryAssets[randomIndex].value;
     }
     return newConfig;
   }
@@ -129,7 +129,7 @@ function App() {
           <AvatarConfigurationPanel
             showTip={showTip}
             hideTip={hideTip}
-            categories={categories}
+            categoryNames={categoryNames}
             avatarConfig={avatarConfig}
             updateAvatarConfig={updateAvatarConfig}
             assets={assets}
