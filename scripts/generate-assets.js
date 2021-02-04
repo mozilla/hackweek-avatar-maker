@@ -2,6 +2,21 @@ const fs = require("fs");
 const path = require("path");
 
 const neverRandomizeToNone = ["Torso", "Head", "Hands", "Eyes", "Mouth", "Eyebrows"];
+const assetOrder = [
+  "Hair",
+  "Head",
+  "Eyes",
+  "Eyebrows",
+  "Mouth",
+  "Facial Hair",
+  "Hands",
+  "Torso",
+  "Hat",
+  "Eyewear",
+  "Earring",
+  "Accessory",
+  "Torso Jacket",
+];
 
 function generateAssetsStructure(directory) {
   const assetFileNames = fs.readdirSync(path.resolve(directory));
@@ -23,10 +38,10 @@ function generateAssetsStructure(directory) {
 
     if (!assets[category]) {
       assets[category] = [
-        { 
+        {
           value: null,
           displayName: "none",
-          excludeFromRandomize: neverRandomizeToNone.includes(category) 
+          excludeFromRandomize: neverRandomizeToNone.includes(category),
         },
       ];
     }
@@ -37,7 +52,13 @@ function generateAssetsStructure(directory) {
     });
   }
 
-  return assets;
+  const orderedAssets = {};
+
+  for (const category of assetOrder) {
+    orderedAssets[category] = assets[category];
+  }
+
+  return orderedAssets;
 }
 
 const assets = generateAssetsStructure("./assets/models");
