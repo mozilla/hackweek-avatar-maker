@@ -40,7 +40,7 @@ function generateAssetsStructure(directory) {
   return assets;
 }
 
-const assets = generateAssetsStructure("./assets");
+const assets = generateAssetsStructure("./assets/models");
 const result = `export default ${JSON.stringify(assets, null, 2)};`;
 
 fs.writeFileSync("./src/assets.js", result);

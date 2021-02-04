@@ -1,3 +1,5 @@
+@import url('assets/fonts/Poppins.css');
+
 :root {
   --primary-blue: #00a5f4;
   --button-bg-color: lightgray;
@@ -25,7 +27,7 @@ body {
 }
 
 * {
-  font-family: sans-serif;
+  font-family: Poppins, sans-serif;
   font-size: 12pt;
   box-sizing: border-box;
 }

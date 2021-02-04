@@ -11,7 +11,7 @@ function urlFor(value) {
   if (value.startsWith("blob")) {
     return value;
   } else {
-    return `assets/${value}.glb`;
+    return `assets/models/${value}.glb`;
   }
 }
 
