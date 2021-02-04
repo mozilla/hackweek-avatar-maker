@@ -53,6 +53,7 @@ body,
 .main {
   display: flex;
   overflow: hidden;
+  flex: 1;
 }
 
 #sceneContainer {
