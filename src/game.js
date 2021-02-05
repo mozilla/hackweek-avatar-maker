@@ -32,6 +32,8 @@ const state = {
   shouldResetView: false,
   thumbnailConfig: {},
   shouldRenderThumbnail: false,
+  shouldRotateLeft: false,
+  shouldRotateRight: false,
 };
 window.gameState = state;
 
@@ -54,6 +56,24 @@ document.addEventListener(constants.exportAvatar, () => {
 });
 document.addEventListener(constants.resetView, () => {
   state.shouldResetView = true;
+});
+
+function onKeyChange(e) {
+  switch (e.key) {
+    case "ArrowRight":
+      state.shouldRotateRight = e.type === "keydown";
+      break;
+    case "ArrowLeft":
+      state.shouldRotateLeft = e.type === "keydown";
+      break;
+  }
+}
+["keydown", "keyup"].map((e) => {
+  document.addEventListener(e, onKeyChange);
+});
+document.addEventListener("blur", () => {
+  state.shouldRotateLeft = false;
+  state.shouldRotateRight = false;
 });
 
 function ensureAvatarNode(category) {
@@ -208,11 +228,6 @@ function tick(time) {
   }
 
   {
-    const { renderer, scene, camera, controls } = state;
-    renderer.render(scene, camera);
-  }
-
-  {
     if (state.shouldApplyNewAvatarConfig) {
       state.shouldApplyNewAvatarConfig = false;
 
@@ -264,7 +279,26 @@ function tick(time) {
   }
 
   {
+    let speed = 0;
+    if (state.shouldRotateLeft) {
+      speed -= 30;
+    }
+    if (state.shouldRotateRight) {
+      speed += 30;
+    }
+    const { controls } = state;
+    controls.autoRotate = true;
+    controls.autoRotateSpeed = speed;
+    controls.update();
+  }
+
+  {
     window.requestAnimationFrame(tick);
+  }
+
+  {
+    const { renderer, scene, camera, controls } = state;
+    renderer.render(scene, camera);
   }
 }
 
