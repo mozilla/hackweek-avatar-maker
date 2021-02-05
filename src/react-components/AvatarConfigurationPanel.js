@@ -6,8 +6,7 @@ import { CategoryContainer } from "./CategoryContainer";
 import { TipContext } from "./TipContext";
 
 export function AvatarConfigurationPanel({
-  showTip,
-  hideTip,
+  onScroll,
   avatarConfig,
   assets,
   onSelectAvatarPart,
@@ -17,10 +16,9 @@ export function AvatarConfigurationPanel({
   const [expandedCategory, setExpandedCategory] = useState(null);
   const categoryNames = Object.keys(assets);
 
-  const panels = categoryNames.map((categoryName) => {
+  const partSelectors = categoryNames.map((categoryName) => {
     const category = assets[categoryName];
-    const selectedPart = avatarConfig[categoryName];
-    const currentSelection = category.parts.find((part) => part.value === selectedPart);
+    const currentSelection = category.parts.find((part) => part.value === avatarConfig[categoryName]);
     return (
       <AvatarPartSelector
         key={categoryName}
@@ -46,8 +44,8 @@ export function AvatarConfigurationPanel({
 
   return (
     <div className="selector">
-      <SimpleBar className="simpleBar" style={{ height: "100%" }} scrollableNodeProps={{ onScroll: hideTip }}>
-        {panels}
+      <SimpleBar className="simpleBar" style={{ height: "100%" }} scrollableNodeProps={{ onScroll }}>
+        {partSelectors}
       </SimpleBar>
     </div>
   );

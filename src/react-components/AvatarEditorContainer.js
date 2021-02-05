@@ -8,14 +8,44 @@ import { AvatarConfigurationPanel } from "./AvatarConfigurationPanel";
 import { AvatarEditor } from "./AvatarEditor";
 import { dispatch } from "../dispatch";
 import { generateRandomConfig } from "../generate-random-config";
+import initialAssets from "../assets";
+import { isThumbnailMode } from "../utils";
 
-export function AvatarEditorContainer({ initialAssets, thumbnailMode }) {
+// Used externally by the generate-thumbnails script
+const thumbnailMode = isThumbnailMode();
+
+export function AvatarEditorContainer() {
   const [assets, setAssets] = useState(initialAssets);
   const [hoveredConfig, setHoveredConfig] = useState({});
   const [canvasUrl, setCanvasUrl] = useState(null);
+  const [avatarConfig, setAvatarConfig] = useState(generateRandomConfig(assets));
+  const [tipState, setTipState] = useState({ visible: false, text: "", top: 0, left: 0 });
 
-  const initialAvatarConfig = generateRandomConfig(assets);
-  const [avatarConfig, setAvatarConfig] = useState(initialAvatarConfig);
+  useEffect(() => {
+    if (!thumbnailMode) {
+      dispatch(constants.avatarConfigChanged, { avatarConfig: { ...avatarConfig, ...hoveredConfig } });
+    }
+    dispatch(constants.reactIsLoaded);
+  });
+
+  // TODO: Save the wave to a static image, or actually do some interesting animation with it.
+  useEffect(async () => {
+    if (canvasUrl === null) {
+      setCanvasUrl(await generateWave());
+    }
+  });
+
+  function updateAvatarConfig(newConfig) {
+    setAvatarConfig({ ...avatarConfig, ...newConfig });
+  }
+
+  function showTip(text, top, left) {
+    setTipState({ visible: true, text, top, left });
+  }
+
+  function hideTip() {
+    setTipState({ visible: false });
+  }
 
   function onGLBUploaded(e) {
     const file = e.target.files[0];
@@ -42,36 +72,8 @@ export function AvatarEditorContainer({ initialAssets, thumbnailMode }) {
     updateAvatarConfig({ [category]: url });
   }
 
-  useEffect(() => {
-    if (!thumbnailMode) {
-      dispatch(constants.avatarConfigChanged, { avatarConfig: { ...avatarConfig, ...hoveredConfig } });
-    }
-    dispatch(constants.reactIsLoaded);
-  });
-
-  // TODO: Save the wave to a static image, or actually do some interesting animation with it.
-  useEffect(async () => {
-    if (canvasUrl === null) {
-      setCanvasUrl(await generateWave());
-    }
-  });
-
-  function updateAvatarConfig(newConfig) {
-    setAvatarConfig({ ...avatarConfig, ...newConfig });
-  }
-
   function randomizeConfig() {
     setAvatarConfig(generateRandomConfig(assets));
-  }
-
-  const [tipState, setTipState] = useState({ visible: false, text: "", top: 0, left: 0 });
-
-  function showTip(text, top, left) {
-    setTipState({ visible: true, text, top, left });
-  }
-
-  function hideTip() {
-    setTipState({ visible: false });
   }
 
   return (
@@ -83,8 +85,9 @@ export function AvatarEditorContainer({ initialAssets, thumbnailMode }) {
             {...{
               avatarConfig,
               assets,
-              showTip,
-              hideTip,
+              onScroll: () => {
+                hideTip();
+              },
               onSelectAvatarPart: ({ categoryName, part }) => {
                 updateAvatarConfig({ [categoryName]: part.value });
               },
