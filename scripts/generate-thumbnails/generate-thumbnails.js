@@ -47,7 +47,7 @@ async function retrySelector(page, selector, timeout = 100, retries = 100) {
   }
 
   let thumbnailsToGenerate = [];
-  for (const [category, parts] of Object.entries(assets)) {
+  for (const [category, {parts}] of Object.entries(assets)) {
     for (const part of parts) {
       if (part.value === null) continue;
       thumbnailsToGenerate.push({ category, part: part.value });
