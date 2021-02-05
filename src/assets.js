@@ -1144,8 +1144,8 @@ export default {
         "excludeFromRandomize": false
       },
       {
-        "value": "facial-hair_beard-full-1-dark",
-        "displayName": "Beard Full 1 Dark"
+        "value": "facial-hair_beard-full-1-black",
+        "displayName": "Beard Full 1 Black"
       },
       {
         "value": "facial-hair_beard-full-2-brown",
@@ -1164,8 +1164,32 @@ export default {
         "displayName": "Goatee 3"
       },
       {
-        "value": "facial-hair_goatee-4",
-        "displayName": "Goatee 4"
+        "value": "facial-hair_goatee-4-black",
+        "displayName": "Goatee 4 Black"
+      },
+      {
+        "value": "facial-hair_goatee-4-blonde",
+        "displayName": "Goatee 4 Blonde"
+      },
+      {
+        "value": "facial-hair_goatee-4-brown",
+        "displayName": "Goatee 4 Brown"
+      },
+      {
+        "value": "facial-hair_goatee-4-dark-brown",
+        "displayName": "Goatee 4 Dark Brown"
+      },
+      {
+        "value": "facial-hair_goatee-4-gray",
+        "displayName": "Goatee 4 Gray"
+      },
+      {
+        "value": "facial-hair_goatee-4-light-brown",
+        "displayName": "Goatee 4 Light Brown"
+      },
+      {
+        "value": "facial-hair_goatee-4-white",
+        "displayName": "Goatee 4 White"
       },
       {
         "value": "facial-hair_goatee-5",
@@ -1366,22 +1390,6 @@ export default {
         }
       },
       {
-        "value": "torso_style-1-tshirt-moz",
-        "displayName": "Style 1 Tshirt Moz",
-        "description": {
-          "Type": "style-1",
-          "Outfit": "tshirt-moz"
-        }
-      },
-      {
-        "value": "torso_style-1-tshirt-union-jack",
-        "displayName": "Style 1 Tshirt Union Jack",
-        "description": {
-          "Type": "style-1",
-          "Outfit": "tshirt-union-jack"
-        }
-      },
-      {
         "value": "torso_style-1-tshirt1-reactor",
         "displayName": "Style 1 Tshirt1 Reactor",
         "description": {
@@ -1526,14 +1534,13 @@ export default {
           "tshirt-1-hubs-white",
           "tshirt-1-moz",
           "tshirt-1-union-jack",
-          "tshirt-moz",
-          "tshirt-union-jack",
           "tshirt1-reactor",
           "ugly-christmas-1",
           "hoodie-2-purple",
           "tshirt-1-baby-unicorn",
           "tshirt-1-heart-animated",
-          "tshirt-1-heart"
+          "tshirt-1-heart",
+          "tshirt-union-jack"
         ]
       }
     }
