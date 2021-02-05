@@ -1,35 +1,40 @@
 import React, { useEffect, useRef } from "react";
 import { AvatarPartContainer } from "./AvatarPartContainer";
 import { CategoryHeading } from "./CategoryHeading";
+import { Collapsible } from "./Collapsible";
 
-export function AvatarPartSelector({
-  onPartSelected,
-  onPartEnter,
-  onPartLeave,
-  setExpanded,
-  expanded,
-  expandedContent,
-  category,
-  selectedPart,
-  categoryName,
-}) {
+export function AvatarPartSelector({ setExpanded, isExpanded, expandedContent, currentSelection, categoryName }) {
   const containerEl = useRef(null);
   useEffect(() => {
-    if (expanded) {
+    if (isExpanded) {
       containerEl.current.scrollIntoView({ behavior: "smooth", block: "nearest" });
     }
-  }, [containerEl, expanded]);
-  const selectedPartInfo = category.parts.find((part) => part.value === selectedPart);
+  }, [containerEl, isExpanded]);
 
   return (
-    <AvatarPartContainer ref={containerEl} {...{ expanded, setExpanded }}>
+    <AvatarPartContainer
+      ref={containerEl}
+      {...{
+        isExpanded,
+        onKeyDown: (e) => {
+          if (e.target === e.currentTarget && (e.key === "Enter" || e.key === " ")) {
+            setExpanded(!isExpanded);
+            e.preventDefault();
+            e.stopPropagation();
+          }
+        },
+      }}
+    >
       <CategoryHeading
-        categoryName={categoryName}
-        selectedPartInfo={selectedPartInfo}
-        onClick={() => setExpanded(!expanded)}
-        expanded={expanded}
+        {...{
+          name,
+          selectedPartName: currentSelection.displayName,
+          image: currentSelection.value,
+          isExpanded,
+          onClick: () => setExpanded(!isExpanded),
+        }}
       />
-      {expanded && expandedContent}
+      {isExpanded && <Collapsible>{expandedContent}</Collapsible>}
     </AvatarPartContainer>
   );
 }
