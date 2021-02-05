@@ -158,8 +158,8 @@ export function createSky() {
   sky.scale.setScalar(450000);
 
   const uniforms = sky.material.uniforms;
-  uniforms["turbidity"].value = 10;
-  uniforms["rayleigh"].value = 3;
+  uniforms["turbidity"].value = 1.5;
+  uniforms["rayleigh"].value = 1.5;
   uniforms["mieCoefficient"].value = 0.005;
   uniforms["mieDirectionalG"].value = 0.7;
 
@@ -168,12 +168,7 @@ export function createSky() {
   const theta = Math.PI * (inclination - 0.5);
   const phi = 2 * Math.PI * (azimuth - 0.5);
 
-  const sun = new THREE.Vector3();
-  sun.x = Math.cos(phi);
-  sun.y = Math.sin(phi) * Math.sin(theta);
-  sun.z = Math.sin(phi) * Math.cos(theta);
-
-  uniforms["sunPosition"].value.copy(sun);
+  uniforms["sunPosition"].value.set(10, 20, 5);
 
   return sky;
 }

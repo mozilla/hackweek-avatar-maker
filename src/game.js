@@ -130,11 +130,14 @@ function init() {
   camera.position.set(0, 0.6, 1);
   state.camera = camera;
 
-  const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
-  scene.add(ambientLight);
+  const directionalLight = new THREE.DirectionalLight(0xffffff, 4.0);
+  directionalLight.position.set(10, 20, 5);
+  scene.add(directionalLight);
 
   // TODO: Square this with react
   const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById("scene"), antialias: true });
+  renderer.physicallyCorrectLights = true;
+  renderer.gammaOutput = true;
   state.renderer = renderer;
 
   const sky = createSky();
@@ -160,7 +163,7 @@ async function loadIntoGroup(category, part, group) {
       forEachMaterial(obj, (material) => {
         if (material.isMeshStandardMaterial) {
           material.envMap = state.envMap;
-          material.envMapIntensity = 0.8;
+          material.envMapIntensity = 0.4;
           if (material.map) {
             material.map.anisotropy = state.renderer.capabilities.getMaxAnisotropy();
           }
