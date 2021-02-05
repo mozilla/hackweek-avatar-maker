@@ -68,13 +68,15 @@ function App() {
     const url = URL.createObjectURL(file);
 
     const clone = { ...assets };
-    clone[category] = clone[category] || [
-      {
-        displayName: "None",
-        value: null,
-      },
-    ];
-    clone[category].push({
+    clone[category] = clone[category] || {
+      parts: [
+        {
+          displayName: "None",
+          value: null,
+        },
+      ],
+    };
+    clone[category].parts.push({
       displayName,
       value: url,
     });
