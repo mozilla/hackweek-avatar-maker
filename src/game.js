@@ -5,6 +5,8 @@ import constants from "./constants";
 import { exportAvatar } from "./export";
 import { loadGLTF, loadGLTFCached, forEachMaterial, generateEnvironmentMap, createSky, isThumbnailMode } from "./utils";
 import { renderThumbnail } from "./render-thumbnail";
+import uvScroll from "./uv-scroll";
+import idleEyes from "./idle-eyes";
 
 // TODO: Don't do this
 function urlFor(value) {
@@ -23,7 +25,10 @@ const state = {
   camera: null,
   renderer: null,
   controls: null,
+  clock: null,
+  delta: 0,
   envMap: null,
+  avatarGroup: null,
   avatarNodes: {},
   avatarConfig: {},
   newAvatarConfig: {},
@@ -34,6 +39,8 @@ const state = {
   shouldRenderThumbnail: false,
   shouldRotateLeft: false,
   shouldRotateRight: false,
+  idleEyesMixers: {},
+  uvScrollMaps: {}
 };
 window.gameState = state;
 
@@ -160,6 +167,8 @@ function init() {
   renderer.gammaOutput = true;
   state.renderer = renderer;
 
+  state.clock = new THREE.Clock();
+
   const sky = createSky();
   state.envMap = generateEnvironmentMap(sky, renderer);
 
@@ -182,6 +191,14 @@ async function loadIntoGroup({ category, part, group, cached = true }) {
 
     gltf.scene.animations = gltf.animations;
 
+    if (idleEyes.hasIdleEyes(gltf)) {
+      state.idleEyesMixers[category] = idleEyes.mixerForGltf(gltf);
+    }
+
+    if (state.uvScrollMaps[category]) {
+      state.uvScrollMaps[category].length = 0;
+    }
+
     gltf.scene.traverse((obj) => {
       forEachMaterial(obj, (material) => {
         if (material.isMeshStandardMaterial) {
@@ -193,12 +210,19 @@ async function loadIntoGroup({ category, part, group, cached = true }) {
           material.needsUpdate = true;
         }
       });
+
+      if (uvScroll.isValidMesh(obj)) {
+        state.uvScrollMaps[category] = state.uvScrollMaps[category] || [];
+        state.uvScrollMaps[category].push(uvScroll.initialStateForMesh(obj));
+      }
     });
 
     group.clear();
     group.add(gltf.scene);
+
     return gltf.scene;
   } catch (ex) {
+    console.error("Failed to load avatar part", category, part, ex);
     if (state.avatarConfig[category] !== part) return;
     group.clear();
     return;
@@ -215,6 +239,10 @@ function tick(time) {
       requestAnimationFrame(tick);
       return;
     }
+  }
+
+  {
+    state.delta = state.clock.getDelta();
   }
 
   {
@@ -301,6 +329,23 @@ function tick(time) {
 
   {
     window.requestAnimationFrame(tick);
+  }
+
+  {
+    for (const categoryName in state.idleEyesMixers) {
+      if (!state.idleEyesMixers.hasOwnProperty(categoryName)) continue;
+      const mixer = state.idleEyesMixers[categoryName];
+      mixer.update(state.delta);
+    }
+  }
+
+  {
+    for (const categoryName in state.uvScrollMaps) {
+      if (!state.uvScrollMaps.hasOwnProperty(categoryName)) continue;
+      for (const uvScrollState of state.uvScrollMaps[categoryName]) {
+        uvScroll.update(uvScrollState, state.delta)
+      }
+    }
   }
 
   {
