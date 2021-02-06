@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import constants from "../constants";
 import { generateWave } from "../utils";
 import { ToolbarContainer } from "./ToolbarContainer";
@@ -10,6 +10,7 @@ import { dispatch } from "../dispatch";
 import { generateRandomConfig } from "../generate-random-config";
 import initialAssets from "../assets";
 import { isThumbnailMode } from "../utils";
+import debounce from "../utils/debounce";
 
 // Used externally by the generate-thumbnails script
 const thumbnailMode = isThumbnailMode();
@@ -17,6 +18,7 @@ const thumbnailMode = isThumbnailMode();
 export function AvatarEditorContainer() {
   const [assets, setAssets] = useState(initialAssets);
   const [hoveredConfig, setHoveredConfig] = useState({});
+  const debouncedSetHoveredConfig = useCallback(debounce(setHoveredConfig), [setHoveredConfig]);
   const [canvasUrl, setCanvasUrl] = useState(null);
   const [avatarConfig, setAvatarConfig] = useState(generateRandomConfig(assets));
   const [tipState, setTipState] = useState({ visible: false, text: "", top: 0, left: 0 });
@@ -92,11 +94,11 @@ export function AvatarEditorContainer() {
                 updateAvatarConfig({ [categoryName]: part.value });
               },
               onHoverAvatarPart: ({ categoryName, part, tip, rect }) => {
-                setHoveredConfig({ [categoryName]: part.value });
+                debouncedSetHoveredConfig({ [categoryName]: part.value });
                 showTip(tip, rect.bottom, rect.left + rect.width / 2);
               },
               onUnhoverAvatarPart: () => {
-                setHoveredConfig({});
+                debouncedSetHoveredConfig({});
                 hideTip();
               },
             }}
