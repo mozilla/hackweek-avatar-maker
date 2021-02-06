@@ -5,6 +5,8 @@
   },
   "dependencies": {
     "esm": "^3.2.25",
-    "puppeteer": "^7.0.0"
+    "prompt-sync": "^4.2.0",
+    "puppeteer": "^7.0.0",
+    "yargs": "^16.2.0"
   }
 }
