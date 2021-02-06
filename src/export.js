@@ -131,8 +131,5 @@ function cloneIntoAvatar(avatarGroup) {
 
 export function exportAvatar(avatarGroup) {
   const avatar = cloneIntoAvatar(avatarGroup);
-  console.log(describeObject3D(avatar));
-  console.log(avatar);
-  exportGLTF(avatar, { binary: false, animations: avatar.animations });
   exportGLTF(avatar, { binary: true, animations: avatar.animations });
 }
