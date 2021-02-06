@@ -27,7 +27,7 @@ export function AvatarPartSelector({ setExpanded, isExpanded, expandedContent, c
     >
       <CategoryHeading
         {...{
-          name,
+          categoryName,
           selectedPartName: currentSelection.displayName,
           image: currentSelection.value,
           isExpanded,
