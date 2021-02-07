@@ -5,15 +5,14 @@ import constants from "./constants";
 import { exportAvatar } from "./export";
 import { loadGLTFCached, forEachMaterial, generateEnvironmentMap, createSky, isThumbnailMode } from "./utils";
 import { renderThumbnail } from "./render-thumbnail";
+import { combine } from "./mesh-combination";
+import { getMaterialInfo } from "./get-material-info";
+import { urlFor } from "./url-for";
 
-// TODO: Don't do this
-function urlFor(value) {
-  if (value.startsWith("blob")) {
-    return value;
-  } else {
-    return `assets/models/${value}.glb`;
-  }
-}
+// Used to test mesh combination
+window.combineCurrentAvatar = async function () {
+  return await combine({ avatar: state.avatarGroup });
+};
 
 const state = {
   reactIsLoaded: false,
@@ -298,8 +297,25 @@ function tick(time) {
 
   {
     const { renderer, scene, camera, controls } = state;
-    renderer.render(scene, camera);
+    throttle(
+      "render",
+      () => {
+        renderer.render(scene, camera);
+      },
+      20
+    );
   }
 }
+
+const throttle = (function () {
+  const m = new Map();
+  return function throttle(id, fn, t) {
+    const count = m.get(id) || 0;
+    if (count % t === 0) {
+      fn();
+    }
+    m.set(id, count + 1);
+  };
+})();
 
 window.requestAnimationFrame(tick);
