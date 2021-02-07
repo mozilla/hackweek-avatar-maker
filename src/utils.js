@@ -82,27 +82,11 @@ export function describeObject3D(root) {
   return traverseWithDepth({ object3D: root, callback: describe, result: [] }).join("\n");
 }
 
-const loadGLTF = (function () {
+export const loadGLTF = (function () {
   const loader = new GLTFLoader();
   return function loadGLTF(url) {
     return new Promise(function (resolve, reject) {
-      loader.load(
-        url,
-        function (gltf) {
-          resolve(gltf);
-          // gltf.animations; // Array<THREE.AnimationClip>
-          // gltf.scene; // THREE.Group
-          // gltf.scenes; // Array<THREE.Group>
-          // gltf.cameras; // Array<THREE.Camera>
-          // gltf.asset; // Object
-        },
-        function (xhr) {
-          // console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
-        },
-        function (error) {
-          reject(error);
-        }
-      );
+      loader.load(url, resolve, null, reject);
     });
   };
 })();
@@ -174,18 +158,18 @@ export function createSky() {
 }
 
 export function generateWave() {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     const center = 30;
     const amplitude = 15;
     const height = 200;
     const halfHeight = height / 2;
     const quarterHeight = height / 4;
 
-    const canvas = document.createElement('canvas');
+    const canvas = document.createElement("canvas");
     canvas.width = center + amplitude;
     canvas.height = height;
 
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
     ctx.fillStyle = "white";
     ctx.lineWidth = 4;
 
@@ -199,12 +183,12 @@ export function generateWave() {
 
     ctx.fill();
 
-    canvas.toBlob(blob => {
+    canvas.toBlob((blob) => {
       resolve(URL.createObjectURL(blob));
     });
   });
 }
 
 export function isThumbnailMode() {
-  return new URLSearchParams(location.search).get("thumbnail") !== null
+  return new URLSearchParams(location.search).get("thumbnail") !== null;
 }

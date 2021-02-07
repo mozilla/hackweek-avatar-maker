@@ -3,12 +3,14 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { GLTFExporter } from "three/examples/jsm/exporters/GLTFExporter";
 import constants from "./constants";
 import { exportAvatar } from "./export";
-import { loadGLTFCached, forEachMaterial, generateEnvironmentMap, createSky, isThumbnailMode } from "./utils";
+import { loadGLTF, loadGLTFCached, forEachMaterial, generateEnvironmentMap, createSky, isThumbnailMode } from "./utils";
 import { renderThumbnail } from "./render-thumbnail";
 import { combine } from "./mesh-combination";
 import { getMaterialInfo } from "./get-material-info";
 import { urlFor } from "./url-for";
 import { createSkydome } from "./create-skydome";
+import uvScroll from "./uv-scroll";
+import idleEyes from "./idle-eyes";
 
 // Used to test mesh combination
 window.combineCurrentAvatar = async function () {
@@ -23,7 +25,10 @@ const state = {
   camera: null,
   renderer: null,
   controls: null,
+  clock: null,
+  delta: 0,
   envMap: null,
+  avatarGroup: null,
   avatarNodes: {},
   avatarConfig: {},
   newAvatarConfig: {},
@@ -34,6 +39,8 @@ const state = {
   shouldRenderThumbnail: false,
   shouldRotateLeft: false,
   shouldRotateRight: false,
+  idleEyesMixers: {},
+  uvScrollMaps: {}
 };
 window.gameState = state;
 
@@ -88,7 +95,7 @@ function resetView() {
 }
 
 function init() {
-  THREE.Cache.enabled = true;
+  THREE.Cache.enabled = !isThumbnailMode();
 
   const scene = new THREE.Scene();
   state.scene = scene;
@@ -110,6 +117,8 @@ function init() {
   renderer.gammaOutput = true;
   state.renderer = renderer;
 
+  state.clock = new THREE.Clock();
+
   const sky = createSky();
   state.envMap = generateEnvironmentMap(sky, renderer);
 
@@ -123,12 +132,23 @@ function init() {
   scene.add(state.avatarGroup);
 }
 
-async function loadIntoGroup(category, part, group) {
+async function loadIntoGroup({ category, part, group, cached = true }) {
   try {
-    const gltf = await loadGLTFCached(urlFor(part));
+    const load = cached ? loadGLTFCached : loadGLTF;
+    const gltf = await load(urlFor(part));
+
     if (state.avatarConfig[category] !== part) return;
 
     gltf.scene.animations = gltf.animations;
+
+    if (idleEyes.hasIdleEyes(gltf)) {
+      state.idleEyesMixers[category] = idleEyes.mixerForGltf(gltf);
+    }
+
+    if (state.uvScrollMaps[category]) {
+      state.uvScrollMaps[category].length = 0;
+    }
+
     gltf.scene.traverse((obj) => {
       forEachMaterial(obj, (material) => {
         if (material.isMeshStandardMaterial) {
@@ -140,12 +160,19 @@ async function loadIntoGroup(category, part, group) {
           material.needsUpdate = true;
         }
       });
+
+      if (uvScroll.isValidMesh(obj)) {
+        state.uvScrollMaps[category] = state.uvScrollMaps[category] || [];
+        state.uvScrollMaps[category].push(uvScroll.initialStateForMesh(obj));
+      }
     });
 
     group.clear();
     group.add(gltf.scene);
+
     return gltf.scene;
   } catch (ex) {
+    console.error("Failed to load avatar part", category, part, ex);
     if (state.avatarConfig[category] !== part) return;
     group.clear();
     return;
@@ -162,6 +189,10 @@ function tick(time) {
       requestAnimationFrame(tick);
       return;
     }
+  }
+
+  {
+    state.delta = state.clock.getDelta();
   }
 
   {
@@ -189,7 +220,7 @@ function tick(time) {
         if (state.newAvatarConfig[category] !== state.avatarConfig[category]) {
           state.avatarConfig[category] = state.newAvatarConfig[category];
           if (state.newAvatarConfig[category] !== null) {
-            loadIntoGroup(category, state.newAvatarConfig[category], state.avatarNodes[category]);
+            loadIntoGroup({ category, part: state.newAvatarConfig[category], group: state.avatarNodes[category] });
           } else {
             state.avatarNodes[category].clear();
           }
@@ -201,14 +232,18 @@ function tick(time) {
   {
     if (state.shouldRenderThumbnail) {
       state.shouldRenderThumbnail = false;
-      for (const category in state.avatarNodes) {
-        if (!state.avatarNodes.hasOwnProperty(category)) continue;
+
+      const { category, part } = state.thumbnailConfig;
+
+      ensureAvatarNode(category);
+
+      for (const category of Object.keys(state.avatarNodes)) {
         state.avatarNodes[category].clear();
       }
-      const { category, part } = state.thumbnailConfig;
-      ensureAvatarNode(category);
+
       state.avatarConfig[category] = part;
-      loadIntoGroup(category, part, state.avatarNodes[category]).then((gltfScene) => {
+
+      loadIntoGroup({ category, part, group: state.avatarNodes[category], cached: false }).then((gltfScene) => {
         renderThumbnail(state.renderer, state.scene, gltfScene, category, part);
       });
     }
@@ -244,6 +279,23 @@ function tick(time) {
 
   {
     window.requestAnimationFrame(tick);
+  }
+
+  {
+    for (const categoryName in state.idleEyesMixers) {
+      if (!state.idleEyesMixers.hasOwnProperty(categoryName)) continue;
+      const mixer = state.idleEyesMixers[categoryName];
+      mixer.update(state.delta);
+    }
+  }
+
+  {
+    for (const categoryName in state.uvScrollMaps) {
+      if (!state.uvScrollMaps.hasOwnProperty(categoryName)) continue;
+      for (const uvScrollState of state.uvScrollMaps[categoryName]) {
+        uvScroll.update(uvScrollState, state.delta)
+      }
+    }
   }
 
   {

@@ -18,7 +18,29 @@ const assetOrder = [
   "Torso Jacket",
 ];
 
+const hairColors = [
+  "black",
+  "blonde",
+  "blue",
+  "dark brown",
+  "light brown",
+  "brown",
+  "gray",
+  "pink",
+  "red",
+  "white",
+];
+
 const categoryDescription = {
+  Hair: {
+    Type: {
+      regExp: new RegExp(`hair_(.+)-(${hairColors.join("|")})$`),
+      isPrimaryOption: true,
+    },
+    Color: {
+      regExp: new RegExp(`-(${hairColors.join("|")})$`),
+    }
+  },
   Head: {
     Type: {
       regExp: /head_(.+)-skin/,
@@ -44,6 +66,15 @@ const categoryDescription = {
     },
     "Skin Tone": {
       regExp: /skin-[0-9a-z]/,
+    }
+  },
+  "Facial Hair": {
+    Type: {
+      regExp: new RegExp(`facial-hair_(.+)-(${hairColors.join("|")})$`),
+      isPrimaryOption: true,
+    },
+    Color: {
+      regExp: new RegExp(`-(${hairColors.join("|")})$`),
     }
   },
   Torso: {
