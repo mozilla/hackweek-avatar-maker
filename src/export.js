@@ -50,23 +50,24 @@ export function combineHubsComponents(a, b) {
 export const exportGLTF = (function () {
   const exporter = new GLTFExporter();
   return function exportGLTF(object3D, { binary, animations }) {
-    exporter.parse(
-      object3D,
-      (gltf) => {
-        if (binary) {
-          const blob = new Blob([gltf], { type: "application/octet-stream" });
-          const el = document.createElement("a");
-          el.style.display = "none";
-          el.href = URL.createObjectURL(blob);
-          el.download = "custom_avatar.glb";
-          el.click();
-          el.remove();
-        } else {
-          console.log(gltf);
-        }
-      },
-      { binary, animations }
-    );
+    return new Promise((resolve) => {
+      exporter.parse(
+        object3D,
+        (gltf) => {
+          if (binary) {
+            const blob = new Blob([gltf], { type: "application/octet-stream" });
+            const el = document.createElement("a");
+            el.style.display = "none";
+            el.href = URL.createObjectURL(blob);
+            el.download = "custom_avatar.glb";
+            el.click();
+            el.remove();
+          }
+          resolve(gltf);
+        },
+        { binary, animations }
+      );
+    });
   };
 })();
 
@@ -135,6 +136,7 @@ export async function exportAvatar(avatarGroup) {
   const avatar = await combine({ avatar: clone });
 
   console.log(avatar);
-  exportGLTF(avatar, { binary: false, animations: avatar.animations });
-  exportGLTF(avatar, { binary: true, animations: avatar.animations });
+  const gltf = await exportGLTF(avatar, { binary: false, animations: avatar.animations });
+  await exportGLTF(avatar, { binary: true, animations: avatar.animations });
+  console.log(gltf);
 }

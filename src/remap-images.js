@@ -13,18 +13,23 @@ export const remapImages = (function () {
     // "alphaMap",
     // "envMap",
   ];
-  return function remapImages({ mesh, images, uvs }) {
-    const material = new THREE.MeshStandardMaterial().copy(mesh.material);
+  return function remapImages({ mesh, images, uvs, textures }) {
     const geometry = mesh.geometry.clone();
-    const newMesh = new THREE.SkinnedMesh().copy(mesh)
-    newMesh.material = material;
-    newMesh.geometry = geometry;
-
+    mesh.geometry = geometry;
+    const material = new THREE.MeshBasicMaterial().copy(mesh.material);
+    mesh.material = material;
 
     // Swap image maps
     for (const [name, image] of images) {
       if (material[name] && material[name].image) {
-        material[name] = new THREE.Texture(image);
+        let texture = textures.get(name);
+        if (!texture) {
+          texture = material[name].clone();
+          texture.image = image;
+          textures.set(name, texture);
+        }
+
+        material[name] = texture;
       }
     }
     // Fix for metalness and roughness having to be in the same texture
