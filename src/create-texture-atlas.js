@@ -44,36 +44,39 @@ export const createTextureAtlas = (function () {
   return async function createTextureAtlas({ meshes }) {
     const uvs = new Map(
       meshes.map((mesh, i) => {
-        const uv = new THREE.Vector2(i % ATLAS_SQRT, Math.floor(i / ATLAS_SQRT)).multiplyScalar(1 / ATLAS_SQRT);
+        const min = new THREE.Vector2(i % ATLAS_SQRT, Math.floor(i / ATLAS_SQRT)).multiplyScalar(1 / ATLAS_SQRT);
+        const max = new THREE.Vector2(min.x + 1 / ATLAS_SQRT, min.y + 1 / ATLAS_SQRT);
 
         MAP_NAMES.forEach((name) => {
           const image = mesh.material && mesh.material[name] && mesh.material[name].image;
           if (image && VALID_IMAGE_TYPES.some((type) => image instanceof type)) {
-            ctx[name].drawImage(image, uv.x * ATLAS_SIZE_PX, uv.y * ATLAS_SIZE_PX, IMAGE_SIZE, IMAGE_SIZE);
+            ctx[name].drawImage(image, min.x * ATLAS_SIZE_PX, min.y * ATLAS_SIZE_PX, IMAGE_SIZE, IMAGE_SIZE);
           }
         });
 
-        return [mesh, uv];
+        return [mesh, { min, max }];
       })
     );
 
-    const images = await Promise.all(
-      MAP_NAMES.map(async (name) => {
-        const url = await new Promise((resolve) => {
-          ctx[name].canvas.toBlob((blob) => {
-            resolve(URL.createObjectURL(blob));
+    const images = new Map(
+      await Promise.all(
+        MAP_NAMES.map(async (name) => {
+          const url = await new Promise((resolve) => {
+            ctx[name].canvas.toBlob((blob) => {
+              resolve(URL.createObjectURL(blob));
+            });
           });
-        });
 
-        const img = document.createElement("img");
-        await new Promise((resolve) => {
-          img.onload = resolve;
-          img.src = url;
-        });
-        // Add image to document for debugging
-        document.body.append(img);
-        return img;
-      })
+          const img = document.createElement("img");
+          await new Promise((resolve) => {
+            img.onload = resolve;
+            img.src = url;
+          });
+          // Add image to document for debugging
+          document.body.append(img);
+          return [name, img];
+        })
+      )
     );
 
     return { images, uvs };
