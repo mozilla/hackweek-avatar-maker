@@ -40,6 +40,7 @@ export const remapImages = (function () {
         uv2.array[i + 1] = lerp(uv2.array[i + 1], 0, 1, min.y, max.y);
       }
     }
+    mesh.geometry = clone;
   };
 })();
 

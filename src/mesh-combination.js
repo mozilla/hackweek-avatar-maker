@@ -6,5 +6,5 @@ export async function combine({ avatar }) {
   const meshes = findChildrenByType(avatar, "SkinnedMesh");
   const { images, uvs } = await createTextureAtlas({ meshes });
   meshes.map((mesh) => remapImages({ mesh, images, uvs: uvs.get(mesh) }));
-  return { images, uvs };
+  return avatar;
 }
