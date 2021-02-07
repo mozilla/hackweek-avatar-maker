@@ -25,23 +25,24 @@ export const createTextureAtlas = (function () {
     ImageBitmap,
     OffscreenCanvas,
   ];
-  const ctx = Object.fromEntries(
-    MAP_NAMES.map((name) => {
-      const canvas = document.createElement("canvas");
-      canvas.width = ATLAS_SIZE_PX;
-      canvas.height = ATLAS_SIZE_PX;
-      const ctx = canvas.getContext("2d");
-      ctx.fillStyle = "gray";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      // Add canvases to document for debugging
-      // document.body.append(name);
-      // document.body.append(canvas);
-      return [name, ctx];
-    })
-  );
 
   return async function createTextureAtlas({ meshes }) {
+    const ctx = Object.fromEntries(
+      MAP_NAMES.map((name) => {
+        const canvas = document.createElement("canvas");
+        canvas.width = ATLAS_SIZE_PX;
+        canvas.height = ATLAS_SIZE_PX;
+        const ctx = canvas.getContext("2d");
+        ctx.fillStyle = "gray";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Add canvases to document for debugging
+        // document.body.append(name);
+        // document.body.append(canvas);
+        return [name, ctx];
+      })
+    );
+
     const uvs = new Map(
       meshes.map((mesh, i) => {
         const min = new THREE.Vector2(i % ATLAS_SQRT, Math.floor(i / ATLAS_SQRT)).multiplyScalar(1 / ATLAS_SQRT);

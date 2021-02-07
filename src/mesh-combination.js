@@ -5,6 +5,10 @@ import { remapImages } from "./remap-images";
 export async function combine({ avatar }) {
   const meshes = findChildrenByType(avatar, "SkinnedMesh");
   const { images, uvs } = await createTextureAtlas({ meshes });
-  meshes.map((mesh) => remapImages({ mesh, images, uvs: uvs.get(mesh) }));
+  meshes
+    .filter((mesh) => !mesh.material.transparent)
+    .map((mesh) => {
+      remapImages({ mesh, images, uvs: uvs.get(mesh) });
+    });
   return avatar;
 }
