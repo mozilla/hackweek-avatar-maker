@@ -40,7 +40,7 @@ const state = {
   shouldRotateLeft: false,
   shouldRotateRight: false,
   idleEyesMixers: {},
-  uvScrollMaps: {}
+  uvScrollMaps: {},
 };
 window.gameState = state;
 
@@ -293,32 +293,15 @@ function tick(time) {
     for (const categoryName in state.uvScrollMaps) {
       if (!state.uvScrollMaps.hasOwnProperty(categoryName)) continue;
       for (const uvScrollState of state.uvScrollMaps[categoryName]) {
-        uvScroll.update(uvScrollState, state.delta)
+        uvScroll.update(uvScrollState, state.delta);
       }
     }
   }
 
   {
     const { renderer, scene, camera, controls } = state;
-    throttle(
-      "render",
-      () => {
-        renderer.render(scene, camera);
-      },
-      20
-    );
+    renderer.render(scene, camera);
   }
 }
-
-const throttle = (function () {
-  const m = new Map();
-  return function throttle(id, fn, t) {
-    const count = m.get(id) || 0;
-    if (count % t === 0) {
-      fn();
-    }
-    m.set(id, count + 1);
-  };
-})();
 
 window.requestAnimationFrame(tick);
