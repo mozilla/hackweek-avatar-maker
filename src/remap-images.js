@@ -1,22 +1,12 @@
 import * as THREE from "three";
 
 export const remapImages = (function () {
-  const MAP_NAMES = [
-    "map",
-    "aoMap",
-    "roughnessMap",
-    "metalnessMap",
-    // "lightMap",
-    // "emissiveMap",
-    // "bumpMap",
-    // "displacementMap",
-    // "alphaMap",
-    // "envMap",
-  ];
   return function remapImages({ mesh, images, uvs, textures }) {
+    // TODO: May not need to clone / create new material and assign it to the mesh.
+    // Probably can mutate in place.
     const geometry = mesh.geometry.clone();
     mesh.geometry = geometry;
-    const material = new THREE.MeshBasicMaterial().copy(mesh.material);
+    const material = new THREE.MeshStandardMaterial().copy(mesh.material);
     mesh.material = material;
 
     // Swap image maps

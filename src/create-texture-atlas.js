@@ -7,10 +7,11 @@ export const createTextureAtlas = (function () {
   const MAP_NAMES = [
     "map",
     "aoMap",
+    "normalMap", //TODO: Check normalMap type. ObjectSpaceNormalMap or TangentSpaceNormalMap
     "roughnessMap",
     "metalnessMap",
     // "lightMap",
-    // "emissiveMap",
+    "emissiveMap",
     // "bumpMap",
     // "displacementMap",
     // "alphaMap",
@@ -37,8 +38,8 @@ export const createTextureAtlas = (function () {
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
         // Add canvases to document for debugging
-        // document.body.append(name);
-        // document.body.append(canvas);
+        document.body.append(name);
+        document.body.append(canvas);
         return [name, ctx];
       })
     );

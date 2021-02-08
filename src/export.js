@@ -58,12 +58,15 @@ export const exportGLTF = (function () {
             const blob = new Blob([gltf], { type: "application/octet-stream" });
             const el = document.createElement("a");
             el.style.display = "none";
-            el.href = URL.createObjectURL(blob);
+            const url = URL.createObjectURL(blob);
+            el.href = url;
             el.download = "custom_avatar.glb";
             el.click();
             el.remove();
+            resolve({ gltf, blob, url });
+          } else {
+            resolve({ gltf });
           }
-          resolve(gltf);
         },
         { binary, animations }
       );
@@ -136,7 +139,8 @@ export async function exportAvatar(avatarGroup) {
   const avatar = await combine({ avatar: clone });
 
   console.log(avatar);
-  const gltf = await exportGLTF(avatar, { binary: false, animations: avatar.animations });
-  await exportGLTF(avatar, { binary: true, animations: avatar.animations });
+  const { gltf } = await exportGLTF(avatar, { binary: false, animations: avatar.animations });
   console.log(gltf);
+  const { blob, url } = await exportGLTF(avatar, { binary: true, animations: avatar.animations });
+  return { url };
 }

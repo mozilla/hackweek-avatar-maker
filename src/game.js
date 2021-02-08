@@ -252,7 +252,25 @@ function tick(time) {
   {
     if (state.shouldExportAvatar) {
       state.shouldExportAvatar = false;
-      exportAvatar(state.avatarGroup);
+
+      exportAvatar(state.avatarGroup).then(({ url }) => {
+        loadGLTF(url).then((gltf) => {
+          gltf.scene.traverse((obj) => {
+            forEachMaterial(obj, (material) => {
+              if (material.isMeshStandardMaterial) {
+                material.envMap = state.envMap;
+                material.envMapIntensity = 0.4;
+                if (material.map) {
+                  material.map.anisotropy = state.renderer.capabilities.getMaxAnisotropy();
+                }
+                material.needsUpdate = true;
+              }
+            });
+          });
+          state.scene.add(gltf.scene);
+          gltf.scene.position.set(0.1, 0, 0);
+        });
+      });
     }
   }
 
