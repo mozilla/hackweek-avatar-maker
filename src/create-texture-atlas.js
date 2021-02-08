@@ -42,8 +42,18 @@ export const createTextureAtlas = (function () {
 
         MAP_NAMES.forEach((name) => {
           const image = mesh.material && mesh.material[name] && mesh.material[name].image;
-          if (image) {
+          if (image && !image.isDummyImage) {
             ctx[name].drawImage(image, min.x * ATLAS_SIZE_PX, min.y * ATLAS_SIZE_PX, IMAGE_SIZE, IMAGE_SIZE);
+          } else if (mesh.material.color && name === "map") {
+            ctx[name].fillStyle = '#' + mesh.material.color.getHexString()
+            ctx[name].fillRect(min.x * ATLAS_SIZE_PX, min.y * ATLAS_SIZE_PX, IMAGE_SIZE, IMAGE_SIZE);
+            const dummyTexture = new THREE.Texture();
+            dummyTexture.image = {
+              isDummyImage: true,
+              width: IMAGE_SIZE,
+              height: IMAGE_SIZE
+            };
+            mesh.material[name] = dummyTexture;
           }
         });
 
@@ -65,8 +75,6 @@ export const createTextureAtlas = (function () {
             img.onload = resolve;
             img.src = url;
           });
-          // Add image to document for debugging
-          document.body.append(img);
           return [name, img];
         })
       )

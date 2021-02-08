@@ -281,7 +281,7 @@ function tick(time) {
           initializeGltf("testExportGroup", gltf);
           state.testExportGroup.clear();
           state.testExportGroup.add(gltf.scene);
-          gltf.scene.position.set(0.5, 0, 0);
+          gltf.scene.position.set(0.8, 0, 0);
         });
       });
     }

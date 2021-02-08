@@ -3,7 +3,7 @@ import { GLTFExporter } from "three/examples/jsm/exporters/GLTFExporter";
 import { findChildrenByType, findChildByName, describeObject3D } from "./utils";
 import { combine } from "./mesh-combination";
 
-function cloneSkeleton(skinnedMesh) {
+export function cloneSkeleton(skinnedMesh) {
   const boneClones = new Map();
 
   for (const bone of skinnedMesh.skeleton.bones) {
