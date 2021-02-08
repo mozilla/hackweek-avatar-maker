@@ -28,6 +28,7 @@ const state = {
   delta: 0,
   envMap: null,
   avatarGroup: null,
+  testExportGroup: null,
   avatarNodes: {},
   avatarConfig: {},
   newAvatarConfig: {},
@@ -127,8 +128,40 @@ function init() {
   controls.saveState();
   state.controls = controls;
 
+  // TODO Remove this test code
+  state.testExportGroup = new THREE.Group();
+  scene.add(state.testExportGroup);
+
   state.avatarGroup = new THREE.Group();
   scene.add(state.avatarGroup);
+}
+
+function initializeGltf(key, gltf) {
+  if (idleEyes.hasIdleEyes(gltf)) {
+    state.idleEyesMixers[key] = idleEyes.mixerForGltf(gltf);
+  }
+
+  if (state.uvScrollMaps[key]) {
+    state.uvScrollMaps[key].length = 0;
+  }
+
+  gltf.scene.traverse((obj) => {
+    forEachMaterial(obj, (material) => {
+      if (material.isMeshStandardMaterial) {
+        material.envMap = state.envMap;
+        material.envMapIntensity = 0.4;
+        if (material.map) {
+          material.map.anisotropy = state.renderer.capabilities.getMaxAnisotropy();
+        }
+        material.needsUpdate = true;
+      }
+    });
+
+    if (uvScroll.isValidMesh(obj)) {
+      state.uvScrollMaps[key] = state.uvScrollMaps[key] || [];
+      state.uvScrollMaps[key].push(uvScroll.initialStateForMesh(obj));
+    }
+  });
 }
 
 async function loadIntoGroup({ category, part, group, cached = true }) {
@@ -138,33 +171,11 @@ async function loadIntoGroup({ category, part, group, cached = true }) {
 
     if (state.avatarConfig[category] !== part) return;
 
+    // TODO Make sure we need to do this.
+    // Stash animations on the Object3D so that we can use them during export.
     gltf.scene.animations = gltf.animations;
 
-    if (idleEyes.hasIdleEyes(gltf)) {
-      state.idleEyesMixers[category] = idleEyes.mixerForGltf(gltf);
-    }
-
-    if (state.uvScrollMaps[category]) {
-      state.uvScrollMaps[category].length = 0;
-    }
-
-    gltf.scene.traverse((obj) => {
-      forEachMaterial(obj, (material) => {
-        if (material.isMeshStandardMaterial) {
-          material.envMap = state.envMap;
-          material.envMapIntensity = 0.4;
-          if (material.map) {
-            material.map.anisotropy = state.renderer.capabilities.getMaxAnisotropy();
-          }
-          material.needsUpdate = true;
-        }
-      });
-
-      if (uvScroll.isValidMesh(obj)) {
-        state.uvScrollMaps[category] = state.uvScrollMaps[category] || [];
-        state.uvScrollMaps[category].push(uvScroll.initialStateForMesh(obj));
-      }
-    });
+    initializeGltf(category, gltf);
 
     group.clear();
     group.add(gltf.scene);
@@ -256,7 +267,7 @@ function tick(time) {
         const blob = new Blob([glb], { type: "application/octet-stream" });
         const url = URL.createObjectURL(blob);
 
-        const triggerDownload = true;
+        const triggerDownload = false;
         if (triggerDownload) {
           const el = document.createElement("a");
           el.style.display = "none";
@@ -267,20 +278,10 @@ function tick(time) {
         }
 
         loadGLTF(url).then((gltf) => {
-          gltf.scene.traverse((obj) => {
-            forEachMaterial(obj, (material) => {
-              if (material.isMeshStandardMaterial) {
-                material.envMap = state.envMap;
-                material.envMapIntensity = 0.4;
-                if (material.map) {
-                  material.map.anisotropy = state.renderer.capabilities.getMaxAnisotropy();
-                }
-                material.needsUpdate = true;
-              }
-            });
-          });
-          state.scene.add(gltf.scene);
-          gltf.scene.position.set(0.1, 0, 0);
+          initializeGltf("testExportGroup", gltf);
+          state.testExportGroup.clear();
+          state.testExportGroup.add(gltf.scene);
+          gltf.scene.position.set(0.5, 0, 0);
         });
       });
     }
