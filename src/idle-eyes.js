@@ -1,9 +1,9 @@
 import * as THREE from "three";
 
-const idleEyesAnimationName = "idle_eyes";
+const idleEyesAnimationNames = ["idle_eyes", "Blinks"];
 
 function idleEyesAnimationsForGltf(gltf) {
-  return gltf.animations && gltf.animations.filter(({ name }) => name === idleEyesAnimationName);
+  return gltf.animations && gltf.animations.filter(({ name }) => idleEyesAnimationNames.includes(name));
 }
 
 export default {
