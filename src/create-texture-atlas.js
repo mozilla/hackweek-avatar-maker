@@ -17,15 +17,6 @@ export const createTextureAtlas = (function () {
     // "alphaMap",
     // "envMap",
   ];
-  const VALID_IMAGE_TYPES = [
-    CSSImageValue,
-    HTMLImageElement,
-    SVGImageElement,
-    HTMLVideoElement,
-    HTMLCanvasElement,
-    ImageBitmap,
-    OffscreenCanvas,
-  ];
 
   return async function createTextureAtlas({ meshes }) {
     const ctx = Object.fromEntries(
@@ -51,7 +42,7 @@ export const createTextureAtlas = (function () {
 
         MAP_NAMES.forEach((name) => {
           const image = mesh.material && mesh.material[name] && mesh.material[name].image;
-          if (image && VALID_IMAGE_TYPES.some((type) => image instanceof type)) {
+          if (image) {
             ctx[name].drawImage(image, min.x * ATLAS_SIZE_PX, min.y * ATLAS_SIZE_PX, IMAGE_SIZE, IMAGE_SIZE);
           }
         });

@@ -1,6 +1,5 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import { GLTFExporter } from "three/examples/jsm/exporters/GLTFExporter";
 import constants from "./constants";
 import { exportAvatar } from "./export";
 import { loadGLTF, loadGLTFCached, forEachMaterial, generateEnvironmentMap, createSky, isThumbnailMode } from "./utils";
@@ -253,7 +252,20 @@ function tick(time) {
     if (state.shouldExportAvatar) {
       state.shouldExportAvatar = false;
 
-      exportAvatar(state.avatarGroup).then(({ url }) => {
+      exportAvatar(state.avatarGroup).then(({ glb }) => {
+        const blob = new Blob([glb], { type: "application/octet-stream" });
+        const url = URL.createObjectURL(blob);
+
+        const triggerDownload = true;
+        if (triggerDownload) {
+          const el = document.createElement("a");
+          el.style.display = "none";
+          el.href = url;
+          el.download = "custom_avatar.glb";
+          el.click();
+          el.remove();
+        }
+
         loadGLTF(url).then((gltf) => {
           gltf.scene.traverse((obj) => {
             forEachMaterial(obj, (material) => {
