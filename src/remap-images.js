@@ -9,21 +9,14 @@ export const remapImages = (function () {
     const material = new THREE.MeshStandardMaterial().copy(mesh.material);
     mesh.material = material;
 
+    // TODO: We don't care about these meshes materials once we combine their geometries.
+    // We can skip this step.
     // Swap image maps
     for (const [name, image] of images) {
       if (material[name] && material[name].image) {
-        let texture = textures.get(name);
-        if (!texture) {
-          texture = material[name].clone();
-          texture.image = image;
-          textures.set(name, texture);
-        }
-
-        material[name] = texture;
+        material[name] = textures.get(name);
       }
     }
-    // Fix for metalness and roughness having to be in the same texture
-    material.roughnessMap = material.metalnessMap;
 
     // Remap uv coordinates
     const { min, max } = uvs;

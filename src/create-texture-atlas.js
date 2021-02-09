@@ -4,19 +4,23 @@ export const createTextureAtlas = (function () {
   const ATLAS_SIZE_PX = 2048;
   const ATLAS_SQRT = 4;
   const IMAGE_SIZE = ATLAS_SIZE_PX / ATLAS_SQRT;
-  const MAP_NAMES = [
-    "map",
-    "aoMap",
-    "normalMap", //TODO: Check normalMap type. ObjectSpaceNormalMap or TangentSpaceNormalMap
-    "roughnessMap",
-    "metalnessMap",
+
+  const DEFAULT_COLOR = new Map([
+    ["map", "#ffffff"],
+    ["aoMap", "#ffffff"],
+    ["normalMap", "#000000"], //TODO: Check normalMap type. ObjectSpaceNormalMap or TangentSpaceNormalMap
+    ["roughnessMap", "#ffffff"],
+    ["metalnessMap", "#ffffff"],
+    ["emissiveMap", "#ffffff"],
     // "lightMap",
-    "emissiveMap",
     // "bumpMap",
     // "displacementMap",
     // "alphaMap",
     // "envMap",
-  ];
+  ]);
+  const MAP_NAMES = Array.from(DEFAULT_COLOR.keys());
+
+  const WHITE = new THREE.Color(1, 1, 1);
 
   return async function createTextureAtlas({ meshes }) {
     const ctx = Object.fromEntries(
@@ -25,7 +29,7 @@ export const createTextureAtlas = (function () {
         canvas.width = ATLAS_SIZE_PX;
         canvas.height = ATLAS_SIZE_PX;
         const ctx = canvas.getContext("2d");
-        ctx.fillStyle = "gray";
+        ctx.fillStyle = "white";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
         // Add canvases to document for debugging
@@ -42,18 +46,31 @@ export const createTextureAtlas = (function () {
 
         MAP_NAMES.forEach((name) => {
           const image = mesh.material && mesh.material[name] && mesh.material[name].image;
-          if (image && !image.isDummyImage) {
+
+          if (image && name === "map") {
+            ctx.globalCompositeOperation = "source-over";
             ctx[name].drawImage(image, min.x * ATLAS_SIZE_PX, min.y * ATLAS_SIZE_PX, IMAGE_SIZE, IMAGE_SIZE);
-          } else if (mesh.material.color && name === "map") {
-            ctx[name].fillStyle = '#' + mesh.material.color.getHexString()
+            if (!mesh.material.color.equals(WHITE)) {
+              console.log("multiplying color")
+              // Bake color into map
+              ctx.globalCompositeOperation = "multiply";
+              ctx[name].fillStyle = "#" + mesh.material.color.getHexString();
+              ctx[name].fillRect(min.x * ATLAS_SIZE_PX, min.y * ATLAS_SIZE_PX, IMAGE_SIZE, IMAGE_SIZE);
+            }
+          } else if (image && name !== "map") {
+            ctx.globalCompositeOperation = "source-over";
+            ctx[name].drawImage(image, min.x * ATLAS_SIZE_PX, min.y * ATLAS_SIZE_PX, IMAGE_SIZE, IMAGE_SIZE);
+          } else if (!image && name === "map") {
+            ctx.globalCompositeOperation = "source-over";
+            //ctx[name].fillStyle = "#" + WHITE.getHexString();
+            ctx[name].fillStyle = "#" + mesh.material.color.getHexString();
             ctx[name].fillRect(min.x * ATLAS_SIZE_PX, min.y * ATLAS_SIZE_PX, IMAGE_SIZE, IMAGE_SIZE);
-            const dummyTexture = new THREE.Texture();
-            dummyTexture.image = {
-              isDummyImage: true,
-              width: IMAGE_SIZE,
-              height: IMAGE_SIZE
-            };
-            mesh.material[name] = dummyTexture;
+          } else if (!image && name != "map") {
+            ctx.globalCompositeOperation = "source-over";
+            ctx[name].fillStyle = DEFAULT_COLOR.get(name);
+            ctx[name].fillRect(min.x * ATLAS_SIZE_PX, min.y * ATLAS_SIZE_PX, IMAGE_SIZE, IMAGE_SIZE);
+          } else {
+            console.error("Ruh roh", mesh.material);
           }
         });
 

@@ -37,6 +37,22 @@ export function AvatarEditorContainer() {
     Accessory: "accessory_duck-floaty",
     "Torso Jacket": null,
   };
+
+  // const initialConfig = {
+  //   Hair: null,
+  //   Head: null,
+  //   Eyes: null,
+  //   Eyebrows: null,
+  //   Mouth: null,
+  //   "Facial Hair": null,
+  //   Hands: null,
+  //   Torso: null,
+  //   Hat: null,
+  //   Eyewear: null,
+  //   Earring: null,
+  //   Accessory: "accessory_duck-floaty",
+  //   "Torso Jacket": null,
+  // };
   const [avatarConfig, setAvatarConfig] = useState(initialConfig);
   const [tipState, setTipState] = useState({ visible: false, text: "", top: 0, left: 0 });
 
