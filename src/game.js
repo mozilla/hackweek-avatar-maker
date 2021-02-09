@@ -267,7 +267,7 @@ function tick(time) {
         const blob = new Blob([glb], { type: "application/octet-stream" });
         const url = URL.createObjectURL(blob);
 
-        const triggerDownload = true;
+        const triggerDownload = false;
         if (triggerDownload) {
           const el = document.createElement("a");
           el.style.display = "none";

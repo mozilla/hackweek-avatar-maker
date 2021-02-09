@@ -8,7 +8,7 @@ export const createTextureAtlas = (function () {
   const DEFAULT_COLOR = new Map([
     ["map", "#ffffff"],
     ["aoMap", "#ffffff"],
-    ["normalMap", "#000000"], //TODO: Check normalMap type. ObjectSpaceNormalMap or TangentSpaceNormalMap
+    // ["normalMap", "#000000"], //TODO: Check normalMap type. ObjectSpaceNormalMap or TangentSpaceNormalMap
     ["roughnessMap", "#ffffff"],
     ["metalnessMap", "#ffffff"],
     ["emissiveMap", "#ffffff"],
@@ -48,25 +48,26 @@ export const createTextureAtlas = (function () {
           const image = mesh.material && mesh.material[name] && mesh.material[name].image;
 
           if (image && name === "map") {
-            ctx.globalCompositeOperation = "source-over";
+            ctx[name].globalCompositeOperation = "source-over";
             ctx[name].drawImage(image, min.x * ATLAS_SIZE_PX, min.y * ATLAS_SIZE_PX, IMAGE_SIZE, IMAGE_SIZE);
-            if (!mesh.material.color.equals(WHITE)) {
-              console.log("multiplying color")
-              // Bake color into map
-              ctx.globalCompositeOperation = "multiply";
-              ctx[name].fillStyle = "#" + mesh.material.color.getHexString();
-              ctx[name].fillRect(min.x * ATLAS_SIZE_PX, min.y * ATLAS_SIZE_PX, IMAGE_SIZE, IMAGE_SIZE);
-            }
+            // if (!mesh.material.color.equals(WHITE)) {
+            console.log("multiplying color");
+            // Bake color into map
+            ctx[name].globalCompositeOperation = "multiply";
+            ctx[name].fillStyle = "#" + mesh.material.color.getHexString();
+            console.log(mesh.material.color.getHexString(), mesh.material.name);
+            ctx[name].fillRect(min.x * ATLAS_SIZE_PX, min.y * ATLAS_SIZE_PX, IMAGE_SIZE, IMAGE_SIZE);
+            // }
           } else if (image && name !== "map") {
-            ctx.globalCompositeOperation = "source-over";
+            ctx[name].globalCompositeOperation = "source-over";
             ctx[name].drawImage(image, min.x * ATLAS_SIZE_PX, min.y * ATLAS_SIZE_PX, IMAGE_SIZE, IMAGE_SIZE);
           } else if (!image && name === "map") {
-            ctx.globalCompositeOperation = "source-over";
+            ctx[name].globalCompositeOperation = "source-over";
             //ctx[name].fillStyle = "#" + WHITE.getHexString();
             ctx[name].fillStyle = "#" + mesh.material.color.getHexString();
             ctx[name].fillRect(min.x * ATLAS_SIZE_PX, min.y * ATLAS_SIZE_PX, IMAGE_SIZE, IMAGE_SIZE);
           } else if (!image && name != "map") {
-            ctx.globalCompositeOperation = "source-over";
+            ctx[name].globalCompositeOperation = "source-over";
             ctx[name].fillStyle = DEFAULT_COLOR.get(name);
             ctx[name].fillRect(min.x * ATLAS_SIZE_PX, min.y * ATLAS_SIZE_PX, IMAGE_SIZE, IMAGE_SIZE);
           } else {
