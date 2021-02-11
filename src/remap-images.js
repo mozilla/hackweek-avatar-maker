@@ -1,7 +1,7 @@
 import * as THREE from "three";
 
 export const remapImages = (function () {
-  return function remapImages({ mesh, images, uvs, textures }) {
+  return function remapImages({ mesh, uvs, textures }) {
     // TODO: May not need to clone / create new material and assign it to the mesh.
     // Probably can mutate in place.
     const geometry = mesh.geometry.clone();
@@ -12,9 +12,9 @@ export const remapImages = (function () {
     // TODO: We don't care about these meshes materials once we combine their geometries.
     // We can skip this step.
     // Swap image maps
-    for (const [name, image] of images) {
+    for (const [name, texture] of textures) {
       if (material[name] && material[name].image) {
-        material[name] = textures.get(name);
+        material[name] = texture;
       }
     }
 

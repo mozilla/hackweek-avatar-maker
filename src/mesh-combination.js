@@ -1,56 +1,50 @@
 import * as THREE from "three";
 import { BufferGeometryUtils } from "three/examples/jsm/utils/BufferGeometryUtils";
-
 import { findChildrenByType } from "./utils";
 import { createTextureAtlas } from "./create-texture-atlas";
-import { remapImages } from "./remap-images";
+import { remapUVs } from "./remap-uvs";
 import { cloneSkeleton } from "./export";
 
-export async function combine({ avatar }) {
-  const meshes = findChildrenByType(avatar, "SkinnedMesh");
-
-  const { images, uvs } = await createTextureAtlas({ meshes });
-
-  const textures = new Map();
-  for (const [name, image] of images) {
-    const mesh = meshes.find((mesh) => mesh.material[name] && mesh.material[name].image);
-    const material = mesh && mesh.material;
-    if (material) {
-      const texture = material[name].clone();
-      texture.image = image;
-      textures.set(name, texture);
+function fillMissingAttributes(geometries) {
+  for (const geometry of geometries) {
+    geometry.morphTargetsRelative = true; // TODO: What if they aren't?
+    geometry.morphAttributes = {};
+    if (!geometry.attributes.uv2) {
+      geometry.setAttribute("uv2", geometry.attributes.uv);
     }
   }
-  // Fix for metalness and roughness having to be in the same texture
-  textures.set("metalnessMap", textures.get("roughnessMap"));
+  return geometries;
+}
 
-  meshes
-    .filter((mesh) => !mesh.material.transparent)
-    .map((mesh) => {
-      remapImages({ mesh, images, uvs: uvs.get(mesh), textures });
-    });
+export async function combine({ avatar }) {
+  // TODO: Transparent meshes
+  const meshes = findChildrenByType(avatar, "SkinnedMesh").filter((mesh) => !mesh.material.transparent);
+
+  const { textures, uvs } = await createTextureAtlas({ meshes });
+
+  meshes.forEach((mesh) => {
+    remapUVs({ mesh, uvs: uvs.get(mesh) });
+  });
 
   const geometries = meshes.map((mesh) => mesh.geometry);
-  for (const mesh of meshes) {
-    mesh.geometry.morphTargetsRelative = false;
-    mesh.geometry.morphAttributes = {};
-    if (!mesh.geometry.attributes.uv2) {
-      mesh.geometry.setAttribute("uv2", mesh.geometry.attributes.uv);
-    }
-  }
-  const combinedGeometry = BufferGeometryUtils.mergeBufferGeometries(geometries);
+  fillMissingAttributes(geometries);
+  const geometry = BufferGeometryUtils.mergeBufferGeometries(geometries);
 
-  const combinedMaterial = new THREE.MeshStandardMaterial();
-  console.log("Mesh 0 is ", meshes[0]);
-  combinedMaterial.copy(meshes[0].material);
-  for (const [mapName, texture] of textures) {
-    combinedMaterial[mapName] = texture;
-  }
-  const combinedMesh = new THREE.SkinnedMesh(combinedGeometry, combinedMaterial);
+  const material = new THREE.MeshStandardMaterial();
+  material.map = textures["diffuse"];
+  material.normalMap = textures["normal"];
+  material.aoMap = textures["orm"];
+  material.roughnessMap = textures["orm"];
+  material.metalnessMap = textures["orm"];
+  const mesh = new THREE.SkinnedMesh(geometry, material);
 
   const skeleton = cloneSkeleton(meshes[0]);
-  combinedMesh.bind(skeleton);
-  combinedMesh.add(skeleton.bones[0]);
+  mesh.bind(skeleton);
+  mesh.add(skeleton.bones[0]);
 
-  return combinedMesh;
+  console.log("textures are", textures);
+  console.log("material is ", material);
+  console.log("mesh is ", mesh);
+
+  return mesh;
 }
