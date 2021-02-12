@@ -51,11 +51,7 @@ export const exportGLTF = (function () {
   const exporter = new GLTFExporter();
   return function exportGLTF(object3D, { binary, animations }) {
     return new Promise((resolve) => {
-      exporter.parse(
-        object3D,
-        (gltf) => resolve({ gltf }),
-        { binary, animations }
-      );
+      exporter.parse(object3D, (gltf) => resolve({ gltf }), { binary, animations });
     });
   };
 })();
@@ -121,6 +117,10 @@ function cloneIntoAvatar(avatarGroup) {
 }
 
 export async function exportAvatar(avatarGroup) {
+  // TODO: Re-evaluate whether we want to perform this step.
+  // The intention (for now) is to make combination optional,
+  // so that it is easy to debug and also if non-mergable meshes
+  // are added, there's a workaround for them.
   const clone = cloneIntoAvatar(avatarGroup);
 
   const avatar = await combine({ avatar: clone });
