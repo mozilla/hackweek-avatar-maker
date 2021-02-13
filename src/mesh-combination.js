@@ -4,8 +4,10 @@ import { createTextureAtlas } from "./create-texture-atlas";
 import { remapUVs } from "./remap-uvs";
 import { cloneSkeleton } from "./export";
 import { mergeGeometry } from "./merge-geometry";
+import constants from "./constants";
 
 export async function combine({ avatar }) {
+  // TODO: Account for meshes that cannot be combined. E.g. uv-scroll
   const meshes = findChildrenByType(avatar, "SkinnedMesh").filter((mesh) => !mesh.material.transparent);
 
   const { textures, uvs } = await createTextureAtlas({ meshes });
@@ -41,6 +43,7 @@ export async function combine({ avatar }) {
   });
 
   const mesh = new THREE.SkinnedMesh(geometry, material);
+  mesh.name = constants.combinedMeshName;
   mesh.morphTargetInfluences = dest.morphTargetInfluences;
   mesh.morphTargetDictionary = dest.morphTargetDictionary;
 
@@ -49,7 +52,10 @@ export async function combine({ avatar }) {
   mesh.add(skeleton.bones[0]);
 
   const group = new THREE.Group();
+  group.name = "CombinedAvatar";
   group.add(mesh);
+
+  group.animations = dest.animations;
 
   // Add (unmerged) transparent meshes
   const transparentMeshes = findChildrenByType(avatar, "SkinnedMesh").filter((mesh) => mesh.material.transparent);

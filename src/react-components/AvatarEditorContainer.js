@@ -22,21 +22,6 @@ export function AvatarEditorContainer() {
   const debouncedSetHoveredConfig = useCallback(debounce(setHoveredConfig), [setHoveredConfig]);
   const [canvasUrl, setCanvasUrl] = useState(null);
 
-  // const initialConfig = {
-  //   Hair: null,
-  //   Head: "head_bald-skin-7",
-  //   Eyes: null,
-  //   Eyebrows: null,
-  //   Mouth: null,
-  //   "Facial Hair": "facial-hair_beard-full-1-dark brown",
-  //   Hands: "hands_skin-1",
-  //   Torso: null,
-  //   Hat: "hat_baseball-giants",
-  //   Eyewear: null,
-  //   Earring: null,
-  //   Accessory: "accessory_duck-floaty",
-  //   "Torso Jacket": null,
-  // };
   const initialConfig = generateRandomConfig(assets);
 
   const [avatarConfig, setAvatarConfig] = useState(initialConfig);
