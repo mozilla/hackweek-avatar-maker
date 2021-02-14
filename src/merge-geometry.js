@@ -13,9 +13,9 @@ function mergeMorphTargetInfluences({ meshes, sourceMorphTargetDictionaries, des
     const sourceIndex = mesh.morphTargetDictionary[morphName];
     destMorphTargetInfluences[destIndex] = mesh.morphTargetInfluences[sourceIndex];
     // TODO: Stop / reset animations so that animated morph influences return to their "at rest" values.
-    // Bake "at rest" values should maybe be baked into attributes (e.g. eye brow shapes) to allow more
-    // active morph targets in the combined mesh. Not all morphs should be baked (e.g. eyelids that are
-    // animated with the "Blinks" animation).
+    // Maybe the "at rest" values should be baked into attributes (e.g. eye brow shapes) to allow more
+    // active morph targets in the combined mesh. Not all morphs should be baked. (e.g. The eyelids
+    // that are animated with the "Blinks" animation should not be baked.)
   });
   return destMorphTargetInfluences;
 }
