@@ -153,7 +153,7 @@ function dedupBy(items, propName) {
 //
 // remapTrack
 //
-//   Remap tracks that animation morph influences.
+//   Remap tracks that animate morph target influences.
 //
 //   We assume the sourceTrack is
 //   - using CubicSpline interpolation and
