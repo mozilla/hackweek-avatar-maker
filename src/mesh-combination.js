@@ -47,27 +47,25 @@ export async function combine({ avatar }) {
   mesh.morphTargetInfluences = dest.morphTargetInfluences;
   mesh.morphTargetDictionary = dest.morphTargetDictionary;
 
-  const skeleton = cloneSkeleton(meshes[0]);
-  mesh.bind(skeleton);
-  mesh.add(skeleton.bones[0]);
-
-  const group = new THREE.Group();
-  group.name = "CombinedAvatar";
-  group.add(mesh);
-
-  group.animations = dest.animations;
-
   // Add (unmerged) transparent meshes
   const transparentMeshes = findChildrenByType(avatar, "SkinnedMesh").filter((mesh) => mesh.material.transparent);
   const clones = transparentMeshes.map((o) => {
     return o.clone(false);
   });
+
+  const skeleton = cloneSkeleton(meshes[0]);
+  mesh.bind(skeleton);
   clones.forEach((clone) => {
     clone.bind(skeleton);
   });
+
+  const group = new THREE.Object3D();
+  group.name = "AvatarRoot";
+  group.animations = dest.animations;
+  group.add(mesh);
+  group.add(skeleton.bones[0]);
   clones.forEach((clone) => {
     group.add(clone);
   });
-
   return group;
 }

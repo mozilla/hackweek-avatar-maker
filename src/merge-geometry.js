@@ -150,64 +150,128 @@ function dedupBy(items, propName) {
   });
 }
 
+//
+// remapTrack
+//
+//   Remap tracks that animation morph influences.
+//
+//   We assume the sourceTrack is
+//   - using CubicSpline interpolation and
+//   - animating morphTargetInfluences.
+//
+//   TODO: Support other interpolation types. (Adding linear should be easy.)
+//
+//   The values buffer of the sourceTrack contains a sequence of keyframes:
+//
+//   [ frame 0 | frame 1 | frame 2 | frame 3 ... ]
+//
+//   Each keyframe contains three numbers for each morph target (influence) of the sourceMesh:
+//   - an inTangent (tanIn)
+//   - an influence (value)
+//   - an outTangent (tanOut)
+//
+//   Each frame orders the numbers by type: inTangents first, then values, then outTangents.
+//   So if there are M morph targets, frame N will look like:
+//   [
+//     ...
+//     |                              |                             |                                |
+//     | tanIn_N_0, ... ,  tanIn_N_M, | value_N_0, ... , value_N_M, | tanOut_N_0,  ... , tanOut_N_M, |  // < -- frame N
+//     |                              |                             |                                |
+//     ...
+//   ]
+//
+//   So for example, if the sourceMesh has 2 morph targets and the track has three keyframes, the values buffer contains:
+//   [
+//      tanIn_0_0, tanIn_0_1, value_0_0, value_0_1, tanOut_0_0, tanOut_0_1, // <-- Frame 0
+//      tanIn_1_0, tanIn_1_1, value_1_0, value_1_1, tanOut_1_0, tanOut_1_1, // <-- Frame 1
+//      tanIn_2_0, tanIn_2_1, value_2_0, value_2_1, tanOut_2_0, tanOut_2_1  // <-- Frame 2
+//   ]
+//
+//   See the GLTF spec for details about how this is represented in GLTF:
+//     https://github.com/KhronosGroup/glTF/blob/master/specification/2.0/README.md#animations
+//   See THREE's GLTFLoader for details about how this is loaded and represented in THREE:
+//     https://github.com/mrdoob/three.js/blob/350f0a021943d6fa1d039a7c14c303653daa463f/examples/jsm/loaders/GLTFLoader.js#L3634
+//
+//   This function creates a new (dest) track that can will work with the combined (dest) mesh.
+//   Each morph target influence index in the source mesh has a corresponding index in the dest mesh.
+//   The dest mesh will have the sum of all the morph targets of its source meshes, so we will
+//   insert several zeros into the track so the dest mesh's morphTargetInfluences that should not
+//   be changed by this track are left alone.
+//
+//   Continuing the example above,
+//   If the sourceMesh has two morph targets and sourceTrack has three keyframes,
+//   and if the destMesh has three morph targets, then there will be some mapping
+//   of morphTargetInfluences from source to dest:
+//   {
+//     sourceMorph0 -> destMorph2,
+//     sourceMorph1 -> destMorph1
+//   }
+//
+//   Assuming the same values buffer from before, the new values buffer will be:
+//   [
+//      0, tanIn_0_1, tanIn_0_0, 0, value_0_1, value_0_0, 0, tanOut_0_1, tanOut_0_0, // <-- Frame 0
+//      0, tanIn_1_1, tanIn_1_0, 0, value_1_1, value_1_0, 0, tanOut_1_1, tanOut_1_0, // <-- Frame 1
+//      0, tanIn_2_1, tanIn_2_0, 0, value_2_1, value_2_0, 0, tanOut_2_1, tanOut_2_0  // <-- Frame 2
+//   ]
+//
+//   Notice that:
+//   - zeroes have been inserted for destMorph0,
+//   - the numbers associated with sourceMorph0 will now be associated with destMorph2, and
+//   - the numbers associated with sourceMorph1 will now be associated with destMorph1
 function remapTrack({ sourceTrack, source, dest }) {
-  const destTrackName = `${constants.combinedMeshName}.morphTargetInfluences`;
+  const sourceMeshName = sourceTrack.name.split(".")[0];
+  const sourceMesh = source.meshes.find((mesh) => mesh.name === sourceMeshName);
+  const sourceFrame = {
+    size: Object.keys(source.morphTargetDictionary.get(sourceMesh)).length * 3,
+  };
+  sourceFrame.tanInOffset = 0;
+  sourceFrame.valueOffset = sourceFrame.size / 3;
+  sourceFrame.tanOutOffset = (sourceFrame.size * 2) / 3;
 
-  const meshName = sourceTrack.name.split(".")[0];
-  const sourceMesh = source.meshes.find((mesh) => mesh.name === meshName);
+  const destFrame = {
+    size: Object.keys(dest.morphTargetDictionary).length * 3,
+  };
+  destFrame.tanInOffset = 0;
+  destFrame.valueOffset = destFrame.size / 3;
+  destFrame.tanOutOffset = (destFrame.size * 2) / 3;
 
-  const destMorphNames = Object.keys(dest.morphTargetDictionary);
   const numFrames = sourceTrack.times.length;
-  // Multiple is 3 for CubicSpline. Handle linear, etc.
-  const multiple = 3;
-  const destFrameSize = destMorphNames.length * multiple;
-
-  const destFrames = [];
-  for (let i = 0; i < numFrames; i++) {
-    destFrames.push(new Array(destFrameSize).fill(0));
-  }
-
-  const sourceFrameSize = Object.keys(source.morphTargetDictionary.get(sourceMesh)).length * multiple;
-  const sourceOffsetTanStart = 0;
-  const sourceOffsetValue = sourceFrameSize / 3;
-  const sourceOffsetTanEnd = (sourceFrameSize * 2) / 3;
-  const destOffsetTanStart = 0;
-  const destOffsetValue = destFrameSize / 3;
-  const destOffsetTanEnd = (destFrameSize * 2) / 3;
+  const destMorphNames = Object.keys(dest.morphTargetDictionary);
   const sourceMorphTargetDictionary = source.morphTargetDictionary.get(sourceMesh);
-  destFrames.forEach((frame, frameNumber) => {
+
+  // Write keyframes for new animation track
+  const keyframes = [];
+  for (let frameIndex = 0; frameIndex < numFrames; frameIndex++) {
+    const frame = [];
     destMorphNames.forEach((morphName) => {
       const destMorphIndex = dest.morphTargetDictionary[morphName];
-      const sourceMorphIndex = sourceMorphTargetDictionary[morphName];
-
       const isInSourceTrack = sourceMorphTargetDictionary.hasOwnProperty(morphName);
+      if (isInSourceTrack) {
+        const sourceMorphIndex = sourceMorphTargetDictionary[morphName];
+        frame[destFrame.tanInOffset + destMorphIndex] =
+          sourceTrack.values[frameIndex * sourceFrame.size + sourceFrame.tanInOffset + sourceMorphIndex];
+        frame[destFrame.valueOffset + destMorphIndex] =
+          sourceTrack.values[frameIndex * sourceFrame.size + sourceFrame.valueOffset + sourceMorphIndex];
 
-      const tanStart = isInSourceTrack
-        ? sourceTrack.values[frameNumber * sourceFrameSize + sourceOffsetTanStart + sourceMorphIndex]
-        : 0;
-      const value = isInSourceTrack
-        ? sourceTrack.values[frameNumber * sourceFrameSize + sourceOffsetValue + sourceMorphIndex]
-        : 0;
-      const tanEnd = isInSourceTrack
-        ? sourceTrack.values[frameNumber * sourceFrameSize + sourceOffsetTanEnd + sourceMorphIndex]
-        : 0;
-
-      const destTanStartIndex = destOffsetTanStart + destMorphIndex;
-      const destValueIndex = destOffsetValue + destMorphIndex;
-      const destTanEndIndex = destOffsetTanEnd + destMorphIndex;
-      frame[destTanStartIndex] = tanStart;
-      frame[destValueIndex] = value;
-      frame[destTanEndIndex] = tanEnd;
+        frame[destFrame.tanOutOffset + destMorphIndex] =
+          sourceTrack.values[frameIndex * sourceFrame.size + sourceFrame.tanOutOffset + sourceMorphIndex];
+      } else {
+        frame[destFrame.tanInOffset + destMorphIndex] = 0;
+        frame[destFrame.valueOffset + destMorphIndex] = 0;
+        frame[destFrame.tanOutOffset + destMorphIndex] = 0;
+      }
     });
-  });
+    keyframes.push(frame);
+  }
 
-  const destValues = destFrames.flat();
+  const destTrackName = `${constants.combinedMeshName}.morphTargetInfluences`;
+  const destTrack = new THREE.NumberKeyframeTrack(destTrackName, sourceTrack.times, keyframes.flat());
 
-  const destTrack = new THREE.NumberKeyframeTrack(destTrackName, sourceTrack.times, destValues);
   destTrack.createInterpolant = function InterpolantFactoryMethodGLTFCubicSpline(result) {
     return new GLTFCubicSplineInterpolant(this.times, this.values, this.getValueSize() / 3, result);
   };
   destTrack.createInterpolant.isInterpolantFactoryMethodGLTFCubicSpline = true;
+
   return destTrack;
 }
 
@@ -215,17 +279,11 @@ function mergeAndRewriteAnimations({ source, dest }) {
   const sourceAnimations = dedupBy(Array.from(source.animations.values()).flat(), "name");
 
   const destAnimations = sourceAnimations.map((sourceAnimation) => {
-    const sourceTracks = sourceAnimation.tracks;
-
-    const destTracks = sourceTracks.map((sourceTrack) => {
-      let destTrack;
+    const destTracks = sourceAnimation.tracks.map((sourceTrack) => {
       if (sourceTrack.name.endsWith("morphTargetInfluences")) {
-        destTrack = remapTrack({ sourceTrack, source, dest });
-      } else {
-        destTrack = sourceTrack;
+        return remapTrack({ sourceTrack, source, dest });
       }
-
-      return destTrack;
+      return sourceTrack;
     });
 
     const destAnimation = new THREE.AnimationClip(
