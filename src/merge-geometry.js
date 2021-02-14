@@ -3,12 +3,11 @@ import { BufferGeometryUtils } from "three/examples/jsm/utils/BufferGeometryUtil
 import constants from "./constants";
 import { GLTFCubicSplineInterpolant } from "./gltf-cubic-spline-interpolant";
 
-function mergeMorphTargetInfluences({ meshes, destMorphTargetDictionary }) {
+function mergeMorphTargetInfluences({ meshes, sourceMorphTargetDictionaries, destMorphTargetDictionary }) {
   const destMorphTargetInfluences = [];
   Object.entries(destMorphTargetDictionary).map(([morphName, destIndex]) => {
     const mesh = meshes.find((mesh) => {
-      const sourceMorphTargetDictionary = mesh.morphTargetDictionary || {};
-      return sourceMorphTargetDictionary.hasOwnProperty(morphName);
+      return sourceMorphTargetDictionaries.get(mesh).hasOwnProperty(morphName);
     });
 
     const sourceIndex = mesh.morphTargetDictionary[morphName];
@@ -48,7 +47,7 @@ function mergeSourceAttributes({ sourceAttributes }) {
   return destAttributes;
 }
 
-function mergeSourceMorphTargetDictionary({ sourceMorphTargetDictionaries }) {
+function mergeSourceMorphTargetDictionaries({ sourceMorphTargetDictionaries }) {
   const morphNames = new Set(); // e.g. ["MouthFlap", "Blink", "Eye Narrow", "Eye Rotation"]
   const allSourceDictionaries = Array.from(sourceMorphTargetDictionaries.values());
   allSourceDictionaries.forEach((dictionary) => {
@@ -298,7 +297,7 @@ export function mergeGeometry({ meshes }) {
 
   const dest = {};
   dest.attributes = mergeSourceAttributes({ sourceAttributes: source.attributes });
-  const destMorphTargetDictionary = mergeSourceMorphTargetDictionary({
+  const destMorphTargetDictionary = mergeSourceMorphTargetDictionaries({
     sourceMorphTargetDictionaries: source.morphTargetDictionaries,
   });
   dest.morphTargetDictionary = destMorphTargetDictionary;
@@ -310,6 +309,7 @@ export function mergeGeometry({ meshes }) {
   });
   dest.morphTargetInfluences = mergeMorphTargetInfluences({
     meshes,
+    sourceMorphTargetDictionaries: source.morphTargetDictionaries,
     destMorphTargetDictionary,
   });
   dest.index = mergeSourceIndices({ meshes });
