@@ -136,8 +136,17 @@ function dedupBy(items, propName) {
   });
 }
 
-//
-// remapTrack
+function CubicSplineFrameOffsets({ numMorphs }) {
+  const frameSize = numMorphs * 3;
+  return {
+    frameSize,
+    tanIn: 0,
+    value: frameSize / 3,
+    tanOut: (frameSize * 2) / 3,
+  };
+}
+
+// remapMorphTrack
 //
 //   Remap tracks that animate morph target influences.
 //
@@ -204,54 +213,41 @@ function dedupBy(items, propName) {
 //   - zeroes have been inserted for destMorph0,
 //   - the numbers associated with sourceMorph0 will now be associated with destMorph2, and
 //   - the numbers associated with sourceMorph1 will now be associated with destMorph1
-function remapTrack({ sourceTrack, source, dest }) {
-  const sourceMeshName = sourceTrack.name.split(".")[0];
-  const sourceMesh = source.meshes.find((mesh) => mesh.name === sourceMeshName);
-  const sourceFrame = {
-    size: Object.keys(source.morphTargetDictionary.get(sourceMesh)).length * 3,
-  };
-  sourceFrame.tanInOffset = 0;
-  sourceFrame.valueOffset = sourceFrame.size / 3;
-  sourceFrame.tanOutOffset = (sourceFrame.size * 2) / 3;
+function remapMorphTrack({ track, sourceMorphTargetDictionary, destMorphTargetDictionary }) {
+  const sourceOffsets = CubicSplineFrameOffsets({ numMorphs: Object.keys(sourceMorphTargetDictionary).length });
+  const destOffsets = CubicSplineFrameOffsets({ numMorphs: Object.keys(destMorphTargetDictionary).length });
 
-  const destFrame = {
-    size: Object.keys(dest.morphTargetDictionary).length * 3,
-  };
-  destFrame.tanInOffset = 0;
-  destFrame.valueOffset = destFrame.size / 3;
-  destFrame.tanOutOffset = (destFrame.size * 2) / 3;
-
-  const numFrames = sourceTrack.times.length;
-  const destMorphNames = Object.keys(dest.morphTargetDictionary);
-  const sourceMorphTargetDictionary = source.morphTargetDictionary.get(sourceMesh);
-
-  // Write keyframes for new animation track
-  const keyframes = [];
+  const destKeyframes = [];
+  const numFrames = track.times.length;
+  const destMorphNames = Object.keys(destMorphTargetDictionary);
   for (let frameIndex = 0; frameIndex < numFrames; frameIndex++) {
-    const frame = [];
+    const sourceFrame = track.values.slice(
+      frameIndex * sourceOffsets.frameSize,
+      frameIndex * sourceOffsets.frameSize + sourceOffsets.frameSize
+    );
+    const destFrame = [];
     destMorphNames.forEach((morphName) => {
-      const destMorphIndex = dest.morphTargetDictionary[morphName];
-      const isInSourceTrack = sourceMorphTargetDictionary.hasOwnProperty(morphName);
-      if (isInSourceTrack) {
+      const destMorphIndex = destMorphTargetDictionary[morphName];
+      const isMorphInSourceTrack = sourceMorphTargetDictionary.hasOwnProperty(morphName);
+      if (isMorphInSourceTrack) {
         const sourceMorphIndex = sourceMorphTargetDictionary[morphName];
-        frame[destFrame.tanInOffset + destMorphIndex] =
-          sourceTrack.values[frameIndex * sourceFrame.size + sourceFrame.tanInOffset + sourceMorphIndex];
-        frame[destFrame.valueOffset + destMorphIndex] =
-          sourceTrack.values[frameIndex * sourceFrame.size + sourceFrame.valueOffset + sourceMorphIndex];
-        frame[destFrame.tanOutOffset + destMorphIndex] =
-          sourceTrack.values[frameIndex * sourceFrame.size + sourceFrame.tanOutOffset + sourceMorphIndex];
+        destFrame[destOffsets.tanIn + destMorphIndex] = sourceFrame[sourceOffsets.tanIn + sourceMorphIndex];
+        destFrame[destOffsets.value + destMorphIndex] = sourceFrame[sourceOffsets.value + sourceMorphIndex];
+        destFrame[destOffsets.tanOut + destMorphIndex] = sourceFrame[sourceOffsets.tanOut + sourceMorphIndex];
       } else {
-        frame[destFrame.tanInOffset + destMorphIndex] = 0;
-        frame[destFrame.valueOffset + destMorphIndex] = 0;
-        frame[destFrame.tanOutOffset + destMorphIndex] = 0;
+        destFrame[destOffsets.tanIn + destMorphIndex] = 0;
+        destFrame[destOffsets.value + destMorphIndex] = 0;
+        destFrame[destOffsets.tanOut + destMorphIndex] = 0;
       }
     });
-    keyframes.push(frame);
+    destKeyframes.push(destFrame);
   }
 
   const destTrackName = `${constants.combinedMeshName}.morphTargetInfluences`;
-  const destTrack = new THREE.NumberKeyframeTrack(destTrackName, sourceTrack.times, keyframes.flat());
+  const destTrack = new THREE.NumberKeyframeTrack(destTrackName, track.times, destKeyframes.flat());
 
+  // Make sure the track will interpolate correctly
+  // (Copied from THREE.GLTFLoader : https://github.com/mrdoob/three.js/blob/350f0a021943d6fa1d039a7c14c303653daa463f/examples/jsm/loaders/GLTFLoader.js#L3634 )
   destTrack.createInterpolant = function InterpolantFactoryMethodGLTFCubicSpline(result) {
     return new GLTFCubicSplineInterpolant(this.times, this.values, this.getValueSize() / 3, result);
   };
@@ -260,15 +256,32 @@ function remapTrack({ sourceTrack, source, dest }) {
   return destTrack;
 }
 
-function mergeAndRewriteAnimations({ source, dest }) {
-  const clips = dedupBy(Array.from(source.animations.values()).flat(), "name");
-  return clips.map((clip) => {
-    const destTracks = clip.tracks.map((sourceTrack) =>
-      sourceTrack.name.endsWith("morphTargetInfluences") ? remapTrack({ sourceTrack, source, dest }) : sourceTrack
-    );
-    const { name, duration, blendMode } = clip;
-    return new THREE.AnimationClip(name, duration, destTracks, blendMode);
-  });
+function remapKeyframeTrack({ track, sourceMorphTargetDictionaries, meshes, destMorphTargetDictionary }) {
+  if (track.name.endsWith("morphTargetInfluences")) {
+    return remapMorphTrack({
+      track,
+      sourceMorphTargetDictionary: sourceMorphTargetDictionaries.get(
+        meshes.find((mesh) => mesh.name === track.name.split(".")[0])
+      ),
+      destMorphTargetDictionary,
+    });
+  } else {
+    return track;
+  }
+}
+
+function remapAnimationClips({ animationClips, sourceMorphTargetDictionaries, meshes, destMorphTargetDictionary }) {
+  return animationClips.map(
+    (clip) =>
+      new THREE.AnimationClip(
+        clip.name,
+        clip.duration,
+        clip.tracks.map((track) =>
+          remapKeyframeTrack({ track, sourceMorphTargetDictionaries, meshes, destMorphTargetDictionary })
+        ),
+        clip.blendMode
+      )
+  );
 }
 
 export function mergeGeometry(meshes) {
@@ -287,7 +300,12 @@ export function mergeGeometry(meshes) {
   dest.morphAttributes = mergeSourceMorphAttributes(source, dest.morphTargetDictionary);
   dest.morphTargetInfluences = mergeSourceTargetInfluences(meshes, source, dest);
   dest.index = mergeSourceIndices(source);
-  dest.animations = mergeAndRewriteAnimations({ source, dest });
+  dest.animations = remapAnimationClips({
+    animationClips: dedupBy(Array.from(source.animations.values()).flat(), "name"),
+    meshes: source.meshes,
+    sourceMorphTargetDictionaries: source.morphTargetDictionary,
+    destMorphTargetDictionary: dest.morphTargetDictionary,
+  });
 
   return { source, dest };
 }
