@@ -67,5 +67,16 @@ export async function combine({ avatar }) {
   clones.forEach((clone) => {
     group.add(clone);
   });
+
+  group.userData = {
+    gltfExtensions: {
+      MOZ_hubs_components: {
+        "loop-animation": {
+          clip: "idle_eyes,Blinks",
+          paused: false,
+        },
+      },
+    },
+  };
   return group;
 }
