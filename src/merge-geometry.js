@@ -19,20 +19,6 @@ function mergeSourceTargetInfluences(meshes, source, dest) {
   return destMorphTargetInfluences;
 }
 
-function reverseMorphTargetDictionaries(source) {
-  const meshes = Array.from(source.morphTargetDictionary.keys());
-  return new Map(
-    meshes.map((mesh) => {
-      const reverseDictionary = {};
-      const dictionary = source.morphTargetDictionary.get(mesh);
-      Object.entries(dictionary).forEach(([morphName, index]) => {
-        reverseDictionary[index] = morphName;
-      });
-      return [mesh, reverseDictionary];
-    })
-  );
-}
-
 function findSceneGroup(object3D) {
   if (object3D.name === "Scene" && object3D.type === "Group") {
     return object3D;
@@ -252,7 +238,6 @@ function remapTrack({ sourceTrack, source, dest }) {
           sourceTrack.values[frameIndex * sourceFrame.size + sourceFrame.tanInOffset + sourceMorphIndex];
         frame[destFrame.valueOffset + destMorphIndex] =
           sourceTrack.values[frameIndex * sourceFrame.size + sourceFrame.valueOffset + sourceMorphIndex];
-
         frame[destFrame.tanOutOffset + destMorphIndex] =
           sourceTrack.values[frameIndex * sourceFrame.size + sourceFrame.tanOutOffset + sourceMorphIndex];
       } else {
@@ -276,26 +261,14 @@ function remapTrack({ sourceTrack, source, dest }) {
 }
 
 function mergeAndRewriteAnimations({ source, dest }) {
-  const sourceAnimations = dedupBy(Array.from(source.animations.values()).flat(), "name");
-
-  const destAnimations = sourceAnimations.map((sourceAnimation) => {
-    const destTracks = sourceAnimation.tracks.map((sourceTrack) => {
-      if (sourceTrack.name.endsWith("morphTargetInfluences")) {
-        return remapTrack({ sourceTrack, source, dest });
-      }
-      return sourceTrack;
-    });
-
-    const destAnimation = new THREE.AnimationClip(
-      sourceAnimation.name,
-      sourceAnimation.duration,
-      destTracks,
-      sourceAnimation.blendMode
+  const clips = dedupBy(Array.from(source.animations.values()).flat(), "name");
+  return clips.map((clip) => {
+    const destTracks = clip.tracks.map((sourceTrack) =>
+      sourceTrack.name.endsWith("morphTargetInfluences") ? remapTrack({ sourceTrack, source, dest }) : sourceTrack
     );
-    return destAnimation;
+    const { name, duration, blendMode } = clip;
+    return new THREE.AnimationClip(name, duration, destTracks, blendMode);
   });
-
-  return destAnimations;
 }
 
 export function mergeGeometry(meshes) {
@@ -307,7 +280,6 @@ export function mergeGeometry(meshes) {
     morphTargetInfluences: new Map(meshes.map((m) => [m, m.morphTargetInfluences || []])),
     animations: new Map(meshes.map((m) => [m, findSceneGroup(m).animations])),
   };
-  source.reverseMorphTargetDictionary = reverseMorphTargetDictionaries(source);
 
   const dest = {};
   dest.attributes = mergeSourceAttributes(source);
