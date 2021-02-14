@@ -18,8 +18,9 @@ export async function combine({ avatar }) {
     if (!geometry.attributes.uv2) {
       geometry.attributes.uv2 = geometry.attributes.uv;
     }
-    // Remove the "active" morph attributes to before merging
-    // (These BufferAttributes are not lost; they remain in geometry.morphAttributes)
+    // Exlude the currently "activated" morph attributes before merging.
+    // The BufferAttributes are not lost; they remain in `mesh.geometry.morphAttributes`
+    // and the influences remain in `mesh.morphTargetInfluences`.
     for (let i = 0; i < 8; i++) {
       delete geometry.attributes[`morphTarget${i}`];
       delete geometry.attributes[`morphNormal${i}`];
