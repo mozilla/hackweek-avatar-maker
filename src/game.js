@@ -41,6 +41,8 @@ const state = {
   shouldRotateRight: false,
   idleEyesMixers: {},
   uvScrollMaps: {},
+  quietMode: false,
+  shouldRenderInQuietMode: true,
 };
 window.gameState = state;
 
@@ -127,6 +129,8 @@ function init() {
   controls.update();
   controls.saveState();
   state.controls = controls;
+  state.currentCameraPosition = new THREE.Vector3();
+  state.prevCameraPosition = new THREE.Vector3();
 
   // TODO Remove this test code
   state.testExportGroup = new THREE.Group();
@@ -179,12 +183,14 @@ async function loadIntoGroup({ category, part, group, cached = true }) {
 
     group.clear();
     group.add(gltf.scene);
+    state.shouldRenderInQuietMode = true;
 
     return gltf.scene;
   } catch (ex) {
     console.error("Failed to load avatar part", category, part, ex);
     if (state.avatarConfig[category] !== part) return;
     group.clear();
+    state.shouldRenderInQuietMode = true;
     return;
   }
 }
@@ -233,6 +239,7 @@ function tick(time) {
             loadIntoGroup({ category, part: state.newAvatarConfig[category], group: state.avatarNodes[category] });
           } else {
             state.avatarNodes[category].clear();
+            state.shouldRenderInQuietMode = true;
           }
         }
       }
@@ -309,10 +316,6 @@ function tick(time) {
   }
 
   {
-    window.requestAnimationFrame(tick);
-  }
-
-  {
     for (const categoryName in state.idleEyesMixers) {
       if (!state.idleEyesMixers.hasOwnProperty(categoryName)) continue;
       const mixer = state.idleEyesMixers[categoryName];
@@ -330,8 +333,24 @@ function tick(time) {
   }
 
   {
+    const { camera, prevCameraPosition, currentCameraPosition } = state;
+    const didCameraMove = !prevCameraPosition.equals(currentCameraPosition.setFromMatrixPosition(camera.matrixWorld));
+    prevCameraPosition.copy(currentCameraPosition);
+    if (didCameraMove) {
+      state.shouldRenderInQuietMode = true;
+    }
+  }
+
+  {
+    window.requestAnimationFrame(tick);
+  }
+
+  {
     const { renderer, scene, camera, controls } = state;
-    renderer.render(scene, camera);
+    if (!state.quietMode || state.shouldRenderInQuietMode) {
+      state.shouldRenderInQuietMode = false;
+      renderer.render(scene, camera);
+    }
   }
 }
 
