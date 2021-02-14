@@ -3,18 +3,20 @@ import { BufferGeometryUtils } from "three/examples/jsm/utils/BufferGeometryUtil
 import constants from "./constants";
 import { GLTFCubicSplineInterpolant } from "./gltf-cubic-spline-interpolant";
 
-function mergeSourceTargetInfluences(meshes, source, dest) {
+function mergeMorphTargetInfluences({ meshes, destMorphTargetDictionary }) {
   const destMorphTargetInfluences = [];
-  new Array(Object.keys(dest.morphTargetDictionary).length).fill(0);
-  Object.entries(dest.morphTargetDictionary).map(([morphName, destIndex]) => {
+  Object.entries(destMorphTargetDictionary).map(([morphName, destIndex]) => {
     const mesh = meshes.find((mesh) => {
-      const sourceMorphTargetDictionary = source.morphTargetDictionary.get(mesh);
+      const sourceMorphTargetDictionary = mesh.morphTargetDictionary || {};
       return sourceMorphTargetDictionary.hasOwnProperty(morphName);
     });
 
     const sourceIndex = mesh.morphTargetDictionary[morphName];
     destMorphTargetInfluences[destIndex] = mesh.morphTargetInfluences[sourceIndex];
-    // TODO: Stop / reset animations so that if these morph influences are animated they return to 0, but if it is baked into the asset (like the eye brows), we keep it.
+    // TODO: Stop / reset animations so that animated morph influences return to their "at rest" values.
+    // Bake "at rest" values should maybe be baked into attributes (e.g. eye brow shapes) to allow more
+    // active morph targets in the combined mesh. Not all morphs should be baked (e.g. eyelids that are
+    // animated with the "Blinks" animation).
   });
   return destMorphTargetInfluences;
 }
@@ -29,9 +31,9 @@ function findSceneGroup(object3D) {
   return findSceneGroup(object3D.parent);
 }
 
-function mergeSourceAttributes(source) {
+function mergeSourceAttributes({ sourceAttributes }) {
   const propertyNames = new Set(); // e.g. ["normal", "position", "skinIndex", "skinWeight", "tangent", "uv", "uv2"]
-  const allSourceAttributes = Array.from(source.attributes.values());
+  const allSourceAttributes = Array.from(sourceAttributes.values());
   allSourceAttributes.forEach((sourceAttributes) => {
     Object.keys(sourceAttributes).forEach((name) => propertyNames.add(name));
   });
@@ -46,9 +48,9 @@ function mergeSourceAttributes(source) {
   return destAttributes;
 }
 
-function mergeSourceMorphTargetDictionary(source) {
+function mergeSourceMorphTargetDictionary({ sourceMorphTargetDictionaries }) {
   const morphNames = new Set(); // e.g. ["MouthFlap", "Blink", "Eye Narrow", "Eye Rotation"]
-  const allSourceDictionaries = Array.from(source.morphTargetDictionary.values());
+  const allSourceDictionaries = Array.from(sourceMorphTargetDictionaries.values());
   allSourceDictionaries.forEach((dictionary) => {
     Object.keys(dictionary).forEach((name) => morphNames.add(name));
   });
@@ -61,27 +63,30 @@ function mergeSourceMorphTargetDictionary(source) {
   return destMorphTargetDictionary;
 }
 
-function mergeSourceMorphAttributes(source, destMorphTargetDictionary) {
+function mergeSourceMorphAttributes({
+  meshes,
+  sourceMorphTargetDictionaries,
+  sourceMorphAttributes,
+  destMorphTargetDictionary,
+}) {
   const propertyNameSet = new Set(); // e.g. ["position", "normal"]
-  const allSourceMorphAttributes = Array.from(source.morphAttributes.values());
+  const allSourceMorphAttributes = Array.from(sourceMorphAttributes.values());
   allSourceMorphAttributes.forEach((sourceMorphAttributes) => {
     Object.keys(sourceMorphAttributes).forEach((name) => propertyNameSet.add(name));
   });
 
   const propertyNames = Array.from(propertyNameSet);
   const morphNames = Object.keys(destMorphTargetDictionary);
-  const meshes = Array.from(source.morphAttributes.keys());
 
   const unmerged = {};
   propertyNames.forEach((propName) => {
     unmerged[propName] = [];
-    morphNames.forEach((morphName) => {
-      const destMorphIndex = destMorphTargetDictionary[morphName];
+    Object.entries(destMorphTargetDictionary).forEach(([morphName, destMorphIndex]) => {
       unmerged[propName][destMorphIndex] = [];
 
       meshes.forEach((mesh) => {
         let bufferAttribute;
-        const morphTargetDictionary = source.morphTargetDictionary.get(mesh);
+        const morphTargetDictionary = sourceMorphTargetDictionaries.get(mesh);
         if (morphTargetDictionary.hasOwnProperty(morphName)) {
           const sourceMorphIndex = morphTargetDictionary[morphName];
           bufferAttribute = mesh.geometry.morphAttributes[propName][sourceMorphIndex];
@@ -98,8 +103,7 @@ function mergeSourceMorphAttributes(source, destMorphTargetDictionary) {
   const merged = {};
   propertyNames.forEach((propName) => {
     merged[propName] = [];
-    morphNames.forEach((morphName) => {
-      const destMorphIndex = destMorphTargetDictionary[morphName];
+    Object.entries(destMorphTargetDictionary).forEach(([morphName, destMorphIndex]) => {
       merged[propName][destMorphIndex] = BufferGeometryUtils.mergeBufferAttributes(unmerged[propName][destMorphIndex]);
     });
   });
@@ -107,9 +111,7 @@ function mergeSourceMorphAttributes(source, destMorphTargetDictionary) {
   return merged;
 }
 
-function mergeSourceIndices(source) {
-  const meshes = Array.from(source.attributes.keys());
-
+function mergeSourceIndices({ meshes }) {
   var indexOffset = 0;
   var mergedIndex = [];
 
@@ -284,27 +286,38 @@ function remapAnimationClips({ animationClips, sourceMorphTargetDictionaries, me
   );
 }
 
-export function mergeGeometry(meshes) {
+export function mergeGeometry({ meshes }) {
   const source = {
     meshes,
     attributes: new Map(meshes.map((m) => [m, m.geometry.attributes])),
     morphAttributes: new Map(meshes.map((m) => [m, m.geometry.morphAttributes])),
-    morphTargetDictionary: new Map(meshes.map((m) => [m, m.morphTargetDictionary || {}])),
+    morphTargetDictionaries: new Map(meshes.map((m) => [m, m.morphTargetDictionary || {}])),
     morphTargetInfluences: new Map(meshes.map((m) => [m, m.morphTargetInfluences || []])),
-    animations: new Map(meshes.map((m) => [m, findSceneGroup(m).animations])),
+    animationClips: new Map(meshes.map((m) => [m, findSceneGroup(m).animations])),
   };
 
   const dest = {};
-  dest.attributes = mergeSourceAttributes(source);
-  dest.morphTargetDictionary = mergeSourceMorphTargetDictionary(source);
-  dest.morphAttributes = mergeSourceMorphAttributes(source, dest.morphTargetDictionary);
-  dest.morphTargetInfluences = mergeSourceTargetInfluences(meshes, source, dest);
-  dest.index = mergeSourceIndices(source);
+  dest.attributes = mergeSourceAttributes({ sourceAttributes: source.attributes });
+  const destMorphTargetDictionary = mergeSourceMorphTargetDictionary({
+    sourceMorphTargetDictionaries: source.morphTargetDictionaries,
+  });
+  dest.morphTargetDictionary = destMorphTargetDictionary;
+  dest.morphAttributes = mergeSourceMorphAttributes({
+    meshes,
+    sourceMorphAttributes: source.morphAttributes,
+    sourceMorphTargetDictionaries: source.morphTargetDictionaries,
+    destMorphTargetDictionary,
+  });
+  dest.morphTargetInfluences = mergeMorphTargetInfluences({
+    meshes,
+    destMorphTargetDictionary,
+  });
+  dest.index = mergeSourceIndices({ meshes });
   dest.animations = remapAnimationClips({
-    animationClips: dedupBy(Array.from(source.animations.values()).flat(), "name"),
-    meshes: source.meshes,
-    sourceMorphTargetDictionaries: source.morphTargetDictionary,
-    destMorphTargetDictionary: dest.morphTargetDictionary,
+    meshes,
+    animationClips: dedupBy(Array.from(source.animationClips.values()).flat(), "name"),
+    sourceMorphTargetDictionaries: source.morphTargetDictionaries,
+    destMorphTargetDictionary,
   });
 
   return { source, dest };

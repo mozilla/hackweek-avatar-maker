@@ -26,7 +26,7 @@ export async function combine({ avatar }) {
     }
   });
 
-  const { source, dest } = mergeGeometry(meshes);
+  const { source, dest } = mergeGeometry({ meshes });
 
   const geometry = new THREE.BufferGeometry();
   geometry.attributes = dest.attributes;
