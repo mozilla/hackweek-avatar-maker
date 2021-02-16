@@ -221,6 +221,7 @@ function tick(time) {
       renderer.setSize(width, height, false);
       camera.aspect = width / height;
       camera.updateProjectionMatrix();
+      state.shouldRenderInQuietMode = true;
     }
   }
 
