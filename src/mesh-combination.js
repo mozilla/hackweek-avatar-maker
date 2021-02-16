@@ -7,7 +7,49 @@ import { cloneSkeleton } from "./export";
 import { mergeGeometry } from "./merge-geometry";
 import constants from "./constants";
 
-export async function combine({ avatar }) {
+function addIn({ bakedAttribute, morphAttribute, weight }) {
+  for (let i = 0; i < bakedAttribute.array.length; i++) {
+    bakedAttribute.array[i] += morphAttribute.array[i] * weight;
+  }
+}
+
+function bakeMorphs(mesh) {
+  const bakedMorphIndices = new Set();
+  if (!mesh.morphTargetInfluences) return bakedMorphIndices;
+  if (!mesh.geometry.morphTargetsRelative) return bakedMorphIndices;
+
+  const morphAttributes = mesh.geometry.morphAttributes;
+
+  Object.entries(morphAttributes).forEach(([propertyName, buffers]) => {
+    buffers.forEach((morphBufferAttribute, index) => {
+      const weight = mesh.morphTargetInfluences[index];
+      if (weight > 0) {
+        bakedMorphIndices.add(index);
+        addIn({
+          bakedAttribute: mesh.geometry.attributes[propertyName],
+          morphAttribute: morphBufferAttribute,
+          weight,
+        });
+      }
+    });
+  });
+
+  return bakedMorphIndices;
+}
+
+function removeBakedMorphs(mesh, bakedMorphIndices) {
+  bakedMorphIndices.forEach((morphIndex) => {
+    delete mesh.geometry.morphAttributes[morphIndex];
+    mesh.morphTargetInfluences.splice(morphIndex, 1);
+
+    const [morphName, _morphIndex] = Object.entries(mesh.morphTargetDictionary).find(
+      ([morphName, index]) => index === morphIndex
+    );
+    delete mesh.morphTargetDictionary[morphName];
+  });
+}
+
+export async function combine({ avatar, mixers }) {
   const meshesToExclude = findChildrenByType(avatar, "SkinnedMesh").filter(
     (mesh) => mesh.material.transparent || hasHubsComponent(mesh, "uv-scroll")
   );
@@ -16,6 +58,11 @@ export async function combine({ avatar }) {
 
   const { textures, uvs } = await createTextureAtlas({ meshes });
   meshes.forEach((mesh) => remapUVs({ mesh, uvs: uvs.get(mesh) }));
+
+  //TODO: This can be moved elsewhere.
+  mixers.forEach((mixer) => mixer.stopAllAction());
+
+  meshes.forEach((mesh) => removeBakedMorphs(mesh, bakeMorphs(mesh)));
 
   meshes.forEach((mesh) => {
     const geometry = mesh.geometry;

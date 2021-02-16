@@ -271,7 +271,8 @@ function tick(time) {
     if (state.shouldExportAvatar) {
       state.shouldExportAvatar = false;
 
-      exportAvatar(state.avatarGroup).then(({ glb }) => {
+      const mixers = Object.values(state.idleEyesMixers);
+      exportAvatar(state.avatarGroup, mixers).then(({ glb }) => {
         const blob = new Blob([glb], { type: "application/octet-stream" });
         const url = URL.createObjectURL(blob);
 
