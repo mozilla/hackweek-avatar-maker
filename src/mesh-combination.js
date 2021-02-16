@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import { findChildrenByType } from "./utils";
+import hasHubsComponent from "./utils/has-hubs-component";
 import { createTextureAtlas } from "./create-texture-atlas";
 import { remapUVs } from "./remap-uvs";
 import { cloneSkeleton } from "./export";
@@ -7,8 +8,11 @@ import { mergeGeometry } from "./merge-geometry";
 import constants from "./constants";
 
 export async function combine({ avatar }) {
-  // TODO: Account for meshes that cannot be combined. E.g. uv-scroll
-  const meshes = findChildrenByType(avatar, "SkinnedMesh").filter((mesh) => !mesh.material.transparent);
+  const meshesToExclude = findChildrenByType(avatar, "SkinnedMesh").filter(
+    (mesh) => mesh.material.transparent || hasHubsComponent(mesh, "uv-scroll")
+  );
+
+  const meshes = findChildrenByType(avatar, "SkinnedMesh").filter((mesh) => !meshesToExclude.includes(mesh));
 
   const { textures, uvs } = await createTextureAtlas({ meshes });
   meshes.forEach((mesh) => remapUVs({ mesh, uvs: uvs.get(mesh) }));
@@ -48,9 +52,8 @@ export async function combine({ avatar }) {
   mesh.morphTargetInfluences = dest.morphTargetInfluences;
   mesh.morphTargetDictionary = dest.morphTargetDictionary;
 
-  // Add (unmerged) transparent meshes
-  const transparentMeshes = findChildrenByType(avatar, "SkinnedMesh").filter((mesh) => mesh.material.transparent);
-  const clones = transparentMeshes.map((o) => {
+  // Add unmerged meshes
+  const clones = meshesToExclude.map((o) => {
     return o.clone(false);
   });
 
