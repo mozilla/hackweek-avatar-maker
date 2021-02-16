@@ -286,12 +286,15 @@ function tick(time) {
           el.remove();
         }
 
-        loadGLTF(url).then((gltf) => {
-          initializeGltf("testExportGroup", gltf);
-          state.testExportGroup.clear();
-          state.testExportGroup.add(gltf.scene);
-          gltf.scene.position.set(0.5, 0, 0);
-        });
+        const debugExports = false;
+        if (debugExports) {
+          loadGLTF(url).then((gltf) => {
+            initializeGltf("testExportGroup", gltf);
+            state.testExportGroup.clear();
+            state.testExportGroup.add(gltf.scene);
+            gltf.scene.position.set(0.5, 0, 0);
+          });
+        }
       });
     }
   }

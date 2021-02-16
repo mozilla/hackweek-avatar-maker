@@ -124,10 +124,13 @@ export async function exportAvatar(avatarGroup, mixers) {
   const clone = cloneIntoAvatar(avatarGroup);
 
   const avatar = await combine({ avatar: clone, mixers });
-  console.log("avatar", avatar);
 
-  const { gltf } = await exportGLTF(avatar, { binary: false, animations: avatar.animations });
-  console.log("gltf", gltf);
+  const debugGLTF = false;
+  if (debugGLTF) {
+    console.log("avatar", avatar);
+    const { gltf } = await exportGLTF(avatar, { binary: false, animations: avatar.animations });
+    console.log("gltf", gltf);
+  }
 
   const { gltf: glb } = await exportGLTF(avatar, { binary: true, animations: avatar.animations });
   return { glb };

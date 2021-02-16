@@ -10,7 +10,6 @@ import { dispatch } from "../dispatch";
 import { generateRandomConfig } from "../generate-random-config";
 import initialAssets from "../assets";
 import { isThumbnailMode } from "../utils";
-import { getMaterialInfo } from "../get-material-info";
 import debounce from "../utils/debounce";
 
 // Used externally by the generate-thumbnails script
@@ -26,11 +25,6 @@ export function AvatarEditorContainer() {
 
   const [avatarConfig, setAvatarConfig] = useState(initialConfig);
   const [tipState, setTipState] = useState({ visible: false, text: "", top: 0, left: 0 });
-
-  // Used to test material info. TODO: Remove
-  window.getMaterialInfo = function () {
-    return getMaterialInfo(assets);
-  };
 
   useEffect(() => {
     if (!thumbnailMode) {
