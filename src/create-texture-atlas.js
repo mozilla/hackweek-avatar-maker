@@ -33,8 +33,6 @@ async function canvasToImage(canvas) {
 
 export const createTextureAtlas = (function () {
   const ATLAS_SIZE_PX = 2048;
-  const ATLAS_SQRT = 4;
-  const IMAGE_SIZE = ATLAS_SIZE_PX / ATLAS_SQRT;
   const IMAGE_NAMES = ["diffuse", "normal", "orm"];
 
   return async function createTextureAtlas({ meshes }) {
@@ -61,10 +59,13 @@ export const createTextureAtlas = (function () {
       });
     }
 
+    const numTiles = Math.floor(Math.sqrt(meshes.length) + 1);
+    const tileSize = ATLAS_SIZE_PX / numTiles;
+
     const uvs = new Map(
       meshes.map((mesh, i) => {
-        const min = new THREE.Vector2(i % ATLAS_SQRT, Math.floor(i / ATLAS_SQRT)).multiplyScalar(1 / ATLAS_SQRT);
-        const max = new THREE.Vector2(min.x + 1 / ATLAS_SQRT, min.y + 1 / ATLAS_SQRT);
+        const min = new THREE.Vector2(i % numTiles, Math.floor(i / numTiles)).multiplyScalar(1 / numTiles);
+        const max = new THREE.Vector2(min.x + 1 / numTiles, min.y + 1 / numTiles);
         return [mesh, { min, max }];
       })
     );
@@ -77,12 +78,12 @@ export const createTextureAtlas = (function () {
         const { min, max } = uvs.get(mesh);
         if (image) {
           context.globalCompositeOperation = "source-over";
-          context.drawImage(image, min.x * ATLAS_SIZE_PX, min.y * ATLAS_SIZE_PX, IMAGE_SIZE, IMAGE_SIZE);
+          context.drawImage(image, min.x * ATLAS_SIZE_PX, min.y * ATLAS_SIZE_PX, tileSize, tileSize);
         }
 
         context.globalCompositeOperation = image ? "multiply" : "source-over";
         context.fillStyle = `#${mesh.material.color.getHexString()}`;
-        context.fillRect(min.x * ATLAS_SIZE_PX, min.y * ATLAS_SIZE_PX, IMAGE_SIZE, IMAGE_SIZE);
+        context.fillRect(min.x * ATLAS_SIZE_PX, min.y * ATLAS_SIZE_PX, tileSize, tileSize);
       });
     }
 
@@ -94,10 +95,10 @@ export const createTextureAtlas = (function () {
         const image = getTextureImage(mesh.material, "normalMap");
         const { min, max } = uvs.get(mesh);
         if (image) {
-          context.drawImage(image, min.x * ATLAS_SIZE_PX, min.y * ATLAS_SIZE_PX, IMAGE_SIZE, IMAGE_SIZE);
+          context.drawImage(image, min.x * ATLAS_SIZE_PX, min.y * ATLAS_SIZE_PX, tileSize, tileSize);
         } else {
           context.fillStyle = "#8080ff"; // default color encodes the vector (0,0,1)
-          context.fillRect(min.x * ATLAS_SIZE_PX, min.y * ATLAS_SIZE_PX, IMAGE_SIZE, IMAGE_SIZE);
+          context.fillRect(min.x * ATLAS_SIZE_PX, min.y * ATLAS_SIZE_PX, tileSize, tileSize);
         }
       });
     }
@@ -112,13 +113,13 @@ export const createTextureAtlas = (function () {
           const { min, max } = uvs.get(mesh);
           if (image) {
             context.globalCompositeOperation = "source-over";
-            context.drawImage(image, min.x * ATLAS_SIZE_PX, min.y * ATLAS_SIZE_PX, IMAGE_SIZE, IMAGE_SIZE);
+            context.drawImage(image, min.x * ATLAS_SIZE_PX, min.y * ATLAS_SIZE_PX, tileSize, tileSize);
           }
 
           context.globalCompositeOperation = image ? "multiply" : "source-over";
           const color = new THREE.Color(material.aoMapIntensity, material.roughness, material.metalness);
           context.fillStyle = `#${color.getHexString()}`;
-          context.fillRect(min.x * ATLAS_SIZE_PX, min.y * ATLAS_SIZE_PX, IMAGE_SIZE, IMAGE_SIZE);
+          context.fillRect(min.x * ATLAS_SIZE_PX, min.y * ATLAS_SIZE_PX, tileSize, tileSize);
         });
       }
     }
