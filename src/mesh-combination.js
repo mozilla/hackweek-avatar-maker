@@ -46,6 +46,7 @@ export async function combine({ avatar }) {
     roughnessMap: textures["orm"],
     metalnessMap: textures["orm"],
   });
+  material.metalness = 1;
 
   const mesh = new THREE.SkinnedMesh(geometry, material);
   mesh.name = constants.combinedMeshName;

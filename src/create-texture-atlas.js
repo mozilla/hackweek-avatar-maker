@@ -82,7 +82,11 @@ export const createTextureAtlas = (function () {
         }
 
         context.globalCompositeOperation = image ? "multiply" : "source-over";
-        context.fillStyle = `#${mesh.material.color.getHexString()}`;
+
+        const colorClone = mesh.material.color.clone();
+        colorClone.convertLinearToGamma();
+
+        context.fillStyle = `#${colorClone.getHexString()}`;
         context.fillRect(min.x * ATLAS_SIZE_PX, min.y * ATLAS_SIZE_PX, tileSize, tileSize);
       });
     }
@@ -109,7 +113,10 @@ export const createTextureAtlas = (function () {
         const context = contexts["orm"];
         meshes.forEach((mesh) => {
           const material = mesh.material;
-          const image = getTextureImage(material, "aoMap");
+          const image =
+            getTextureImage(material, "aoMap") ||
+            getTextureImage(material, "roughnessMap") ||
+            getTextureImage(material, "metalnessMap");
           const { min, max } = uvs.get(mesh);
           if (image) {
             context.globalCompositeOperation = "source-over";
