@@ -1,8 +1,9 @@
 import * as THREE from "three";
 import { GLTFExporter } from "three/examples/jsm/exporters/GLTFExporter";
 import { findChildrenByType, findChildByName, describeObject3D } from "./utils";
+import { combine } from "./mesh-combination";
 
-function cloneSkeleton(skinnedMesh) {
+export function cloneSkeleton(skinnedMesh) {
   const boneClones = new Map();
 
   for (const bone of skinnedMesh.skeleton.bones) {
@@ -49,23 +50,9 @@ export function combineHubsComponents(a, b) {
 export const exportGLTF = (function () {
   const exporter = new GLTFExporter();
   return function exportGLTF(object3D, { binary, animations }) {
-    exporter.parse(
-      object3D,
-      (gltf) => {
-        if (binary) {
-          const blob = new Blob([gltf], { type: "application/octet-stream" });
-          const el = document.createElement("a");
-          el.style.display = "none";
-          el.href = URL.createObjectURL(blob);
-          el.download = "custom_avatar.glb";
-          el.click();
-          el.remove();
-        } else {
-          console.log(gltf);
-        }
-      },
-      { binary, animations }
-    );
+    return new Promise((resolve) => {
+      exporter.parse(object3D, (gltf) => resolve({ gltf }), { binary, animations });
+    });
   };
 })();
 
@@ -129,7 +116,22 @@ function cloneIntoAvatar(avatarGroup) {
   return clonedScene;
 }
 
-export function exportAvatar(avatarGroup) {
-  const avatar = cloneIntoAvatar(avatarGroup);
-  exportGLTF(avatar, { binary: true, animations: avatar.animations });
+export async function exportAvatar(avatarGroup, mixers) {
+  // TODO: Re-evaluate whether we want to perform this step.
+  // The intention (for now) is to make combination optional,
+  // so that it is easy to debug and also if non-mergable meshes
+  // are added, there's a workaround for them.
+  const clone = cloneIntoAvatar(avatarGroup);
+
+  const avatar = await combine({ avatar: clone, mixers });
+
+  const debugGLTF = false;
+  if (debugGLTF) {
+    console.log("avatar", avatar);
+    const { gltf } = await exportGLTF(avatar, { binary: false, animations: avatar.animations });
+    console.log("gltf", gltf);
+  }
+
+  const { gltf: glb } = await exportGLTF(avatar, { binary: true, animations: avatar.animations });
+  return { glb };
 }

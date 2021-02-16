@@ -1,21 +1,20 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import { GLTFExporter } from "three/examples/jsm/exporters/GLTFExporter";
 import constants from "./constants";
 import { exportAvatar } from "./export";
 import { loadGLTF, loadGLTFCached, forEachMaterial, generateEnvironmentMap, createSky, isThumbnailMode } from "./utils";
 import { renderThumbnail } from "./render-thumbnail";
+import { combine } from "./mesh-combination";
+import { getMaterialInfo } from "./get-material-info";
+import { urlFor } from "./url-for";
+import { createSkydome } from "./create-skydome";
 import uvScroll from "./uv-scroll";
 import idleEyes from "./idle-eyes";
 
-// TODO: Don't do this
-function urlFor(value) {
-  if (value.startsWith("blob")) {
-    return value;
-  } else {
-    return `assets/models/${value}.glb`;
-  }
-}
+// Used to test mesh combination
+window.combineCurrentAvatar = async function () {
+  return await combine({ avatar: state.avatarGroup });
+};
 
 const state = {
   reactIsLoaded: false,
@@ -29,6 +28,7 @@ const state = {
   delta: 0,
   envMap: null,
   avatarGroup: null,
+  testExportGroup: null,
   avatarNodes: {},
   avatarConfig: {},
   newAvatarConfig: {},
@@ -40,7 +40,9 @@ const state = {
   shouldRotateLeft: false,
   shouldRotateRight: false,
   idleEyesMixers: {},
-  uvScrollMaps: {}
+  uvScrollMaps: {},
+  quietMode: false,
+  shouldRenderInQuietMode: true,
 };
 window.gameState = state;
 
@@ -94,56 +96,6 @@ function resetView() {
   state.controls.reset();
 }
 
-function createSkydome(radius) {
-  const vertexShader = `
-    varying vec3 vWorldPosition;
-
-    void main() {
-
-      vec4 worldPosition = modelMatrix * vec4( position, 1.0 );
-      vWorldPosition = worldPosition.xyz;
-
-      gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
-
-    }
-  `;
-  const fragmentShader = `
-    uniform vec3 topColor;
-    uniform vec3 bottomColor;
-    uniform float offset;
-    uniform float exponent;
-
-    varying vec3 vWorldPosition;
-
-    void main() {
-
-      float h = normalize( vWorldPosition + offset ).y;
-      gl_FragColor = vec4( mix( bottomColor, topColor, max( pow( max( h , 0.0), exponent ), 0.0 ) ), 1.0 );
-
-    }
-  `;
-
-  const offset = radius / 12;
-
-  const uniforms = {
-    topColor: { value: new THREE.Color(0x0096db) }, // TODO: match primary color
-    bottomColor: { value: new THREE.Color(0xc6dde5) },
-    offset: { value: offset },
-    exponent: { value: 1.0 },
-  };
-
-  // TODO Pixel push these values to perfection!!!
-  const geometry = new THREE.SphereGeometry(radius, 16, 16);
-  const material = new THREE.ShaderMaterial({
-    uniforms: uniforms,
-    vertexShader: vertexShader,
-    fragmentShader: fragmentShader,
-    side: THREE.BackSide,
-  });
-
-  return new THREE.Mesh(geometry, material);
-}
-
 function init() {
   THREE.Cache.enabled = !isThumbnailMode();
 
@@ -177,9 +129,43 @@ function init() {
   controls.update();
   controls.saveState();
   state.controls = controls;
+  state.currentCameraPosition = new THREE.Vector3();
+  state.prevCameraPosition = new THREE.Vector3();
+
+  // TODO Remove this test code
+  state.testExportGroup = new THREE.Group();
+  scene.add(state.testExportGroup);
 
   state.avatarGroup = new THREE.Group();
   scene.add(state.avatarGroup);
+}
+
+function initializeGltf(key, gltf) {
+  if (idleEyes.hasIdleEyes(gltf)) {
+    state.idleEyesMixers[key] = idleEyes.mixerForGltf(gltf);
+  }
+
+  if (state.uvScrollMaps[key]) {
+    state.uvScrollMaps[key].length = 0;
+  }
+
+  gltf.scene.traverse((obj) => {
+    forEachMaterial(obj, (material) => {
+      if (material.isMeshStandardMaterial) {
+        material.envMap = state.envMap;
+        material.envMapIntensity = 0.4;
+        if (material.map) {
+          material.map.anisotropy = state.renderer.capabilities.getMaxAnisotropy();
+        }
+        material.needsUpdate = true;
+      }
+    });
+
+    if (uvScroll.isValidMesh(obj)) {
+      state.uvScrollMaps[key] = state.uvScrollMaps[key] || [];
+      state.uvScrollMaps[key].push(uvScroll.initialStateForMesh(obj));
+    }
+  });
 }
 
 async function loadIntoGroup({ category, part, group, cached = true }) {
@@ -189,42 +175,22 @@ async function loadIntoGroup({ category, part, group, cached = true }) {
 
     if (state.avatarConfig[category] !== part) return;
 
+    // TODO Make sure we need to do this.
+    // Stash animations on the Object3D so that we can use them during export.
     gltf.scene.animations = gltf.animations;
 
-    if (idleEyes.hasIdleEyes(gltf)) {
-      state.idleEyesMixers[category] = idleEyes.mixerForGltf(gltf);
-    }
-
-    if (state.uvScrollMaps[category]) {
-      state.uvScrollMaps[category].length = 0;
-    }
-
-    gltf.scene.traverse((obj) => {
-      forEachMaterial(obj, (material) => {
-        if (material.isMeshStandardMaterial) {
-          material.envMap = state.envMap;
-          material.envMapIntensity = 0.4;
-          if (material.map) {
-            material.map.anisotropy = state.renderer.capabilities.getMaxAnisotropy();
-          }
-          material.needsUpdate = true;
-        }
-      });
-
-      if (uvScroll.isValidMesh(obj)) {
-        state.uvScrollMaps[category] = state.uvScrollMaps[category] || [];
-        state.uvScrollMaps[category].push(uvScroll.initialStateForMesh(obj));
-      }
-    });
+    initializeGltf(category, gltf);
 
     group.clear();
     group.add(gltf.scene);
+    state.shouldRenderInQuietMode = true;
 
     return gltf.scene;
   } catch (ex) {
     console.error("Failed to load avatar part", category, part, ex);
     if (state.avatarConfig[category] !== part) return;
     group.clear();
+    state.shouldRenderInQuietMode = true;
     return;
   }
 }
@@ -255,6 +221,7 @@ function tick(time) {
       renderer.setSize(width, height, false);
       camera.aspect = width / height;
       camera.updateProjectionMatrix();
+      state.shouldRenderInQuietMode = true;
     }
   }
 
@@ -273,6 +240,7 @@ function tick(time) {
             loadIntoGroup({ category, part: state.newAvatarConfig[category], group: state.avatarNodes[category] });
           } else {
             state.avatarNodes[category].clear();
+            state.shouldRenderInQuietMode = true;
           }
         }
       }
@@ -302,7 +270,32 @@ function tick(time) {
   {
     if (state.shouldExportAvatar) {
       state.shouldExportAvatar = false;
-      exportAvatar(state.avatarGroup);
+
+      const mixers = Object.values(state.idleEyesMixers);
+      exportAvatar(state.avatarGroup, mixers).then(({ glb }) => {
+        const blob = new Blob([glb], { type: "application/octet-stream" });
+        const url = URL.createObjectURL(blob);
+
+        const triggerDownload = true;
+        if (triggerDownload) {
+          const el = document.createElement("a");
+          el.style.display = "none";
+          el.href = url;
+          el.download = "custom_avatar.glb";
+          el.click();
+          el.remove();
+        }
+
+        const debugExports = false;
+        if (debugExports) {
+          loadGLTF(url).then((gltf) => {
+            initializeGltf("testExportGroup", gltf);
+            state.testExportGroup.clear();
+            state.testExportGroup.add(gltf.scene);
+            gltf.scene.position.set(0.5, 0, 0);
+          });
+        }
+      });
     }
   }
 
@@ -328,10 +321,6 @@ function tick(time) {
   }
 
   {
-    window.requestAnimationFrame(tick);
-  }
-
-  {
     for (const categoryName in state.idleEyesMixers) {
       if (!state.idleEyesMixers.hasOwnProperty(categoryName)) continue;
       const mixer = state.idleEyesMixers[categoryName];
@@ -343,14 +332,30 @@ function tick(time) {
     for (const categoryName in state.uvScrollMaps) {
       if (!state.uvScrollMaps.hasOwnProperty(categoryName)) continue;
       for (const uvScrollState of state.uvScrollMaps[categoryName]) {
-        uvScroll.update(uvScrollState, state.delta)
+        uvScroll.update(uvScrollState, state.delta);
       }
     }
   }
 
   {
+    const { camera, prevCameraPosition, currentCameraPosition } = state;
+    const didCameraMove = !prevCameraPosition.equals(currentCameraPosition.setFromMatrixPosition(camera.matrixWorld));
+    prevCameraPosition.copy(currentCameraPosition);
+    if (didCameraMove) {
+      state.shouldRenderInQuietMode = true;
+    }
+  }
+
+  {
+    window.requestAnimationFrame(tick);
+  }
+
+  {
     const { renderer, scene, camera, controls } = state;
-    renderer.render(scene, camera);
+    if (!state.quietMode || state.shouldRenderInQuietMode) {
+      state.shouldRenderInQuietMode = false;
+      renderer.render(scene, camera);
+    }
   }
 }
 

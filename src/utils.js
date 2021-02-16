@@ -2,7 +2,7 @@ import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { Sky } from "three/examples/jsm/objects/Sky";
 
-function findChild({ candidates, predicate }) {
+export function findChild({ candidates, predicate }) {
   if (!candidates.length) {
     return null;
   }

@@ -20,7 +20,10 @@ export function AvatarEditorContainer() {
   const [hoveredConfig, setHoveredConfig] = useState({});
   const debouncedSetHoveredConfig = useCallback(debounce(setHoveredConfig), [setHoveredConfig]);
   const [canvasUrl, setCanvasUrl] = useState(null);
-  const [avatarConfig, setAvatarConfig] = useState(generateRandomConfig(assets));
+
+  const initialConfig = generateRandomConfig(assets);
+
+  const [avatarConfig, setAvatarConfig] = useState(initialConfig);
   const [tipState, setTipState] = useState({ visible: false, text: "", top: 0, left: 0 });
 
   useEffect(() => {
