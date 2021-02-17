@@ -100,6 +100,20 @@ export async function combine({ avatar, mixers }) {
   mesh.morphTargetInfluences = dest.morphTargetInfluences;
   mesh.morphTargetDictionary = dest.morphTargetDictionary;
 
+  if ("MouthFlap" in mesh.morphTargetDictionary) {
+    mesh.userData = {
+      gltfExtensions: {
+        MOZ_hubs_components: {
+          "morph-audio-feedback": {
+            minValue: 0,
+            maxValue: 1,
+            name: "MouthFlap",
+          },
+        },
+      },
+    };
+  }
+
   // Add unmerged meshes
   const clones = meshesToExclude.map((o) => {
     return o.clone(false);
