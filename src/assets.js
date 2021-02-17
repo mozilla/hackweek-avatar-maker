@@ -2350,7 +2350,8 @@ export default {
       {
         "value": null,
         "displayName": "None",
-        "excludeFromRandomize": false
+        "excludeFromRandomize": false,
+        "randomizationWeight": 60
       },
       {
         "value": "facial-hair_beard-full-1-black",
@@ -3221,7 +3222,8 @@ export default {
       {
         "value": null,
         "displayName": "None",
-        "excludeFromRandomize": false
+        "excludeFromRandomize": false,
+        "randomizationWeight": 10,
       },
       {
         "value": "eyewear_arnette",
@@ -3296,6 +3298,7 @@ export default {
       {
         "value": "accessory_face-mask-1-animated",
         "displayName": "Face Mask 1 Animated",
+        "randomizationWeight": 0.5
       },
       {
         "value": "accessory_headband-cat-ears-1",
@@ -3307,7 +3310,8 @@ export default {
       },
       {
         "value": "accessory_pool-mask-1",
-        "displayName": "Pool Mask 1"
+        "displayName": "Pool Mask 1",
+        "randomizationWeight": 0.1
       }
     ]
   },
