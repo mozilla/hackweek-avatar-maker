@@ -87,11 +87,163 @@ export default {
         }
       },
       {
+        "value": "hair_afro-1-black",
+        "displayName": "Afro 1 Black",
+        "description": {
+          "Type": "afro-1",
+          "Color": "black"
+        }
+      },
+      {
+        "value": "hair_afro-1-blonde",
+        "displayName": "Afro 1 Blonde",
+        "description": {
+          "Type": "afro-1",
+          "Color": "blonde"
+        }
+      },
+      {
+        "value": "hair_afro-1-blue",
+        "displayName": "Afro 1 Blue",
+        "description": {
+          "Type": "afro-1",
+          "Color": "blue"
+        }
+      },
+      {
+        "value": "hair_afro-1-brown",
+        "displayName": "Afro 1 Brown",
+        "description": {
+          "Type": "afro-1",
+          "Color": "brown"
+        }
+      },
+      {
         "value": "hair_afro-1-dark brown",
         "displayName": "Afro 1 Dark brown",
         "description": {
           "Type": "afro-1",
           "Color": "dark brown"
+        }
+      },
+      {
+        "value": "hair_afro-1-gray",
+        "displayName": "Afro 1 Gray",
+        "description": {
+          "Type": "afro-1",
+          "Color": "gray"
+        }
+      },
+      {
+        "value": "hair_afro-1-light brown",
+        "displayName": "Afro 1 Light brown",
+        "description": {
+          "Type": "afro-1",
+          "Color": "light brown"
+        }
+      },
+      {
+        "value": "hair_afro-1-pink",
+        "displayName": "Afro 1 Pink",
+        "description": {
+          "Type": "afro-1",
+          "Color": "pink"
+        }
+      },
+      {
+        "value": "hair_afro-1-red",
+        "displayName": "Afro 1 Red",
+        "description": {
+          "Type": "afro-1",
+          "Color": "red"
+        }
+      },
+      {
+        "value": "hair_afro-1-white",
+        "displayName": "Afro 1 White",
+        "description": {
+          "Type": "afro-1",
+          "Color": "white"
+        }
+      },
+      {
+        "value": "hair_afro-2-black",
+        "displayName": "Afro 2 Black",
+        "description": {
+          "Type": "afro-2",
+          "Color": "black"
+        }
+      },
+      {
+        "value": "hair_afro-2-blonde",
+        "displayName": "Afro 2 Blonde",
+        "description": {
+          "Type": "afro-2",
+          "Color": "blonde"
+        }
+      },
+      {
+        "value": "hair_afro-2-blue",
+        "displayName": "Afro 2 Blue",
+        "description": {
+          "Type": "afro-2",
+          "Color": "blue"
+        }
+      },
+      {
+        "value": "hair_afro-2-brown",
+        "displayName": "Afro 2 Brown",
+        "description": {
+          "Type": "afro-2",
+          "Color": "brown"
+        }
+      },
+      {
+        "value": "hair_afro-2-dark brown",
+        "displayName": "Afro 2 Dark brown",
+        "description": {
+          "Type": "afro-2",
+          "Color": "dark brown"
+        }
+      },
+      {
+        "value": "hair_afro-2-gray",
+        "displayName": "Afro 2 Gray",
+        "description": {
+          "Type": "afro-2",
+          "Color": "gray"
+        }
+      },
+      {
+        "value": "hair_afro-2-light brown",
+        "displayName": "Afro 2 Light brown",
+        "description": {
+          "Type": "afro-2",
+          "Color": "light brown"
+        }
+      },
+      {
+        "value": "hair_afro-2-pink",
+        "displayName": "Afro 2 Pink",
+        "description": {
+          "Type": "afro-2",
+          "Color": "pink"
+        }
+      },
+      {
+        "value": "hair_afro-2-red",
+        "displayName": "Afro 2 Red",
+        "description": {
+          "Type": "afro-2",
+          "Color": "red"
+        }
+      },
+      {
+        "value": "hair_afro-2-white",
+        "displayName": "Afro 2 White",
+        "description": {
+          "Type": "afro-2",
+          "Color": "white"
         }
       },
       {
@@ -255,11 +407,83 @@ export default {
         }
       },
       {
-        "value": "hair_eraser-top-dark brown",
-        "displayName": "Eraser Top Dark brown",
+        "value": "hair_eraser-top-1-black",
+        "displayName": "Eraser Top 1 Black",
         "description": {
-          "Type": "eraser-top",
+          "Type": "eraser-top-1",
+          "Color": "black"
+        }
+      },
+      {
+        "value": "hair_eraser-top-1-blonde",
+        "displayName": "Eraser Top 1 Blonde",
+        "description": {
+          "Type": "eraser-top-1",
+          "Color": "blonde"
+        }
+      },
+      {
+        "value": "hair_eraser-top-1-blue",
+        "displayName": "Eraser Top 1 Blue",
+        "description": {
+          "Type": "eraser-top-1",
+          "Color": "blue"
+        }
+      },
+      {
+        "value": "hair_eraser-top-1-brown",
+        "displayName": "Eraser Top 1 Brown",
+        "description": {
+          "Type": "eraser-top-1",
+          "Color": "brown"
+        }
+      },
+      {
+        "value": "hair_eraser-top-1-dark brown",
+        "displayName": "Eraser Top 1 Dark brown",
+        "description": {
+          "Type": "eraser-top-1",
           "Color": "dark brown"
+        }
+      },
+      {
+        "value": "hair_eraser-top-1-gray",
+        "displayName": "Eraser Top 1 Gray",
+        "description": {
+          "Type": "eraser-top-1",
+          "Color": "gray"
+        }
+      },
+      {
+        "value": "hair_eraser-top-1-light brown",
+        "displayName": "Eraser Top 1 Light brown",
+        "description": {
+          "Type": "eraser-top-1",
+          "Color": "light brown"
+        }
+      },
+      {
+        "value": "hair_eraser-top-1-pink",
+        "displayName": "Eraser Top 1 Pink",
+        "description": {
+          "Type": "eraser-top-1",
+          "Color": "pink"
+        }
+      },
+      {
+        "value": "hair_eraser-top-1-red",
+        "displayName": "Eraser Top 1 Red",
+        "description": {
+          "Type": "eraser-top-1",
+          "Color": "red"
+        }
+      },
+      {
+        "value": "hair_eraser-top-1-white",
+        "displayName": "Eraser Top 1 White",
+        "description": {
+          "Type": "eraser-top-1",
+          "Color": "white"
         }
       },
       {
@@ -668,6 +892,78 @@ export default {
         "description": {
           "Type": "mullet-1",
           "Color": "black"
+        }
+      },
+      {
+        "value": "hair_mullet-1-blonde",
+        "displayName": "Mullet 1 Blonde",
+        "description": {
+          "Type": "mullet-1",
+          "Color": "blonde"
+        }
+      },
+      {
+        "value": "hair_mullet-1-blue",
+        "displayName": "Mullet 1 Blue",
+        "description": {
+          "Type": "mullet-1",
+          "Color": "blue"
+        }
+      },
+      {
+        "value": "hair_mullet-1-brown",
+        "displayName": "Mullet 1 Brown",
+        "description": {
+          "Type": "mullet-1",
+          "Color": "brown"
+        }
+      },
+      {
+        "value": "hair_mullet-1-dark brown",
+        "displayName": "Mullet 1 Dark brown",
+        "description": {
+          "Type": "mullet-1",
+          "Color": "dark brown"
+        }
+      },
+      {
+        "value": "hair_mullet-1-gray",
+        "displayName": "Mullet 1 Gray",
+        "description": {
+          "Type": "mullet-1",
+          "Color": "gray"
+        }
+      },
+      {
+        "value": "hair_mullet-1-light brown",
+        "displayName": "Mullet 1 Light brown",
+        "description": {
+          "Type": "mullet-1",
+          "Color": "light brown"
+        }
+      },
+      {
+        "value": "hair_mullet-1-pink",
+        "displayName": "Mullet 1 Pink",
+        "description": {
+          "Type": "mullet-1",
+          "Color": "pink"
+        }
+      },
+      {
+        "value": "hair_mullet-1-red",
+        "displayName": "Mullet 1 Red",
+        "description": {
+          "Type": "mullet-1",
+          "Color": "red"
+        }
+      },
+      {
+        "value": "hair_mullet-1-white",
+        "displayName": "Mullet 1 White",
+        "description": {
+          "Type": "mullet-1",
+          "Color": "white"
         }
       },
       {
@@ -1151,6 +1447,78 @@ export default {
         }
       },
       {
+        "value": "hair_spikey-1-black",
+        "displayName": "Spikey 1 Black",
+        "description": {
+          "Type": "spikey-1",
+          "Color": "black"
+        }
+      },
+      {
+        "value": "hair_spikey-1-blonde",
+        "displayName": "Spikey 1 Blonde",
+        "description": {
+          "Type": "spikey-1",
+          "Color": "blonde"
+        }
+      },
+      {
+        "value": "hair_spikey-1-blue",
+        "displayName": "Spikey 1 Blue",
+        "description": {
+          "Type": "spikey-1",
+          "Color": "blue"
+        }
+      },
+      {
+        "value": "hair_spikey-1-brown",
+        "displayName": "Spikey 1 Brown",
+        "description": {
+          "Type": "spikey-1",
+          "Color": "brown"
+        }
+      },
+      {
+        "value": "hair_spikey-1-dark brown",
+        "displayName": "Spikey 1 Dark brown",
+        "description": {
+          "Type": "spikey-1",
+          "Color": "dark brown"
+        }
+      },
+      {
+        "value": "hair_spikey-1-gray",
+        "displayName": "Spikey 1 Gray",
+        "description": {
+          "Type": "spikey-1",
+          "Color": "gray"
+        }
+      },
+      {
+        "value": "hair_spikey-1-light brown",
+        "displayName": "Spikey 1 Light brown",
+        "description": {
+          "Type": "spikey-1",
+          "Color": "light brown"
+        }
+      },
+      {
+        "value": "hair_spikey-1-pink",
+        "displayName": "Spikey 1 Pink",
+        "description": {
+          "Type": "spikey-1",
+          "Color": "pink"
+        }
+      },
+      {
+        "value": "hair_spikey-1-red",
+        "displayName": "Spikey 1 Red",
+        "description": {
+          "Type": "spikey-1",
+          "Color": "red"
+        }
+      },
+      {
         "value": "hair_spikey-1-white",
         "displayName": "Spikey 1 White",
         "description": {
@@ -1159,19 +1527,163 @@ export default {
         }
       },
       {
-        "value": "hair_starter-locs-red",
-        "displayName": "Starter Locs Red",
+        "value": "hair_starter-locs-1-black",
+        "displayName": "Starter Locs 1 Black",
         "description": {
-          "Type": "starter-locs",
+          "Type": "starter-locs-1",
+          "Color": "black"
+        }
+      },
+      {
+        "value": "hair_starter-locs-1-blonde",
+        "displayName": "Starter Locs 1 Blonde",
+        "description": {
+          "Type": "starter-locs-1",
+          "Color": "blonde"
+        }
+      },
+      {
+        "value": "hair_starter-locs-1-blue",
+        "displayName": "Starter Locs 1 Blue",
+        "description": {
+          "Type": "starter-locs-1",
+          "Color": "blue"
+        }
+      },
+      {
+        "value": "hair_starter-locs-1-brown",
+        "displayName": "Starter Locs 1 Brown",
+        "description": {
+          "Type": "starter-locs-1",
+          "Color": "brown"
+        }
+      },
+      {
+        "value": "hair_starter-locs-1-dark brown",
+        "displayName": "Starter Locs 1 Dark brown",
+        "description": {
+          "Type": "starter-locs-1",
+          "Color": "dark brown"
+        }
+      },
+      {
+        "value": "hair_starter-locs-1-gray",
+        "displayName": "Starter Locs 1 Gray",
+        "description": {
+          "Type": "starter-locs-1",
+          "Color": "gray"
+        }
+      },
+      {
+        "value": "hair_starter-locs-1-light brown",
+        "displayName": "Starter Locs 1 Light brown",
+        "description": {
+          "Type": "starter-locs-1",
+          "Color": "light brown"
+        }
+      },
+      {
+        "value": "hair_starter-locs-1-pink",
+        "displayName": "Starter Locs 1 Pink",
+        "description": {
+          "Type": "starter-locs-1",
+          "Color": "pink"
+        }
+      },
+      {
+        "value": "hair_starter-locs-1-red",
+        "displayName": "Starter Locs 1 Red",
+        "description": {
+          "Type": "starter-locs-1",
           "Color": "red"
         }
       },
       {
-        "value": "hair_taper-afro-1-dark brown",
-        "displayName": "Taper Afro 1 Dark brown",
+        "value": "hair_starter-locs-1-white",
+        "displayName": "Starter Locs 1 White",
+        "description": {
+          "Type": "starter-locs-1",
+          "Color": "white"
+        }
+      },
+      {
+        "value": "hair_taper-afro-1-blue",
+        "displayName": "Taper Afro 1 Blue",
         "description": {
           "Type": "taper-afro-1",
+          "Color": "blue"
+        }
+      },
+      {
+        "value": "hair_taper-afro-2-black",
+        "displayName": "Taper Afro 2 Black",
+        "description": {
+          "Type": "taper-afro-2",
+          "Color": "black"
+        }
+      },
+      {
+        "value": "hair_taper-afro-2-blonde",
+        "displayName": "Taper Afro 2 Blonde",
+        "description": {
+          "Type": "taper-afro-2",
+          "Color": "blonde"
+        }
+      },
+      {
+        "value": "hair_taper-afro-2-brown",
+        "displayName": "Taper Afro 2 Brown",
+        "description": {
+          "Type": "taper-afro-2",
+          "Color": "brown"
+        }
+      },
+      {
+        "value": "hair_taper-afro-2-dark brown",
+        "displayName": "Taper Afro 2 Dark brown",
+        "description": {
+          "Type": "taper-afro-2",
           "Color": "dark brown"
+        }
+      },
+      {
+        "value": "hair_taper-afro-2-gray",
+        "displayName": "Taper Afro 2 Gray",
+        "description": {
+          "Type": "taper-afro-2",
+          "Color": "gray"
+        }
+      },
+      {
+        "value": "hair_taper-afro-2-light brown",
+        "displayName": "Taper Afro 2 Light brown",
+        "description": {
+          "Type": "taper-afro-2",
+          "Color": "light brown"
+        }
+      },
+      {
+        "value": "hair_taper-afro-2-pink",
+        "displayName": "Taper Afro 2 Pink",
+        "description": {
+          "Type": "taper-afro-2",
+          "Color": "pink"
+        }
+      },
+      {
+        "value": "hair_taper-afro-2-red",
+        "displayName": "Taper Afro 2 Red",
+        "description": {
+          "Type": "taper-afro-2",
+          "Color": "red"
+        }
+      },
+      {
+        "value": "hair_taper-afro-2-white",
+        "displayName": "Taper Afro 2 White",
+        "description": {
+          "Type": "taper-afro-2",
+          "Color": "white"
         }
       }
     ],
@@ -1181,9 +1693,10 @@ export default {
           null,
           "aLine-asym",
           "afro-1",
+          "afro-2",
           "bob-1",
           "braided-bun",
-          "eraser-top",
+          "eraser-top-1",
           "fauxhawk-1",
           "flat-top-1",
           "french-braid-buns",
@@ -1197,8 +1710,9 @@ export default {
           "pony-tail-2",
           "pony-tail-3",
           "spikey-1",
-          "starter-locs",
-          "taper-afro-1"
+          "starter-locs-1",
+          "taper-afro-1",
+          "taper-afro-2"
         ],
         "isPrimaryOption": true
       },
@@ -2351,7 +2865,7 @@ export default {
         "value": null,
         "displayName": "None",
         "excludeFromRandomize": false,
-        "randomizationWeight": 60
+        "randomizationWeight": 59
       },
       {
         "value": "facial-hair_beard-full-1-black",
@@ -2546,11 +3060,11 @@ export default {
         }
       },
       {
-        "value": "facial-hair_goatee-2-dark brown",
-        "displayName": "Goatee 2 Dark brown",
+        "value": "facial-hair_goatee-2-brown",
+        "displayName": "Goatee 2 Brown",
         "description": {
           "Type": "goatee-2",
-          "Color": "dark brown"
+          "Color": "brown"
         }
       },
       {
@@ -2682,11 +3196,11 @@ export default {
         }
       },
       {
-        "value": "facial-hair_goatee-5-dark brown",
-        "displayName": "Goatee 5 Dark brown",
+        "value": "facial-hair_goatee-5-brown",
+        "displayName": "Goatee 5 Brown",
         "description": {
           "Type": "goatee-5",
-          "Color": "dark brown"
+          "Color": "brown"
         }
       },
       {
@@ -2942,7 +3456,8 @@ export default {
         "description": {
           "Type": "style-1",
           "Outfit": "bowling-shirt-1-red"
-        }
+        },
+        "matchRandomizationToNull": true
       },
       {
         "value": "torso_style-1-combat-vest-red",
@@ -2950,15 +3465,8 @@ export default {
         "description": {
           "Type": "style-1",
           "Outfit": "combat-vest-red"
-        }
-      },
-      {
-        "value": "torso_style-1-hoodie-1-gray",
-        "displayName": "Style 1 Hoodie 1 Gray",
-        "description": {
-          "Type": "style-1",
-          "Outfit": "hoodie-1-gray"
-        }
+        },
+        "matchRandomizationToNull": true
       },
       {
         "value": "torso_style-1-sport-coat-1-dark",
@@ -2966,7 +3474,8 @@ export default {
         "description": {
           "Type": "style-1",
           "Outfit": "sport-coat-1-dark"
-        }
+        },
+        "matchRandomizationToNull": true
       },
       {
         "value": "torso_style-1-sport-coat-1-gray",
@@ -2974,7 +3483,8 @@ export default {
         "description": {
           "Type": "style-1",
           "Outfit": "sport-coat-1-gray"
-        }
+        },
+        "matchRandomizationToNull": true
       },
       {
         "value": "torso_style-1-tshirt-1-hubs-black",
@@ -3038,7 +3548,8 @@ export default {
         "description": {
           "Type": "style-1",
           "Outfit": "ugly-christmas-1"
-        }
+        },
+        "matchRandomizationToNull": true
       },
       {
         "value": "torso_style-2-baseball-giants",
@@ -3046,22 +3557,6 @@ export default {
         "description": {
           "Type": "style-2",
           "Outfit": "baseball-giants"
-        }
-      },
-      {
-        "value": "torso_style-2-hoodie-1-gray",
-        "displayName": "Style 2 Hoodie 1 Gray",
-        "description": {
-          "Type": "style-2",
-          "Outfit": "hoodie-1-gray"
-        }
-      },
-      {
-        "value": "torso_style-2-hoodie-2-purple",
-        "displayName": "Style 2 Hoodie 2 Purple",
-        "description": {
-          "Type": "style-2",
-          "Outfit": "hoodie-2-purple"
         }
       },
       {
@@ -3159,7 +3654,6 @@ export default {
           "baseball-giants",
           "bowling-shirt-1-red",
           "combat-vest-red",
-          "hoodie-1-gray",
           "sport-coat-1-dark",
           "sport-coat-1-gray",
           "tshirt-1-hubs-black",
@@ -3170,7 +3664,6 @@ export default {
           "tshirt-1-union-jack",
           "tshirt1-reactor",
           "ugly-christmas-1",
-          "hoodie-2-purple",
           "tshirt-1-baby-unicorn",
           "tshirt-1-heart-animated",
           "tshirt-1-heart",
@@ -3200,7 +3693,8 @@ export default {
       },
       {
         "value": "hat_spokemon",
-        "displayName": "Spokemon"
+        "displayName": "Spokemon",
+        "randomizationWeight": 0.1
       },
       {
         "value": "hat_top-hat-1",
@@ -3214,39 +3708,39 @@ export default {
         "value": null,
         "displayName": "None",
         "excludeFromRandomize": false,
-        "randomizationWeight": 10,
+        "randomizationWeight": 9
       },
       {
         "value": "eyewear_arnette",
-        "displayName": "Arnette",
+        "displayName": "Arnette"
       },
       {
         "value": "eyewear_aviators1",
-        "displayName": "Aviators1",
+        "displayName": "Aviators1"
       },
       {
         "value": "eyewear_glam-2",
-        "displayName": "Glam 2",
+        "displayName": "Glam 2"
       },
       {
         "value": "eyewear_heart-1-pink",
-        "displayName": "Heart 1 Pink",
+        "displayName": "Heart 1 Pink"
       },
       {
         "value": "eyewear_metal-1",
-        "displayName": "Metal 1",
+        "displayName": "Metal 1"
       },
       {
         "value": "eyewear_oakleys-red",
-        "displayName": "Oakleys Red",
+        "displayName": "Oakleys Red"
       },
       {
         "value": "eyewear_punk-2",
-        "displayName": "Punk 2",
+        "displayName": "Punk 2"
       },
       {
         "value": "eyewear_wire-frame-1-gold",
-        "displayName": "Wire Frame 1 Gold",
+        "displayName": "Wire Frame 1 Gold"
       }
     ]
   },
@@ -3255,7 +3749,8 @@ export default {
       {
         "value": null,
         "displayName": "None",
-        "excludeFromRandomize": false
+        "excludeFromRandomize": false,
+        "randomizationWeight": 5
       },
       {
         "value": "earring_hoop-high-left-silver",
@@ -3311,13 +3806,234 @@ export default {
       {
         "value": null,
         "displayName": "None",
-        "excludeFromRandomize": false
+        "excludeFromRandomize": false,
+        "randomizationWeight": 25
+      },
+      {
+        "value": "torso-jacket_style-1-hoodie-1-black",
+        "displayName": "Style 1 Hoodie 1 Black",
+        "description": {
+          "Type": "style-1",
+          "Outfit": "hoodie-1-black"
+        }
+      },
+      {
+        "value": "torso-jacket_style-1-hoodie-1-blue",
+        "displayName": "Style 1 Hoodie 1 Blue",
+        "description": {
+          "Type": "style-1",
+          "Outfit": "hoodie-1-blue"
+        }
+      },
+      {
+        "value": "torso-jacket_style-1-hoodie-1-gray",
+        "displayName": "Style 1 Hoodie 1 Gray",
+        "description": {
+          "Type": "style-1",
+          "Outfit": "hoodie-1-gray"
+        }
+      },
+      {
+        "value": "torso-jacket_style-1-hoodie-1-green",
+        "displayName": "Style 1 Hoodie 1 Green",
+        "description": {
+          "Type": "style-1",
+          "Outfit": "hoodie-1-green"
+        }
+      },
+      {
+        "value": "torso-jacket_style-1-hoodie-1-light-gray",
+        "displayName": "Style 1 Hoodie 1 Light Gray",
+        "description": {
+          "Type": "style-1",
+          "Outfit": "hoodie-1-light-gray"
+        }
+      },
+      {
+        "value": "torso-jacket_style-1-hoodie-1-red",
+        "displayName": "Style 1 Hoodie 1 Red",
+        "description": {
+          "Type": "style-1",
+          "Outfit": "hoodie-1-red"
+        }
       },
       {
         "value": "torso-jacket_style-1-punk-leather-1-black",
         "displayName": "Style 1 Punk Leather 1 Black",
-        "excludeFromRandomize": true
+        "description": {
+          "Type": "style-1",
+          "Outfit": "punk-leather-1-black"
+        }
+      },
+      {
+        "value": "torso-jacket_style-1-punk-leather-1-blue",
+        "displayName": "Style 1 Punk Leather 1 Blue",
+        "description": {
+          "Type": "style-1",
+          "Outfit": "punk-leather-1-blue"
+        }
+      },
+      {
+        "value": "torso-jacket_style-1-punk-leather-1-brown",
+        "displayName": "Style 1 Punk Leather 1 Brown",
+        "description": {
+          "Type": "style-1",
+          "Outfit": "punk-leather-1-brown"
+        }
+      },
+      {
+        "value": "torso-jacket_style-1-punk-leather-1-cognac",
+        "displayName": "Style 1 Punk Leather 1 Cognac",
+        "description": {
+          "Type": "style-1",
+          "Outfit": "punk-leather-1-cognac"
+        }
+      },
+      {
+        "value": "torso-jacket_style-1-punk-leather-1-maroon",
+        "displayName": "Style 1 Punk Leather 1 Maroon",
+        "description": {
+          "Type": "style-1",
+          "Outfit": "punk-leather-1-maroon"
+        }
+      },
+      {
+        "value": "torso-jacket_style-1-punk-leather-1-red",
+        "displayName": "Style 1 Punk Leather 1 Red",
+        "description": {
+          "Type": "style-1",
+          "Outfit": "punk-leather-1-red"
+        }
+      },
+      {
+        "value": "torso-jacket_style-2-hoodie-1-black",
+        "displayName": "Style 2 Hoodie 1 Black",
+        "description": {
+          "Type": "style-2",
+          "Outfit": "hoodie-1-black"
+        }
+      },
+      {
+        "value": "torso-jacket_style-2-hoodie-1-blue",
+        "displayName": "Style 2 Hoodie 1 Blue",
+        "description": {
+          "Type": "style-2",
+          "Outfit": "hoodie-1-blue"
+        }
+      },
+      {
+        "value": "torso-jacket_style-2-hoodie-1-gray",
+        "displayName": "Style 2 Hoodie 1 Gray",
+        "description": {
+          "Type": "style-2",
+          "Outfit": "hoodie-1-gray"
+        }
+      },
+      {
+        "value": "torso-jacket_style-2-hoodie-1-light-gray",
+        "displayName": "Style 2 Hoodie 1 Light Gray",
+        "description": {
+          "Type": "style-2",
+          "Outfit": "hoodie-1-light-gray"
+        }
+      },
+      {
+        "value": "torso-jacket_style-2-hoodie-1-pink",
+        "displayName": "Style 2 Hoodie 1 Pink",
+        "description": {
+          "Type": "style-2",
+          "Outfit": "hoodie-1-pink"
+        }
+      },
+      {
+        "value": "torso-jacket_style-2-hoodie-1-purple",
+        "displayName": "Style 2 Hoodie 1 Purple",
+        "description": {
+          "Type": "style-2",
+          "Outfit": "hoodie-1-purple"
+        }
+      },
+      {
+        "value": "torso-jacket_style-2-punk-leather-1-black",
+        "displayName": "Style 2 Punk Leather 1 Black",
+        "description": {
+          "Type": "style-2",
+          "Outfit": "punk-leather-1-black"
+        }
+      },
+      {
+        "value": "torso-jacket_style-2-punk-leather-1-blue",
+        "displayName": "Style 2 Punk Leather 1 Blue",
+        "description": {
+          "Type": "style-2",
+          "Outfit": "punk-leather-1-blue"
+        }
+      },
+      {
+        "value": "torso-jacket_style-2-punk-leather-1-brown",
+        "displayName": "Style 2 Punk Leather 1 Brown",
+        "description": {
+          "Type": "style-2",
+          "Outfit": "punk-leather-1-brown"
+        }
+      },
+      {
+        "value": "torso-jacket_style-2-punk-leather-1-cognac",
+        "displayName": "Style 2 Punk Leather 1 Cognac",
+        "description": {
+          "Type": "style-2",
+          "Outfit": "punk-leather-1-cognac"
+        }
+      },
+      {
+        "value": "torso-jacket_style-2-punk-leather-1-maroon",
+        "displayName": "Style 2 Punk Leather 1 Maroon",
+        "description": {
+          "Type": "style-2",
+          "Outfit": "punk-leather-1-maroon"
+        }
+      },
+      {
+        "value": "torso-jacket_style-2-punk-leather-1-red",
+        "displayName": "Style 2 Punk Leather 1 Red",
+        "description": {
+          "Type": "style-2",
+          "Outfit": "punk-leather-1-red"
+        }
       }
-    ]
+    ],
+    "description": {
+      "Type": {
+        "options": [
+          null,
+          "style-1",
+          "style-2"
+        ],
+        "isPrimaryOption": true
+      },
+      "Outfit": {
+        "options": [
+          "hoodie-1-black",
+          "hoodie-1-blue",
+          "hoodie-1-gray",
+          "hoodie-1-green",
+          "hoodie-1-light-gray",
+          "hoodie-1-red",
+          "punk-leather-1-black",
+          "punk-leather-1-blue",
+          "punk-leather-1-brown",
+          "punk-leather-1-cognac",
+          "punk-leather-1-maroon",
+          "punk-leather-1-red",
+          "hoodie-1-pink",
+          "hoodie-1-purple"
+        ]
+      }
+    },
+    "matchRandomization": {
+      "categoryName": "Torso",
+      "primaryOption": "Type",
+      "secondaryOption": "Outfit"
+    }
   }
 };
