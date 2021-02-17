@@ -96,11 +96,14 @@ if (!argv.dryRun) {
     thumbnailsToGenerate = thumbnailsToGenerate.slice(0, argv.limit);
   }
 
+  const start = Date.now();
   for (let i = 0; i < thumbnailsToGenerate.length; i++) {
     const { category, part } = thumbnailsToGenerate[i];
     console.log(`[${i + 1}/${thumbnailsToGenerate.length}] Generating ${category} ${part}`);
     await generateThumbnail(category, part);
   }
+  const elapsedSeconds = (Date.now() - start) / 1000;
+  console.log(`Generated ${thumbnailsToGenerate.length} thumbnails in ${elapsedSeconds.toFixed(0)} seconds.`);
 
   await browser.close();
 })();
