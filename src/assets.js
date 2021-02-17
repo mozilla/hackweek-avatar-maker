@@ -2961,14 +2961,6 @@ export default {
         }
       },
       {
-        "value": "torso_style-1-ketchum",
-        "displayName": "Style 1 Ketchum",
-        "description": {
-          "Type": "style-1",
-          "Outfit": "ketchum"
-        }
-      },
-      {
         "value": "torso_style-1-sport-coat-1-dark",
         "displayName": "Style 1 Sport Coat 1 Dark",
         "description": {
@@ -3168,7 +3160,6 @@ export default {
           "bowling-shirt-1-red",
           "combat-vest-red",
           "hoodie-1-gray",
-          "ketchum",
           "sport-coat-1-dark",
           "sport-coat-1-gray",
           "tshirt-1-hubs-black",
