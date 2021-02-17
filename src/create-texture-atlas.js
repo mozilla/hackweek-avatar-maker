@@ -40,7 +40,7 @@ export const createTextureAtlas = (function () {
       IMAGE_NAMES.map((name) => [name, createContext({ width: ATLAS_SIZE_PX, height: ATLAS_SIZE_PX })])
     );
 
-    const debugCanvases = true;
+    const debugCanvases = false;
     if (debugCanvases) {
       const previous = document.getElementById("debug-canvases");
       if (previous) {
