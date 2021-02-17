@@ -50,6 +50,15 @@ const categoryDescription = {
       regExp: /skin-[0-9a-z]/,
     }
   },
+  Eyes: {
+    Style: {
+      regExp: /style-[0-9a-z][0-9a-z]?/,
+      isPrimaryOption: true,
+    },
+    Color: {
+      regExp: /style-[0-9a-z][0-9a-z]?-(.+)/,
+    }
+  },
   Eyebrows: {
     Style: {
       regExp: /style-[0-9a-z]/,

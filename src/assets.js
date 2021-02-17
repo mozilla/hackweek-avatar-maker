@@ -1607,14 +1607,6 @@ export default {
         }
       },
       {
-        "value": "hair_taper-afro-1-blue",
-        "displayName": "Taper Afro 1 Blue",
-        "description": {
-          "Type": "taper-afro-1",
-          "Color": "blue"
-        }
-      },
-      {
         "value": "hair_taper-afro-2-black",
         "displayName": "Taper Afro 2 Black",
         "description": {
@@ -1628,6 +1620,14 @@ export default {
         "description": {
           "Type": "taper-afro-2",
           "Color": "blonde"
+        }
+      },
+      {
+        "value": "hair_taper-afro-2-blue",
+        "displayName": "Taper Afro 2 Blue",
+        "description": {
+          "Type": "taper-afro-2",
+          "Color": "blue"
         }
       },
       {
@@ -1711,7 +1711,6 @@ export default {
           "pony-tail-3",
           "spikey-1",
           "starter-locs-1",
-          "taper-afro-1",
           "taper-afro-2"
         ],
         "isPrimaryOption": true
@@ -2165,49 +2164,268 @@ export default {
       },
       {
         "value": "eyes_style-1-blue",
-        "displayName": "Style 1 Blue"
+        "displayName": "Style 1 Blue",
+        "description": {
+          "Style": "style-1",
+          "Color": "blue"
+        }
       },
       {
         "value": "eyes_style-1-brown",
-        "displayName": "Style 1 Brown"
+        "displayName": "Style 1 Brown",
+        "description": {
+          "Style": "style-1",
+          "Color": "brown"
+        }
+      },
+      {
+        "value": "eyes_style-1-gray",
+        "displayName": "Style 1 Gray",
+        "description": {
+          "Style": "style-1",
+          "Color": "gray"
+        }
+      },
+      {
+        "value": "eyes_style-1-green",
+        "displayName": "Style 1 Green",
+        "description": {
+          "Style": "style-1",
+          "Color": "green"
+        }
+      },
+      {
+        "value": "eyes_style-1-hazel",
+        "displayName": "Style 1 Hazel",
+        "description": {
+          "Style": "style-1",
+          "Color": "hazel"
+        }
       },
       {
         "value": "eyes_style-11-blue",
-        "displayName": "Style 11 Blue"
+        "displayName": "Style 11 Blue",
+        "description": {
+          "Style": "style-11",
+          "Color": "blue"
+        }
       },
       {
         "value": "eyes_style-11-brown",
-        "displayName": "Style 11 Brown"
+        "displayName": "Style 11 Brown",
+        "description": {
+          "Style": "style-11",
+          "Color": "brown"
+        }
+      },
+      {
+        "value": "eyes_style-11-gray",
+        "displayName": "Style 11 Gray",
+        "description": {
+          "Style": "style-11",
+          "Color": "gray"
+        }
+      },
+      {
+        "value": "eyes_style-11-green",
+        "displayName": "Style 11 Green",
+        "description": {
+          "Style": "style-11",
+          "Color": "green"
+        }
+      },
+      {
+        "value": "eyes_style-11-hazel",
+        "displayName": "Style 11 Hazel",
+        "description": {
+          "Style": "style-11",
+          "Color": "hazel"
+        }
       },
       {
         "value": "eyes_style-12-blue",
-        "displayName": "Style 12 Blue"
+        "displayName": "Style 12 Blue",
+        "description": {
+          "Style": "style-12",
+          "Color": "blue"
+        }
       },
       {
         "value": "eyes_style-12-brown",
-        "displayName": "Style 12 Brown"
+        "displayName": "Style 12 Brown",
+        "description": {
+          "Style": "style-12",
+          "Color": "brown"
+        }
+      },
+      {
+        "value": "eyes_style-12-gray",
+        "displayName": "Style 12 Gray",
+        "description": {
+          "Style": "style-12",
+          "Color": "gray"
+        }
       },
       {
         "value": "eyes_style-12-green",
-        "displayName": "Style 12 Green"
+        "displayName": "Style 12 Green",
+        "description": {
+          "Style": "style-12",
+          "Color": "green"
+        }
+      },
+      {
+        "value": "eyes_style-12-hazel",
+        "displayName": "Style 12 Hazel",
+        "description": {
+          "Style": "style-12",
+          "Color": "hazel"
+        }
       },
       {
         "value": "eyes_style-13-blue",
-        "displayName": "Style 13 Blue"
+        "displayName": "Style 13 Blue",
+        "description": {
+          "Style": "style-13",
+          "Color": "blue"
+        }
       },
       {
         "value": "eyes_style-13-brown",
-        "displayName": "Style 13 Brown"
+        "displayName": "Style 13 Brown",
+        "description": {
+          "Style": "style-13",
+          "Color": "brown"
+        }
+      },
+      {
+        "value": "eyes_style-13-gray",
+        "displayName": "Style 13 Gray",
+        "description": {
+          "Style": "style-13",
+          "Color": "gray"
+        }
+      },
+      {
+        "value": "eyes_style-13-green",
+        "displayName": "Style 13 Green",
+        "description": {
+          "Style": "style-13",
+          "Color": "green"
+        }
+      },
+      {
+        "value": "eyes_style-13-hazel",
+        "displayName": "Style 13 Hazel",
+        "description": {
+          "Style": "style-13",
+          "Color": "hazel"
+        }
       },
       {
         "value": "eyes_style-14-blue",
-        "displayName": "Style 14 Blue"
+        "displayName": "Style 14 Blue",
+        "description": {
+          "Style": "style-14",
+          "Color": "blue"
+        }
       },
       {
         "value": "eyes_style-14-brown",
-        "displayName": "Style 14 Brown"
+        "displayName": "Style 14 Brown",
+        "description": {
+          "Style": "style-14",
+          "Color": "brown"
+        }
+      },
+      {
+        "value": "eyes_style-14-gray",
+        "displayName": "Style 14 Gray",
+        "description": {
+          "Style": "style-14",
+          "Color": "gray"
+        }
+      },
+      {
+        "value": "eyes_style-14-green",
+        "displayName": "Style 14 Green",
+        "description": {
+          "Style": "style-14",
+          "Color": "green"
+        }
+      },
+      {
+        "value": "eyes_style-14-hazel",
+        "displayName": "Style 14 Hazel",
+        "description": {
+          "Style": "style-14",
+          "Color": "hazel"
+        }
+      },
+      {
+        "value": "eyes_style-15-blue",
+        "displayName": "Style 15 Blue",
+        "description": {
+          "Style": "style-15",
+          "Color": "blue"
+        }
+      },
+      {
+        "value": "eyes_style-15-brown",
+        "displayName": "Style 15 Brown",
+        "description": {
+          "Style": "style-15",
+          "Color": "brown"
+        }
+      },
+      {
+        "value": "eyes_style-15-gray",
+        "displayName": "Style 15 Gray",
+        "description": {
+          "Style": "style-15",
+          "Color": "gray"
+        }
+      },
+      {
+        "value": "eyes_style-15-green",
+        "displayName": "Style 15 Green",
+        "description": {
+          "Style": "style-15",
+          "Color": "green"
+        }
+      },
+      {
+        "value": "eyes_style-15-hazel",
+        "displayName": "Style 15 Hazel",
+        "description": {
+          "Style": "style-15",
+          "Color": "hazel"
+        }
       }
-    ]
+    ],
+    "description": {
+      "Style": {
+        "options": [
+          null,
+          "style-1",
+          "style-11",
+          "style-12",
+          "style-13",
+          "style-14",
+          "style-15"
+        ],
+        "isPrimaryOption": true
+      },
+      "Color": {
+        "options": [
+          "blue",
+          "brown",
+          "gray",
+          "green",
+          "hazel"
+        ]
+      }
+    }
   },
   "Eyebrows": {
     "parts": [

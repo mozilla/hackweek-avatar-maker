@@ -16,6 +16,7 @@ const colorRenames = [
 const renames = [
   ["facial-hair_goatee-2.glb", "facial-hair_goatee-2-brown.glb"],
   ["facial-hair_goatee-5.glb", "facial-hair_goatee-5-brown.glb"],
+  ["hair_taper-afro-1-blue.glb", "hair_taper-afro-2-blue.glb"],
 ];
 
 const filesToDelete = [
