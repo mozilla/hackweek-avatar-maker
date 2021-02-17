@@ -3082,7 +3082,6 @@ export default {
       {
         "value": "torso_style-2-tshirt-1-heart-animated",
         "displayName": "Style 2 Tshirt 1 Heart Animated",
-        "excludeFromRandomize": true,
         "description": {
           "Type": "style-2",
           "Outfit": "tshirt-1-heart-animated"
@@ -3227,42 +3226,34 @@ export default {
       {
         "value": "eyewear_arnette",
         "displayName": "Arnette",
-        "excludeFromRandomize": true
       },
       {
         "value": "eyewear_aviators1",
         "displayName": "Aviators1",
-        "excludeFromRandomize": true
       },
       {
         "value": "eyewear_glam-2",
         "displayName": "Glam 2",
-        "excludeFromRandomize": true
       },
       {
         "value": "eyewear_heart-1-pink",
         "displayName": "Heart 1 Pink",
-        "excludeFromRandomize": true
       },
       {
         "value": "eyewear_metal-1",
         "displayName": "Metal 1",
-        "excludeFromRandomize": true
       },
       {
         "value": "eyewear_oakleys-red",
         "displayName": "Oakleys Red",
-        "excludeFromRandomize": true
       },
       {
         "value": "eyewear_punk-2",
         "displayName": "Punk 2",
-        "excludeFromRandomize": true
       },
       {
         "value": "eyewear_wire-frame-1-gold",
         "displayName": "Wire Frame 1 Gold",
-        "excludeFromRandomize": true
       }
     ]
   },
@@ -3305,7 +3296,6 @@ export default {
       {
         "value": "accessory_face-mask-1-animated",
         "displayName": "Face Mask 1 Animated",
-        "excludeFromRandomize": true
       },
       {
         "value": "accessory_headband-cat-ears-1",
