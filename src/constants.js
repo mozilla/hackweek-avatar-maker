@@ -5,5 +5,5 @@ export default {
   reactIsLoaded: "reactIsLoaded",
   renderThumbnail: "renderThumbnail",
   thumbnailResult: "thumbnailResult",
-  combinedMeshName: "combinedMeshName",
+  combinedMeshName: "CombinedMesh",
 };
