@@ -3893,137 +3893,6 @@ export default {
       }
     }
   },
-  "Hat": {
-    "parts": [
-      {
-        "value": null,
-        "displayName": "None",
-        "excludeFromRandomize": false
-      },
-      {
-        "value": "hat_baseball-giants",
-        "displayName": "Baseball Giants"
-      },
-      {
-        "value": "hat_beach-umbrella",
-        "displayName": "Beach Umbrella"
-      },
-      {
-        "value": "hat_beanie-1-red",
-        "displayName": "Beanie 1 Red"
-      },
-      {
-        "value": "hat_spokemon",
-        "displayName": "Spokemon",
-        "randomizationWeight": 0.1
-      },
-      {
-        "value": "hat_top-hat-1",
-        "displayName": "Top Hat 1"
-      }
-    ]
-  },
-  "Eyewear": {
-    "parts": [
-      {
-        "value": null,
-        "displayName": "None",
-        "excludeFromRandomize": false,
-        "randomizationWeight": 9
-      },
-      {
-        "value": "eyewear_arnette",
-        "displayName": "Arnette"
-      },
-      {
-        "value": "eyewear_aviators1",
-        "displayName": "Aviators1"
-      },
-      {
-        "value": "eyewear_glam-2",
-        "displayName": "Glam 2"
-      },
-      {
-        "value": "eyewear_heart-1-pink",
-        "displayName": "Heart 1 Pink"
-      },
-      {
-        "value": "eyewear_metal-1",
-        "displayName": "Metal 1"
-      },
-      {
-        "value": "eyewear_oakleys-red",
-        "displayName": "Oakleys Red"
-      },
-      {
-        "value": "eyewear_punk-2",
-        "displayName": "Punk 2"
-      },
-      {
-        "value": "eyewear_wire-frame-1-gold",
-        "displayName": "Wire Frame 1 Gold"
-      }
-    ]
-  },
-  "Earring": {
-    "parts": [
-      {
-        "value": null,
-        "displayName": "None",
-        "excludeFromRandomize": false,
-        "randomizationWeight": 5
-      },
-      {
-        "value": "earring_hoop-high-left-silver",
-        "displayName": "Hoop High Left Silver"
-      },
-      {
-        "value": "earring_hoop-high-right-silver",
-        "displayName": "Hoop High Right Silver"
-      },
-      {
-        "value": "earring_hoop-large-both-gold",
-        "displayName": "Hoop Large Both Gold",
-        "bisectInThumbnail": true
-      },
-      {
-        "value": "earring_hoop-small-both-gold",
-        "displayName": "Hoop Small Both Gold",
-        "bisectInThumbnail": true
-      }
-    ]
-  },
-  "Accessory": {
-    "parts": [
-      {
-        "value": null,
-        "displayName": "None",
-        "excludeFromRandomize": false
-      },
-      {
-        "value": "accessory_duck-floaty",
-        "displayName": "Duck Floaty"
-      },
-      {
-        "value": "accessory_face-mask-1-animated",
-        "displayName": "Face Mask 1 Animated",
-        "randomizationWeight": 0.5
-      },
-      {
-        "value": "accessory_headband-cat-ears-1",
-        "displayName": "Headband Cat Ears 1"
-      },
-      {
-        "value": "accessory_headphones-1-black",
-        "displayName": "Headphones 1 Black"
-      },
-      {
-        "value": "accessory_pool-mask-1",
-        "displayName": "Pool Mask 1",
-        "randomizationWeight": 0.1
-      }
-    ]
-  },
   "Torso Jacket": {
     "parts": [
       {
@@ -4258,5 +4127,136 @@ export default {
       "primaryOption": "Type",
       "secondaryOption": "Outfit"
     }
+  },
+  "Hat": {
+    "parts": [
+      {
+        "value": null,
+        "displayName": "None",
+        "excludeFromRandomize": false
+      },
+      {
+        "value": "hat_baseball-giants",
+        "displayName": "Baseball Giants"
+      },
+      {
+        "value": "hat_beach-umbrella",
+        "displayName": "Beach Umbrella"
+      },
+      {
+        "value": "hat_beanie-1-red",
+        "displayName": "Beanie 1 Red"
+      },
+      {
+        "value": "hat_spokemon",
+        "displayName": "Spokemon",
+        "randomizationWeight": 0.1
+      },
+      {
+        "value": "hat_top-hat-1",
+        "displayName": "Top Hat 1"
+      }
+    ]
+  },
+  "Eyewear": {
+    "parts": [
+      {
+        "value": null,
+        "displayName": "None",
+        "excludeFromRandomize": false,
+        "randomizationWeight": 9
+      },
+      {
+        "value": "eyewear_arnette",
+        "displayName": "Arnette"
+      },
+      {
+        "value": "eyewear_aviators1",
+        "displayName": "Aviators1"
+      },
+      {
+        "value": "eyewear_glam-2",
+        "displayName": "Glam 2"
+      },
+      {
+        "value": "eyewear_heart-1-pink",
+        "displayName": "Heart 1 Pink"
+      },
+      {
+        "value": "eyewear_metal-1",
+        "displayName": "Metal 1"
+      },
+      {
+        "value": "eyewear_oakleys-red",
+        "displayName": "Oakleys Red"
+      },
+      {
+        "value": "eyewear_punk-2",
+        "displayName": "Punk 2"
+      },
+      {
+        "value": "eyewear_wire-frame-1-gold",
+        "displayName": "Wire Frame 1 Gold"
+      }
+    ]
+  },
+  "Earring": {
+    "parts": [
+      {
+        "value": null,
+        "displayName": "None",
+        "excludeFromRandomize": false,
+        "randomizationWeight": 5
+      },
+      {
+        "value": "earring_hoop-high-left-silver",
+        "displayName": "Hoop High Left Silver"
+      },
+      {
+        "value": "earring_hoop-high-right-silver",
+        "displayName": "Hoop High Right Silver"
+      },
+      {
+        "value": "earring_hoop-large-both-gold",
+        "displayName": "Hoop Large Both Gold",
+        "bisectInThumbnail": true
+      },
+      {
+        "value": "earring_hoop-small-both-gold",
+        "displayName": "Hoop Small Both Gold",
+        "bisectInThumbnail": true
+      }
+    ]
+  },
+  "Accessory": {
+    "parts": [
+      {
+        "value": null,
+        "displayName": "None",
+        "excludeFromRandomize": false
+      },
+      {
+        "value": "accessory_duck-floaty",
+        "displayName": "Duck Floaty"
+      },
+      {
+        "value": "accessory_face-mask-1-animated",
+        "displayName": "Face Mask 1 Animated",
+        "randomizationWeight": 0.5
+      },
+      {
+        "value": "accessory_headband-cat-ears-1",
+        "displayName": "Headband Cat Ears 1"
+      },
+      {
+        "value": "accessory_headphones-1-black",
+        "displayName": "Headphones 1 Black"
+      },
+      {
+        "value": "accessory_pool-mask-1",
+        "displayName": "Pool Mask 1",
+        "randomizationWeight": 0.1
+      }
+    ]
   }
 };

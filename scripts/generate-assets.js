@@ -12,11 +12,11 @@ const assetOrder = [
   "Facial Hair",
   "Hands",
   "Torso",
+  "Torso Jacket",
   "Hat",
   "Eyewear",
   "Earring",
   "Accessory",
-  "Torso Jacket",
 ];
 
 const hairColors = [
