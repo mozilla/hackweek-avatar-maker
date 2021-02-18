@@ -2425,7 +2425,8 @@ export default {
           "hazel"
         ]
       }
-    }
+    },
+    "bisectInThumbnail": true
   },
   "Eyebrows": {
     "parts": [
@@ -2780,7 +2781,8 @@ export default {
           "white"
         ]
       }
-    }
+    },
+    "bisectInThumbnail": true
   },
   "Mouth": {
     "parts": [
@@ -3651,7 +3653,8 @@ export default {
         "value": "hands_skin-h",
         "displayName": "Skin H"
       }
-    ]
+    ],
+    "bisectInThumbnail": true
   },
   "Torso": {
     "parts": [
@@ -3980,11 +3983,13 @@ export default {
       },
       {
         "value": "earring_hoop-large-both-gold",
-        "displayName": "Hoop Large Both Gold"
+        "displayName": "Hoop Large Both Gold",
+        "bisectInThumbnail": true
       },
       {
         "value": "earring_hoop-small-both-gold",
-        "displayName": "Hoop Small Both Gold"
+        "displayName": "Hoop Small Both Gold",
+        "bisectInThumbnail": true
       }
     ]
   },

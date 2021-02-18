@@ -2,6 +2,7 @@ const fs = require("fs");
 const path = require("path");
 
 const neverRandomizeToNone = ["Torso", "Head", "Hands", "Eyes", "Mouth", "Eyebrows"];
+
 const assetOrder = [
   "Hair",
   "Head",
@@ -146,6 +147,9 @@ const matchRandomizationToNull = [
   "torso_style-1-ugly-christmas-1"
 ];
 
+const categoriesToBisect = ["Hands", "Eyes", "Eyebrows"];
+const partsToBisect = ["earring_hoop-large-both-gold", "earring_hoop-small-both-gold"];
+
 function descriptionForPart({ category, filename }) {
   if (!categoryDescription[category]) return null;
 
@@ -230,6 +234,10 @@ function generateAssetsStructure(directory) {
       part.matchRandomizationToNull = true;
     }
 
+    if (partsToBisect.includes(filename)) {
+      part.bisectInThumbnail = true;
+    }
+
     assets[category].parts.push(part);
   }
 
@@ -241,6 +249,10 @@ function generateAssetsStructure(directory) {
 
     if (categoryName in matchRandomization) {
       assets[categoryName].matchRandomization = matchRandomization[categoryName];
+    }
+
+    if (categoriesToBisect.includes(categoryName)) {
+      assets[categoryName].bisectInThumbnail = true;
     }
   }
 

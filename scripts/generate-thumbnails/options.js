@@ -21,6 +21,11 @@ export default {
     type: "number",
     description: "Limit generation to the first n assets",
   },
+  "filter": {
+    alias: "f",
+    type: "string",
+    description: "Filter assets to ones that contain this string",
+  },
   "dry-run": {
     alias: "d",
     type: "boolean",

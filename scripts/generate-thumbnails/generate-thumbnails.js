@@ -92,6 +92,12 @@ if (!argv.dryRun) {
     }
   }
 
+  if (argv.filter) {
+    thumbnailsToGenerate = thumbnailsToGenerate.filter(({ part }) =>
+      part.toLowerCase().includes(argv.filter.toLowerCase())
+    );
+  }
+
   if (argv.limit) {
     thumbnailsToGenerate = thumbnailsToGenerate.slice(0, argv.limit);
   }
@@ -102,8 +108,10 @@ if (!argv.dryRun) {
     console.log(`[${i + 1}/${thumbnailsToGenerate.length}] Generating ${category} ${part}`);
     await generateThumbnail(category, part);
   }
-  const elapsedSeconds = (Date.now() - start) / 1000;
-  console.log(`Generated ${thumbnailsToGenerate.length} thumbnails in ${elapsedSeconds.toFixed(0)} seconds.`);
+  const elapsedMinutes = (Date.now() - start) / 1000 / 60;
+  console.log(`Generated ${thumbnailsToGenerate.length} thumbnails in ${elapsedMinutes.toFixed(1)} minutes.`);
 
-  await browser.close();
+  if (!argv.noHeadless) {
+    await browser.close();
+  }
 })();
