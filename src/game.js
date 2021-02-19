@@ -2,7 +2,15 @@ import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import constants from "./constants";
 import { exportAvatar } from "./export";
-import { loadGLTF, loadGLTFCached, forEachMaterial, generateEnvironmentMap, createSky, isThumbnailMode } from "./utils";
+import {
+  loadGLTF,
+  loadGLTFCached,
+  forEachMaterial,
+  generateEnvironmentMap,
+  createSky,
+  isThumbnailMode,
+  findChildrenByType,
+} from "./utils";
 import { renderThumbnail } from "./render-thumbnail";
 import { combine } from "./mesh-combination";
 import { getMaterialInfo } from "./get-material-info";
@@ -10,6 +18,7 @@ import { urlFor } from "./url-for";
 import { createSkydome } from "./create-skydome";
 import uvScroll from "./uv-scroll";
 import idleEyes from "./idle-eyes";
+import assets from "./assets";
 
 // Used to test mesh combination
 window.combineCurrentAvatar = async function () {
@@ -43,6 +52,7 @@ const state = {
   uvScrollMaps: {},
   quietMode: false,
   shouldRenderInQuietMode: true,
+  shouldApplyMorphRelationships: false,
 };
 window.gameState = state;
 
@@ -168,6 +178,37 @@ function initializeGltf(key, gltf) {
   });
 }
 
+function saveInitialMorphTargetInfluences(node) {
+  node.traverse((obj) => {
+    if (obj.morphTargetInfluences && !obj.userData.initialMorphTargetInfluences) {
+      obj.userData.initialMorphTargetInfluences = obj.morphTargetInfluences.slice(0);
+    }
+  });
+}
+
+function resetMorphTargetInfluences(node) {
+  for (const mesh of findChildrenByType(node, "SkinnedMesh")) {
+    if (!mesh.morphTargetInfluences) continue;
+    for (let i = 0; i < mesh.morphTargetInfluences.length; i++) {
+      mesh.morphTargetInfluences[i] = mesh.userData.initialMorphTargetInfluences[i];
+    }
+  }
+}
+
+function applyMorphRelationships(part) {
+  if (!part.morphRelationships) return;
+
+  for (const { targetCategoryName, targetMorphName, targetMorphValue } of part.morphRelationships) {
+    const mesh = state.avatarNodes[targetCategoryName].getObjectByProperty("type", "SkinnedMesh");
+    if (!mesh || !mesh.morphTargetDictionary) continue;
+
+    const morphTargetIndex = mesh.morphTargetDictionary[targetMorphName];
+    if (morphTargetIndex !== undefined) {
+      mesh.morphTargetInfluences[morphTargetIndex] = targetMorphValue;
+    }
+  }
+}
+
 async function loadIntoGroup({ category, part, group, cached = true }) {
   try {
     const load = cached ? loadGLTFCached : loadGLTF;
@@ -178,6 +219,8 @@ async function loadIntoGroup({ category, part, group, cached = true }) {
     // TODO Make sure we need to do this.
     // Stash animations on the Object3D so that we can use them during export.
     gltf.scene.animations = gltf.animations;
+
+    saveInitialMorphTargetInfluences(gltf.scene);
 
     initializeGltf(category, gltf);
 
@@ -237,12 +280,32 @@ function tick(time) {
         if (state.newAvatarConfig[category] !== state.avatarConfig[category]) {
           state.avatarConfig[category] = state.newAvatarConfig[category];
           if (state.newAvatarConfig[category] !== null) {
-            loadIntoGroup({ category, part: state.newAvatarConfig[category], group: state.avatarNodes[category] });
+            loadIntoGroup({ category, part: state.newAvatarConfig[category], group: state.avatarNodes[category] }).then(
+              () => {
+                state.shouldApplyMorphRelationships = true;
+              }
+            );
           } else {
             state.avatarNodes[category].clear();
             state.shouldRenderInQuietMode = true;
           }
         }
+      }
+    }
+  }
+
+  {
+    if (state.shouldApplyMorphRelationships) {
+      state.shouldApplyMorphRelationships = false;
+
+      for (const categoryName of Object.keys(state.avatarConfig)) {
+        if (!state.avatarConfig[categoryName]) continue;
+
+        resetMorphTargetInfluences(state.avatarNodes[categoryName]);
+
+        const currentPart = assets[categoryName].parts.find((part) => part.value === state.avatarConfig[categoryName]);
+
+        applyMorphRelationships(currentPart);
       }
     }
   }
@@ -276,7 +339,7 @@ function tick(time) {
         const blob = new Blob([glb], { type: "application/octet-stream" });
         const url = URL.createObjectURL(blob);
 
-        const triggerDownload = true;
+        const triggerDownload = false;
         if (triggerDownload) {
           const el = document.createElement("a");
           el.style.display = "none";
@@ -286,7 +349,7 @@ function tick(time) {
           el.remove();
         }
 
-        const debugExports = false;
+        const debugExports = true;
         if (debugExports) {
           loadGLTF(url).then((gltf) => {
             initializeGltf("testExportGroup", gltf);

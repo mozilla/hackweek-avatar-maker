@@ -150,6 +150,16 @@ const matchRandomizationToNull = [
 const categoriesToBisect = ["Hands", "Eyes", "Eyebrows"];
 const partsToBisect = ["earring_hoop-large-both-gold", "earring_hoop-small-both-gold"];
 
+const morphRelationships = {
+  "hat_hijab": [
+    {
+      targetCategoryName: "Head", 
+      targetMorphName: "ear rotate back",
+      targetMorphValue: 1
+    }
+  ]
+};
+
 function descriptionForPart({ category, filename }) {
   if (!categoryDescription[category]) return null;
 
@@ -236,6 +246,10 @@ function generateAssetsStructure(directory) {
 
     if (partsToBisect.includes(filename)) {
       part.bisectInThumbnail = true;
+    }
+
+    if (filename in morphRelationships) {
+      part.morphRelationships = morphRelationships[filename];
     }
 
     assets[category].parts.push(part);
