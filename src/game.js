@@ -287,9 +287,9 @@ function tick(time) {
             );
           } else {
             state.avatarNodes[category].clear();
+            state.shouldApplyMorphRelationships = true;
+            state.shouldRenderInQuietMode = true;
           }
-          state.shouldApplyMorphRelationships = true;
-          state.shouldRenderInQuietMode = true;
         }
       }
     }
