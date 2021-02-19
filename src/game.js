@@ -340,7 +340,7 @@ function tick(time) {
         const blob = new Blob([glb], { type: "application/octet-stream" });
         const url = URL.createObjectURL(blob);
 
-        const triggerDownload = false;
+        const triggerDownload = true;
         if (triggerDownload) {
           const el = document.createElement("a");
           el.style.display = "none";
@@ -350,7 +350,7 @@ function tick(time) {
           el.remove();
         }
 
-        const debugExports = true;
+        const debugExports = false;
         if (debugExports) {
           loadGLTF(url).then((gltf) => {
             initializeGltf("testExportGroup", gltf);
