@@ -1995,14 +1995,6 @@ export default {
         }
       },
       {
-        "value": "head_morph-skin-1",
-        "displayName": "Morph Skin 1",
-        "description": {
-          "Type": "morph",
-          "Skin Tone": "skin-1"
-        }
-      },
-      {
         "value": "head_shaved-skin-1",
         "displayName": "Shaved Skin 1",
         "description": {
@@ -2137,7 +2129,6 @@ export default {
           null,
           "bald",
           "freckles",
-          "morph",
           "shaved"
         ],
         "isPrimaryOption": true
@@ -4155,17 +4146,6 @@ export default {
       {
         "value": "hat_beanie-1-red",
         "displayName": "Beanie 1 Red"
-      },
-      {
-        "value": "hat_hijab",
-        "displayName": "Hijab",
-        "morphRelationships": [
-          {
-            "targetCategoryName": "Head",
-            "targetMorphName": "ear rotate back",
-            "targetMorphValue": 1
-          }
-        ]
       },
       {
         "value": "hat_spokemon",
