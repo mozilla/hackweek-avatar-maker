@@ -22,7 +22,6 @@ export function AvatarEditorContainer() {
   const [canvasUrl, setCanvasUrl] = useState(null);
 
   const initialConfig = generateRandomConfig(assets);
-
   const [avatarConfig, setAvatarConfig] = useState(initialConfig);
   const [tipState, setTipState] = useState({ visible: false, text: "", top: 0, left: 0 });
 
