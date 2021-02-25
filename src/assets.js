@@ -887,86 +887,6 @@ export default {
         }
       },
       {
-        "value": "hair_mullet-1-black",
-        "displayName": "Mullet 1 Black",
-        "description": {
-          "Type": "mullet-1",
-          "Color": "black"
-        }
-      },
-      {
-        "value": "hair_mullet-1-blonde",
-        "displayName": "Mullet 1 Blonde",
-        "description": {
-          "Type": "mullet-1",
-          "Color": "blonde"
-        }
-      },
-      {
-        "value": "hair_mullet-1-blue",
-        "displayName": "Mullet 1 Blue",
-        "description": {
-          "Type": "mullet-1",
-          "Color": "blue"
-        }
-      },
-      {
-        "value": "hair_mullet-1-brown",
-        "displayName": "Mullet 1 Brown",
-        "description": {
-          "Type": "mullet-1",
-          "Color": "brown"
-        }
-      },
-      {
-        "value": "hair_mullet-1-dark brown",
-        "displayName": "Mullet 1 Dark brown",
-        "description": {
-          "Type": "mullet-1",
-          "Color": "dark brown"
-        }
-      },
-      {
-        "value": "hair_mullet-1-gray",
-        "displayName": "Mullet 1 Gray",
-        "description": {
-          "Type": "mullet-1",
-          "Color": "gray"
-        }
-      },
-      {
-        "value": "hair_mullet-1-light brown",
-        "displayName": "Mullet 1 Light brown",
-        "description": {
-          "Type": "mullet-1",
-          "Color": "light brown"
-        }
-      },
-      {
-        "value": "hair_mullet-1-pink",
-        "displayName": "Mullet 1 Pink",
-        "description": {
-          "Type": "mullet-1",
-          "Color": "pink"
-        }
-      },
-      {
-        "value": "hair_mullet-1-red",
-        "displayName": "Mullet 1 Red",
-        "description": {
-          "Type": "mullet-1",
-          "Color": "red"
-        }
-      },
-      {
-        "value": "hair_mullet-1-white",
-        "displayName": "Mullet 1 White",
-        "description": {
-          "Type": "mullet-1",
-          "Color": "white"
-        }
-      },
-      {
         "value": "hair_parted-1-black",
         "displayName": "Parted 1 Black",
         "description": {
@@ -1527,86 +1447,6 @@ export default {
         }
       },
       {
-        "value": "hair_starter-locs-1-black",
-        "displayName": "Starter Locs 1 Black",
-        "description": {
-          "Type": "starter-locs-1",
-          "Color": "black"
-        }
-      },
-      {
-        "value": "hair_starter-locs-1-blonde",
-        "displayName": "Starter Locs 1 Blonde",
-        "description": {
-          "Type": "starter-locs-1",
-          "Color": "blonde"
-        }
-      },
-      {
-        "value": "hair_starter-locs-1-blue",
-        "displayName": "Starter Locs 1 Blue",
-        "description": {
-          "Type": "starter-locs-1",
-          "Color": "blue"
-        }
-      },
-      {
-        "value": "hair_starter-locs-1-brown",
-        "displayName": "Starter Locs 1 Brown",
-        "description": {
-          "Type": "starter-locs-1",
-          "Color": "brown"
-        }
-      },
-      {
-        "value": "hair_starter-locs-1-dark brown",
-        "displayName": "Starter Locs 1 Dark brown",
-        "description": {
-          "Type": "starter-locs-1",
-          "Color": "dark brown"
-        }
-      },
-      {
-        "value": "hair_starter-locs-1-gray",
-        "displayName": "Starter Locs 1 Gray",
-        "description": {
-          "Type": "starter-locs-1",
-          "Color": "gray"
-        }
-      },
-      {
-        "value": "hair_starter-locs-1-light brown",
-        "displayName": "Starter Locs 1 Light brown",
-        "description": {
-          "Type": "starter-locs-1",
-          "Color": "light brown"
-        }
-      },
-      {
-        "value": "hair_starter-locs-1-pink",
-        "displayName": "Starter Locs 1 Pink",
-        "description": {
-          "Type": "starter-locs-1",
-          "Color": "pink"
-        }
-      },
-      {
-        "value": "hair_starter-locs-1-red",
-        "displayName": "Starter Locs 1 Red",
-        "description": {
-          "Type": "starter-locs-1",
-          "Color": "red"
-        }
-      },
-      {
-        "value": "hair_starter-locs-1-white",
-        "displayName": "Starter Locs 1 White",
-        "description": {
-          "Type": "starter-locs-1",
-          "Color": "white"
-        }
-      },
-      {
         "value": "hair_taper-afro-2-black",
         "displayName": "Taper Afro 2 Black",
         "description": {
@@ -1702,7 +1542,6 @@ export default {
           "french-braid-buns",
           "french-braids-double",
           "mohawk-1",
-          "mullet-1",
           "parted-1",
           "parted-long-1",
           "pigtails-1",
@@ -1710,7 +1549,6 @@ export default {
           "pony-tail-2",
           "pony-tail-3",
           "spikey-1",
-          "starter-locs-1",
           "taper-afro-2"
         ],
         "isPrimaryOption": true
