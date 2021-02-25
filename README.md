@@ -8,11 +8,12 @@ To create an avatar for Hubs:
 2. Have fun! You can mix and match different selections to give your avatar a unique look. 
 3. Download your avatar using the 'Export avatar' button. 
 4. Sign into a Hubs room
-5. Select the "People" list icon in the top right corner of the screen. Select your own name to open the avatar selection screen.
+5. Select the "More" icon in the bottom right corner of the screen and click "Change Name and Avatar".
 6. Click the "Change Avatar" button.
 7. From here, you can see a list of your own avatars, the first spot should say "Create Avatar".
 8. Click the link that says 'Custom GLB', found under the three default body shapes
-9. Upload your saved avatar and enjoy your new look! 
+9. Upload the .glb file that you saved to your computer
+10. Save your avatar and enjoy your new look!
 
 ## Creating Accessories and Custom Components
 You can create custom components for the avatar by modeling the object in Blender. While you can upload any .glb file as an accessory, using the base template for an avatar built with this editor will ensure that the uploaded custom component sits in the correct place on the avatar. 
@@ -29,7 +30,7 @@ We invite the community to use this editor as a template for creating and hostin
 ## FAQ
 **Q: I'm an avatar creator - can I make my own avatar editor for Hubs with this?**
 
-A: Yes! We'd love that. Feel free to drop into our [Discord server](https://discord.gg/dFJncWwHun) if you have any questions about that. 
+A: Yes! We'd love that. Feel free to drop into the #avatars channel in our [Discord chat server](https://discord.gg/dFJncWwHun) if you have any questions about that. 
 
 **Q: Why isn't this built-in to Hubs?**
 
