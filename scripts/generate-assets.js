@@ -13,7 +13,7 @@ const assetOrder = [
   "Hands",
   "Torso",
   "Torso Jacket",
-  "Hat",
+  "Headwear",
   "Eyewear",
   "Earring",
   "Accessory",
@@ -111,9 +111,9 @@ const customRandomizationWeights = {
   "Facial Hair": [
     {value: null, randomizationWeight: {useLength: true}}
   ],
-  "Hat": [
+  "Headwear": [
     {value: null, randomizationWeight: {value: 20}},
-    {value: "hat_spokemon", randomizationWeight: {value: 0.1}}
+    {value: "headwear_spokemon", randomizationWeight: {value: 0.1}}
   ],
   "Eyewear": [
     {value: null, randomizationWeight: {value: 20}}
@@ -152,7 +152,7 @@ const categoriesToBisect = ["Hands", "Eyes", "Eyebrows"];
 const partsToBisect = ["earring_hoop-large-both-gold", "earring_hoop-small-both-gold"];
 
 const morphRelationships = {
-  "hat_hijab": [
+  "headwear_hijab": [
     {
       targetCategoryName: "Head", 
       targetMorphName: "ear rotate back",

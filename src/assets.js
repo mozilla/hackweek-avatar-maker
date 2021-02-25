@@ -887,6 +887,86 @@ export default {
         }
       },
       {
+        "value": "hair_mullet-1-black",
+        "displayName": "Mullet 1 Black",
+        "description": {
+          "Type": "mullet-1",
+          "Color": "black"
+        }
+      },
+      {
+        "value": "hair_mullet-1-blonde",
+        "displayName": "Mullet 1 Blonde",
+        "description": {
+          "Type": "mullet-1",
+          "Color": "blonde"
+        }
+      },
+      {
+        "value": "hair_mullet-1-blue",
+        "displayName": "Mullet 1 Blue",
+        "description": {
+          "Type": "mullet-1",
+          "Color": "blue"
+        }
+      },
+      {
+        "value": "hair_mullet-1-brown",
+        "displayName": "Mullet 1 Brown",
+        "description": {
+          "Type": "mullet-1",
+          "Color": "brown"
+        }
+      },
+      {
+        "value": "hair_mullet-1-dark brown",
+        "displayName": "Mullet 1 Dark brown",
+        "description": {
+          "Type": "mullet-1",
+          "Color": "dark brown"
+        }
+      },
+      {
+        "value": "hair_mullet-1-gray",
+        "displayName": "Mullet 1 Gray",
+        "description": {
+          "Type": "mullet-1",
+          "Color": "gray"
+        }
+      },
+      {
+        "value": "hair_mullet-1-light brown",
+        "displayName": "Mullet 1 Light brown",
+        "description": {
+          "Type": "mullet-1",
+          "Color": "light brown"
+        }
+      },
+      {
+        "value": "hair_mullet-1-pink",
+        "displayName": "Mullet 1 Pink",
+        "description": {
+          "Type": "mullet-1",
+          "Color": "pink"
+        }
+      },
+      {
+        "value": "hair_mullet-1-red",
+        "displayName": "Mullet 1 Red",
+        "description": {
+          "Type": "mullet-1",
+          "Color": "red"
+        }
+      },
+      {
+        "value": "hair_mullet-1-white",
+        "displayName": "Mullet 1 White",
+        "description": {
+          "Type": "mullet-1",
+          "Color": "white"
+        }
+      },
+      {
         "value": "hair_parted-1-black",
         "displayName": "Parted 1 Black",
         "description": {
@@ -1542,6 +1622,7 @@ export default {
           "french-braid-buns",
           "french-braids-double",
           "mohawk-1",
+          "mullet-1",
           "parted-1",
           "parted-long-1",
           "pigtails-1",
@@ -3966,7 +4047,7 @@ export default {
       "secondaryOption": "Outfit"
     }
   },
-  "Hat": {
+  "Headwear": {
     "parts": [
       {
         "value": null,
@@ -3975,24 +4056,24 @@ export default {
         "randomizationWeight": 20
       },
       {
-        "value": "hat_baseball-giants",
+        "value": "headwear_baseball-giants",
         "displayName": "Baseball Giants"
       },
       {
-        "value": "hat_beach-umbrella",
+        "value": "headwear_beach-umbrella",
         "displayName": "Beach Umbrella"
       },
       {
-        "value": "hat_beanie-1-red",
+        "value": "headwear_beanie-1-red",
         "displayName": "Beanie 1 Red"
       },
       {
-        "value": "hat_spokemon",
+        "value": "headwear_spokemon",
         "displayName": "Spokemon",
         "randomizationWeight": 0.1
       },
       {
-        "value": "hat_top-hat-1",
+        "value": "headwear_top-hat-1",
         "displayName": "Top Hat 1"
       }
     ]
