@@ -15,7 +15,7 @@ function dispatchExportAvatar() {
 export function ToolbarContainer({ onGLBUploaded, randomizeConfig }) {
   return (
     <Toolbar>
-      <span className="appName">babw</span>
+      <span className="appName">Hackweek Avatar Maker</span>
       <UploadButton onGLBUploaded={onGLBUploaded} />
       <button onClick={randomizeConfig}>Randomize avatar</button>
       <button onClick={dispatchResetView}>Reset camera view</button>

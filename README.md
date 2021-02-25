@@ -1,10 +1,10 @@
 # Christian's Avatar Editor
 
-This repository is to track work for the 2021 Hubs Team Q1 Hackathon. For discussion and ideation, please use the Issues tab, but note that this project is only lightly maintained by Mozilla. You can use the editor as-is [here](https://mozilla.github.io/babw/).
+This repository is to track work for the 2021 Hubs Team Q1 Hackathon. For discussion and ideation, please use the Issues tab, but note that this project is only lightly maintained by Mozilla. You can use the editor as-is [here](https://mozilla.github.io/hackweek-avatar-maker/).
 
 ## Creating an Avatar
 To create an avatar for Hubs: 
-1. Go to [https://mozilla.github.io/babw/](https://mozilla.github.io/babw/). The first avatar that you see will be a randomly generated avatar using different components that are available. 
+1. Go to [https://mozilla.github.io/hackweek-avatar-maker/](https://mozilla.github.io/hackweek-avatar-maker/). The first avatar that you see will be a randomly generated avatar using different components that are available. 
 2. Have fun! You can mix and match different selections to give your avatar a unique look. 
 3. Download your avatar using the 'Export avatar' button. 
 4. Sign into a Hubs room
@@ -21,7 +21,7 @@ You can create custom components for the avatar by modeling the object in Blende
 ## About the editor
 We invite the community to use this editor as a template for creating and hosting new avatar tools. The code is released under the MPL 2.0 and we'd love to see what you make with it! Here's a bit about how the editor works:
 
-* The avatar that you see is comprised of different pieces that were designed to work on the same skeleton and body format. [Models](https://github.com/mozilla/babw/tree/main/assets/models) for each piece and category are saved with a specific naming convention, which allows the app to correctly put them into a category depending on where the accessory should be placed on the base model.
+* The avatar that you see is comprised of different pieces that were designed to work on the same skeleton and body format. [Models](https://github.com/mozilla/hackweek-avatar-maker/tree/main/assets/models) for each piece and category are saved with a specific naming convention, which allows the app to correctly put them into a category depending on where the accessory should be placed on the base model.
  
 * A script takes screenshots of the pieces that are contained in the `assets/models` directory and uses these to indicate the different pieces that can be selected from. 
 
