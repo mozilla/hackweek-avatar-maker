@@ -4133,7 +4133,8 @@ export default {
       {
         "value": null,
         "displayName": "None",
-        "excludeFromRandomize": false
+        "excludeFromRandomize": false,
+        "randomizationWeight": 20
       },
       {
         "value": "hat_baseball-giants",
@@ -4164,7 +4165,7 @@ export default {
         "value": null,
         "displayName": "None",
         "excludeFromRandomize": false,
-        "randomizationWeight": 9
+        "randomizationWeight": 20
       },
       {
         "value": "eyewear_arnette",

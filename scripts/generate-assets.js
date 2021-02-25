@@ -112,10 +112,11 @@ const customRandomizationWeights = {
     {value: null, randomizationWeight: {useLength: true}}
   ],
   "Hat": [
+    {value: null, randomizationWeight: {value: 20}},
     {value: "hat_spokemon", randomizationWeight: {value: 0.1}}
   ],
   "Eyewear": [
-    {value: null, randomizationWeight: {useLength: true}}
+    {value: null, randomizationWeight: {value: 20}}
   ],
   "Earring": [
     {value: null, randomizationWeight: {useLength: true}}
