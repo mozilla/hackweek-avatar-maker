@@ -151,6 +151,22 @@ function init() {
   scene.add(state.avatarGroup);
 }
 
+function playClips(scene, clips) {
+  if (!scene.animations) return;
+
+  const mixer = new THREE.AnimationMixer(scene);
+
+  for (const clip of clips) {
+    const animation = scene.animations.find(a => a.name === clip)
+    if (animation) {
+      const action = mixer.clipAction(animation);
+      action.play();
+    }
+  }
+
+  mixer.update(0);
+}
+
 function initializeGltf(key, gltf) {
   if (idleEyes.hasIdleEyes(gltf)) {
     state.idleEyesMixers[key] = idleEyes.mixerForGltf(gltf);
@@ -177,6 +193,10 @@ function initializeGltf(key, gltf) {
       state.uvScrollMaps[key].push(uvScroll.initialStateForMesh(obj));
     }
   });
+
+  // TODO: We shouldn't have to do this, but the head models have their skeleton's right
+  // hand gripped by default, so we open both hands to ensure a consistent export.
+  playClips(gltf.scene, ["allOpen_L", "allOpen_R"]);
 }
 
 function saveInitialMorphTargetInfluences(node) {
