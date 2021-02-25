@@ -49,7 +49,7 @@ function removeBakedMorphs(mesh, bakedMorphIndices) {
   });
 }
 
-export async function combine({ avatar, mixers }) {
+export async function combine({ avatar }) {
   const meshesToExclude = findChildrenByType(avatar, "SkinnedMesh").filter(
     (mesh) => mesh.material.transparent || hasHubsComponent(mesh, "uv-scroll")
   );
@@ -58,9 +58,6 @@ export async function combine({ avatar, mixers }) {
 
   const { textures, uvs } = await createTextureAtlas({ meshes });
   meshes.forEach((mesh) => remapUVs({ mesh, uvs: uvs.get(mesh) }));
-
-  //TODO: This can be moved elsewhere.
-  mixers.forEach((mixer) => mixer.stopAllAction());
 
   meshes.forEach((mesh) => removeBakedMorphs(mesh, bakeMorphs(mesh)));
 
