@@ -19,6 +19,7 @@ import { createSkydome } from "./create-skydome";
 import uvScroll from "./uv-scroll";
 import idleEyes from "./idle-eyes";
 import assets from "./assets";
+import debugConfig from "./debug-config";
 
 // Used to test mesh combination
 window.combineCurrentAvatar = async function () {
@@ -340,8 +341,7 @@ function tick(time) {
         const blob = new Blob([glb], { type: "application/octet-stream" });
         const url = URL.createObjectURL(blob);
 
-        const triggerDownload = true;
-        if (triggerDownload) {
+        if (!debugConfig.disableDownload) {
           const el = document.createElement("a");
           el.style.display = "none";
           el.href = url;
@@ -350,8 +350,7 @@ function tick(time) {
           el.remove();
         }
 
-        const debugExports = false;
-        if (debugExports) {
+        if (debugConfig.debugExports) {
           loadGLTF(url).then((gltf) => {
             initializeGltf("testExportGroup", gltf);
             state.testExportGroup.clear();

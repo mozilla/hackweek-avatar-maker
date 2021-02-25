@@ -2,6 +2,7 @@ import * as THREE from "three";
 import { GLTFExporter } from "three/examples/jsm/exporters/GLTFExporter";
 import { findChildrenByType, findChildByName, describeObject3D } from "./utils";
 import { combine } from "./mesh-combination";
+import debugConfig from "./debug-config";
 
 export function cloneSkeleton(skinnedMesh) {
   const boneClones = new Map();
@@ -125,8 +126,7 @@ export async function exportAvatar(avatarGroup, mixers) {
 
   const avatar = await combine({ avatar: clone, mixers });
 
-  const debugGLTF = false;
-  if (debugGLTF) {
+  if (debugConfig.debugGLTF) {
     console.log("avatar", avatar);
     const { gltf } = await exportGLTF(avatar, { binary: false, animations: avatar.animations });
     console.log("gltf", gltf);

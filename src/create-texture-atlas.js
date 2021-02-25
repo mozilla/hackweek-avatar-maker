@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import debugConfig from "./debug-config";
 
 function createContext({ width, height }) {
   const canvas = document.createElement("canvas");
@@ -40,8 +41,7 @@ export const createTextureAtlas = (function () {
       IMAGE_NAMES.map((name) => [name, createContext({ width: ATLAS_SIZE_PX, height: ATLAS_SIZE_PX })])
     );
 
-    const debugCanvases = false;
-    if (debugCanvases) {
+    if (debugConfig.debugCanvases) {
       const previous = document.getElementById("debug-canvases");
       if (previous) {
         previous.parentNode.removeChild(previous);
