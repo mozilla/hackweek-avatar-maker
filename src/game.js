@@ -193,10 +193,6 @@ function initializeGltf(key, gltf) {
       state.uvScrollMaps[key].push(uvScroll.initialStateForMesh(obj));
     }
   });
-
-  // TODO: We shouldn't have to do this, but the head models have their skeleton's right
-  // hand gripped by default, so we open both hands to ensure a consistent export.
-  playClips(gltf.scene, ["allOpen_L", "allOpen_R"]);
 }
 
 function saveInitialMorphTargetInfluences(node) {
@@ -356,8 +352,13 @@ function tick(time) {
     if (state.shouldExportAvatar) {
       state.shouldExportAvatar = false;
 
-      const mixers = Object.values(state.idleEyesMixers);
-      exportAvatar(state.avatarGroup, mixers).then(({ glb }) => {
+      // Reset all idle eyes animations before cloning or exporting the avatar
+      // so that we don't export it mid-blink.
+      Object.values(state.idleEyesMixers).forEach(mixer => {
+        mixer.setTime(0);
+      });
+
+      exportAvatar(state.avatarGroup).then(({ glb }) => {
         const blob = new Blob([glb], { type: "application/octet-stream" });
         const url = URL.createObjectURL(blob);
 

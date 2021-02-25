@@ -5,6 +5,8 @@ import { combine } from "./mesh-combination";
 import debugConfig from "./debug-config";
 
 export function cloneSkeleton(skinnedMesh) {
+  skinnedMesh.skeleton.pose();
+
   const boneClones = new Map();
 
   for (const bone of skinnedMesh.skeleton.bones) {
@@ -117,14 +119,14 @@ function cloneIntoAvatar(avatarGroup) {
   return clonedScene;
 }
 
-export async function exportAvatar(avatarGroup, mixers) {
+export async function exportAvatar(avatarGroup) {
   // TODO: Re-evaluate whether we want to perform this step.
   // The intention (for now) is to make combination optional,
   // so that it is easy to debug and also if non-mergable meshes
   // are added, there's a workaround for them.
   const clone = cloneIntoAvatar(avatarGroup);
 
-  const avatar = await combine({ avatar: clone, mixers });
+  const avatar = await combine({ avatar: clone });
 
   if (debugConfig.debugGLTF) {
     console.log("avatar", avatar);
