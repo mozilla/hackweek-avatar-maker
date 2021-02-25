@@ -152,12 +152,16 @@ function init() {
 }
 
 function playClips(scene, clips) {
+  if (!scene.animations) return;
+
   const mixer = new THREE.AnimationMixer(scene);
 
   for (const clip of clips) {
     const animation = scene.animations.find(a => a.name === clip)
-    const action = mixer.clipAction(animation);
-    action.play();
+    if (animation) {
+      const action = mixer.clipAction(animation);
+      action.play();
+    }
   }
 
   mixer.update(0);
