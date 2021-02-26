@@ -17,11 +17,16 @@ export function ToolbarContainer({ onGLBUploaded, randomizeConfig }) {
   return (
     <Toolbar>
       <span className="appName">Hackweek Avatar Maker</span>
-      <MoreMenu items={[
-        <UploadButton onGLBUploaded={onGLBUploaded} />,
-        <a href="https://github.com/mozilla/hackweek-avatar-maker" target="_blank">GitHub</a>
-      ]}>
-      </MoreMenu>
+      <MoreMenu
+        items={
+          <>
+            <UploadButton onGLBUploaded={onGLBUploaded} />
+            <a href="https://github.com/mozilla/hackweek-avatar-maker" target="_blank">
+              GitHub
+            </a>
+          </>
+        }
+      ></MoreMenu>
       <button onClick={randomizeConfig}>Randomize avatar</button>
       <button onClick={dispatchResetView}>Reset camera view</button>
       <button onClick={dispatchExportAvatar} className="primary">
