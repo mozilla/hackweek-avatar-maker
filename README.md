@@ -19,7 +19,7 @@ To create an avatar for Hubs:
 
 ## Creating Accessories and Custom Components
 
-You can create custom components for the avatar by modeling the object in blender. While you can upload any .glb file as an accessory, using the base template for an avatar built with this editor will ensure that the uploaded custom component sits in the correct place on the avatar. More information can be found in the customization guide.
+You can create custom components for the avatar by modeling the object in blender. While you can upload any .glb file as an accessory, using the base template for an avatar built with this editor will ensure that the uploaded custom component sits in the correct place on the avatar. More information can be found in the [customization guide](./CUSTOMIZING.md).
 
 ## About the editor
 
@@ -30,6 +30,8 @@ We invite the community to use this editor as a template for creating and hostin
 - A script takes screenshots of the pieces that are contained in the `assets/models` directory and uses these to indicate the different pieces that can be selected from.
 
 - When you've finished customizing your avatar, the meshes are combined and the correct components to have animations in Hubs are added to the avatar .glb file that is saved.
+
+More information can be found in the [customization guide](./CUSTOMIZING.md).
 
 ## FAQ
 
