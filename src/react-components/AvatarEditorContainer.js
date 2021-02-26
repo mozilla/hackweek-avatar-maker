@@ -51,14 +51,41 @@ export function AvatarEditorContainer() {
     setTipState({ visible: false });
   }
 
+  function capitalize(str) {
+    if (!str) return "";
+    return str[0].toUpperCase() + str.substring(1);
+  }
+
+  // TODO Share this code with the generate-assets script.
+  function parseFilename(fullname, categoryNamePrefix, fallbackCategoryName) {
+    const filename = fullname.substring(0, fullname.lastIndexOf("."));
+
+    let [hyphenatedCategory, hyphenatedName] = filename.split("_");
+    if (!hyphenatedName) {
+      hyphenatedCategory = fallbackCategoryName;
+      hyphenatedName = filename;
+    } else {
+      hyphenatedCategory = categoryNamePrefix + "-" + hyphenatedCategory;
+    }
+    const category = hyphenatedCategory
+      .split("-")
+      .map((p) => capitalize(p))
+      .join(" ");
+    const displayName = hyphenatedName
+      .split("-")
+      .map((p) => capitalize(p))
+      .join(" ");
+    return [category, displayName];
+  }
+
   function onGLBUploaded(e) {
+    const clone = { ...assets };
+
     const file = e.target.files[0];
-    const filename = file.name;
-    const category = filename.substring(0, filename.indexOf("_")) || "custom";
-    const displayName = filename.substring(filename.indexOf("_") + 1, filename.lastIndexOf("."));
+
+    let [category, displayName] = parseFilename(file.name, "Uploaded", "Uploads");
     const url = URL.createObjectURL(file);
 
-    const clone = { ...assets };
     clone[category] = clone[category] || {
       parts: [
         {
@@ -67,10 +94,12 @@ export function AvatarEditorContainer() {
         },
       ],
     };
+
     clone[category].parts.push({
       displayName,
       value: url,
     });
+
     setAssets(clone);
 
     updateAvatarConfig({ [category]: url });

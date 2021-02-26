@@ -317,7 +317,7 @@ function tick(time) {
       state.shouldApplyMorphRelationships = false;
 
       for (const categoryName of Object.keys(state.avatarConfig)) {
-        if (!state.avatarConfig[categoryName]) continue;
+        if (!state.avatarConfig[categoryName] || !assets[categoryName]) continue;
 
         resetMorphTargetInfluences(state.avatarNodes[categoryName]);
 
