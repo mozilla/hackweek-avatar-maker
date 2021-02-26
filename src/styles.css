@@ -205,6 +205,7 @@ label {
   padding: 20px 20px;
   display: flex;
   justify-content: flex-end;
+  align-items: center;
   background-color: var(--toolbar-bg-color);
   border-top: 2px solid lightgrey;
 }
@@ -218,6 +219,7 @@ label {
   font-size: 10pt;
   padding: 22px;
   font-weight: bold;
+  white-space: nowrap;
 }
 .toolbar button:hover,
 .toolbar button:focus,
@@ -248,6 +250,34 @@ button.primary:focus {
   align-items: center;
 }
 
+.menuContainer {
+  position: relative;
+}
+
+.menuContainer .menuButton {
+  --button-size: 70px;
+  font-size: 20pt;
+  width: var(--button-size);
+  height: var(--button-size);
+  border-radius: var(--button-size);
+  padding: 0;
+}
+
+.menu {
+  position: absolute;
+  z-index: 1;
+  background-color: var(--toolbar-bg-color);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 4px;
+  border-radius: var(--border-radius);
+}
+
+.menu a {
+  margin: 10px 0;
+}
+
 @keyframes wave {
   from { background-position-y: 0 }
   to { background-position-y: 400px; }
@@ -274,5 +304,9 @@ button.primary:focus {
   }
   .appName {
     font-size: 24pt;
+  }
+  .menu {
+    bottom: 85px;
+    flex-direction: column-reverse;
   }
 }
