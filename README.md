@@ -56,6 +56,6 @@ A: Sure! If you build something custom and are interested in contributing it bac
 - [Avatar Texture Tool (misslivirose)](https://github.com/misslivirose/avatar-texture-tool)
 - [Avatar Customizer (rhiannanberry)](https://github.com/rhiannanberry/Avatar-Customizer)
 - [Quilt (brianpeiris)](https://github.com/brianpeiris/quilt)
-- [Hubs avatar pipelines](github.com/mozillareality/hubs-avatar-pipelines/)
+- [Hubs avatar pipelines](https://github.com/mozillareality/hubs-avatar-pipelines/)
 - [Advanced Avatar Customization](https://hubs.mozilla.com/docs/creators-advanced-avatar-customization.html)
 - [Video: using Hubs components for avatar creation in Blender](https://www.youtube.com/watch?v=qBvZhh6KVcg)
