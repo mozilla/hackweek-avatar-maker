@@ -79,12 +79,12 @@ export function AvatarEditorContainer() {
   }
 
   function onGLBUploaded(e) {
-    const clone = { ...assets };
-
     const file = e.target.files[0];
 
     let [category, displayName] = parseFilename(file.name, "Uploaded", "Uploads");
     const url = URL.createObjectURL(file);
+
+    const clone = { ...assets };
 
     clone[category] = clone[category] || {
       parts: [
