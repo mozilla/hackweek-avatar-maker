@@ -1,6 +1,8 @@
 @import url('../assets/fonts/Poppins.css');
 
 :root {
+  --main-bg-color: white;
+  --toolbar-bg-color: #f5f5f5;
   --primary-blue: #00a5f4;
   --thumbnail-bg-color: lightgray;
   --button-border-color: white;
@@ -40,12 +42,13 @@ body,
 
 #root {
   display:flex;
-  flex-direction: column;
+  flex-direction: column-reverse;
 }
 
 .selector {
   overflow: auto;
   width: 45%;
+  background-color: var(--main-bg-color);
 }
 
 .selector .simpleBar {
@@ -199,10 +202,11 @@ label {
 }
 
 .toolbar {
-  padding: 20px 40px;
+  padding: 20px 20px;
   display: flex;
   justify-content: flex-end;
-  background-color: #f5f5f5;
+  align-items: center;
+  background-color: var(--toolbar-bg-color);
   border-top: 2px solid lightgrey;
 }
 
@@ -215,6 +219,7 @@ label {
   font-size: 10pt;
   padding: 22px;
   font-weight: bold;
+  white-space: nowrap;
 }
 .toolbar button:hover,
 .toolbar button:focus,
@@ -240,9 +245,37 @@ button.primary:focus {
 
 .appName {
   flex: 1;
-  font-size: 24pt;
+  font-size: 12pt;
   display: flex;
   align-items: center;
+}
+
+.menuContainer {
+  position: relative;
+}
+
+.menuContainer .menuButton {
+  --button-size: 70px;
+  font-size: 20pt;
+  width: var(--button-size);
+  height: var(--button-size);
+  border-radius: var(--button-size);
+  padding: 0;
+}
+
+.menu {
+  position: absolute;
+  z-index: 1;
+  background-color: var(--toolbar-bg-color);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 4px;
+  border-radius: var(--border-radius);
+}
+
+.menu a {
+  margin: 10px 0;
 }
 
 @keyframes wave {
@@ -260,4 +293,20 @@ button.primary:focus {
   animation-timing-function: cubic-bezier(.2,.52,.79,.49);
   /* Move 1 pixel to the left to workaround rendering issue in FF linux */
   left: -1px;
+}
+
+@media (min-width: 1200px) {
+  #root {
+    flex-direction: column;
+  }
+  .toolbar {
+    padding: 20px 40px;
+  }
+  .appName {
+    font-size: 24pt;
+  }
+  .menu {
+    bottom: 85px;
+    flex-direction: column-reverse;
+  }
 }
