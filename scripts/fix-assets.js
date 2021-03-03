@@ -20,8 +20,9 @@ const renames = [
 ];
 
 const filesToDelete = [
-  "facial-hair_mustache-2.glb",
-  "torso_style-1-ketchum.glb",
+  /facial-hair_mustache-2.glb/,
+  /torso_style-1-ketchum.glb/,
+  /hair_starter-locs/,
 ];
 
 function fixColorNames(filename) {
@@ -47,10 +48,12 @@ for (const [oldName, newName] of renames) {
   }
 }
 
-for (const fileToDelete of filesToDelete) {
-  const filePath = path.join(directory, fileToDelete);
-  if (fs.existsSync(filePath)) {
-    console.log(`deleting ${fileToDelete}`);
-    fs.unlinkSync(filePath);
+for (const filename of assetFileNames) {
+  if (filesToDelete.some(regex => regex.test(filename))) {
+    const filePath = path.join(directory, filename);
+    if (fs.existsSync(filePath)) {
+      console.log(`deleting ${filename}`);
+      fs.unlinkSync(filePath);
+    }
   }
 }
