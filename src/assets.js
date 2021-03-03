@@ -4056,27 +4056,169 @@ export default {
         "randomizationWeight": 20
       },
       {
-        "value": "headwear_baseball-giants",
-        "displayName": "Baseball Giants"
+        "value": "headwear_baseball-giants-black",
+        "displayName": "Baseball Giants Black",
+        "description": {
+          "Type": "baseball-giants",
+          "Color": "black"
+        }
       },
       {
-        "value": "headwear_beach-umbrella",
-        "displayName": "Beach Umbrella"
+        "value": "headwear_beach-umbrella-mixed",
+        "displayName": "Beach Umbrella Mixed",
+        "description": {
+          "Type": "beach-umbrella",
+          "Color": "mixed"
+        }
       },
       {
         "value": "headwear_beanie-1-red",
-        "displayName": "Beanie 1 Red"
+        "displayName": "Beanie 1 Red",
+        "description": {
+          "Type": "beanie-1",
+          "Color": "red"
+        }
       },
       {
-        "value": "headwear_spokemon",
-        "displayName": "Spokemon",
+        "value": "headwear_hijab-black",
+        "displayName": "Hijab Black",
+        "description": {
+          "Type": "hijab",
+          "Color": "black"
+        },
+        "morphRelationships": [
+          {
+            "targetCategoryName": "Head",
+            "targetMorphName": "ear rotate back",
+            "targetMorphValue": 1
+          }
+        ],
+        "randomizationWeight": 0.05
+      },
+      {
+        "value": "headwear_hijab-blue",
+        "displayName": "Hijab Blue",
+        "description": {
+          "Type": "hijab",
+          "Color": "blue"
+        },
+        "morphRelationships": [
+          {
+            "targetCategoryName": "Head",
+            "targetMorphName": "ear rotate back",
+            "targetMorphValue": 1
+          }
+        ],
+        "randomizationWeight": 0.05
+      },
+      {
+        "value": "headwear_hijab-gray",
+        "displayName": "Hijab Gray",
+        "description": {
+          "Type": "hijab",
+          "Color": "gray"
+        },
+        "morphRelationships": [
+          {
+            "targetCategoryName": "Head",
+            "targetMorphName": "ear rotate back",
+            "targetMorphValue": 1
+          }
+        ],
+        "randomizationWeight": 0.05
+      },
+      {
+        "value": "headwear_hijab-lavender",
+        "displayName": "Hijab Lavender",
+        "description": {
+          "Type": "hijab",
+          "Color": "lavender"
+        },
+        "morphRelationships": [
+          {
+            "targetCategoryName": "Head",
+            "targetMorphName": "ear rotate back",
+            "targetMorphValue": 1
+          }
+        ],
+        "randomizationWeight": 0.05
+      },
+      {
+        "value": "headwear_hijab-pink",
+        "displayName": "Hijab Pink",
+        "description": {
+          "Type": "hijab",
+          "Color": "pink"
+        },
+        "morphRelationships": [
+          {
+            "targetCategoryName": "Head",
+            "targetMorphName": "ear rotate back",
+            "targetMorphValue": 1
+          }
+        ],
+        "randomizationWeight": 0.05
+      },
+      {
+        "value": "headwear_hijab-white",
+        "displayName": "Hijab White",
+        "description": {
+          "Type": "hijab",
+          "Color": "white"
+        },
+        "morphRelationships": [
+          {
+            "targetCategoryName": "Head",
+            "targetMorphName": "ear rotate back",
+            "targetMorphValue": 1
+          }
+        ],
+        "randomizationWeight": 0.05
+      },
+      {
+        "value": "headwear_spokemon-mixed",
+        "displayName": "Spokemon Mixed",
+        "description": {
+          "Type": "spokemon",
+          "Color": "mixed"
+        },
         "randomizationWeight": 0.1
       },
       {
-        "value": "headwear_top-hat-1",
-        "displayName": "Top Hat 1"
+        "value": "headwear_top-hat-1-black",
+        "displayName": "Top Hat 1 Black",
+        "description": {
+          "Type": "top-hat-1",
+          "Color": "black"
+        }
       }
-    ]
+    ],
+    "description": {
+      "Type": {
+        "options": [
+          null,
+          "baseball-giants",
+          "beach-umbrella",
+          "beanie-1",
+          "hijab",
+          "spokemon",
+          "top-hat-1"
+        ],
+        "isPrimaryOption": true
+      },
+      "Color": {
+        "options": [
+          "black",
+          "mixed",
+          "red",
+          "blue",
+          "gray",
+          "lavender",
+          "pink",
+          "white"
+        ]
+      }
+    }
   },
   "Eyewear": {
     "parts": [
