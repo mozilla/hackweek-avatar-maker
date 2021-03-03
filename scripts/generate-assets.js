@@ -19,7 +19,7 @@ const assetOrder = [
   "Accessory",
 ];
 
-const hairColors = [
+const colors = [
   "black",
   "blonde",
   "blue",
@@ -30,16 +30,18 @@ const hairColors = [
   "pink",
   "red",
   "white",
+  "lavender",
+  "mixed",
 ];
 
 const categoryDescription = {
   Hair: {
     Type: {
-      regExp: new RegExp(`hair_(.+)-(${hairColors.join("|")})$`),
+      regExp: new RegExp(`hair_(.+)-(${colors.join("|")})$`),
       isPrimaryOption: true,
     },
     Color: {
-      regExp: new RegExp(`-(${hairColors.join("|")})$`),
+      regExp: new RegExp(`-(${colors.join("|")})$`),
     }
   },
   Head: {
@@ -80,11 +82,11 @@ const categoryDescription = {
   },
   "Facial Hair": {
     Type: {
-      regExp: new RegExp(`facial-hair_(.+)-(${hairColors.join("|")})$`),
+      regExp: new RegExp(`facial-hair_(.+)-(${colors.join("|")})$`),
       isPrimaryOption: true,
     },
     Color: {
-      regExp: new RegExp(`-(${hairColors.join("|")})$`),
+      regExp: new RegExp(`-(${colors.join("|")})$`),
     }
   },
   Torso: {
@@ -105,6 +107,15 @@ const categoryDescription = {
       regExp: /style-[0-9a-z]-(.+)/,
     }
   },
+  Headwear: {
+    Type: {
+      regExp: new RegExp(`headwear_(.+)-(${colors.join("|")})?$`),
+      isPrimaryOption: true,
+    },
+    Color: {
+      regExp: new RegExp(`-(${colors.join("|")})?$`),
+    }
+  },
 };
 
 const customRandomizationWeights = {
@@ -113,7 +124,8 @@ const customRandomizationWeights = {
   ],
   "Headwear": [
     {value: null, randomizationWeight: {value: 20}},
-    {value: "headwear_spokemon", randomizationWeight: {value: 0.1}}
+    {value: "headwear_spokemon-mixed", randomizationWeight: {value: 0.1}},
+    {prefix: "headwear_hijab", randomizationWeight: {value: 0.05}}
   ],
   "Eyewear": [
     {value: null, randomizationWeight: {value: 20}}
@@ -249,8 +261,10 @@ function generateAssetsStructure(directory) {
       part.bisectInThumbnail = true;
     }
 
-    if (filename in morphRelationships) {
-      part.morphRelationships = morphRelationships[filename];
+    for (prefix of Object.keys(morphRelationships)) {
+      if (filename.startsWith(prefix)) {
+        part.morphRelationships = morphRelationships[prefix];
+      }
     }
 
     assets[category].parts.push(part);
@@ -281,7 +295,13 @@ function generateAssetsStructure(directory) {
     for (const config of configs) {
       const category = orderedAssets[categoryName];
       const weight = config.randomizationWeight.useLength ? category.parts.length : config.randomizationWeight.value;
-      category.parts.find(part => part.value === config.value).randomizationWeight = weight;
+      const parts = category.parts.filter(part => (
+        part.value === config.value || 
+        part.value && part.value.startsWith(config.prefix)
+      ));
+      for (part of parts) {
+        part.randomizationWeight = weight;
+      }
     }
   }
 

@@ -17,6 +17,10 @@ const renames = [
   ["facial-hair_goatee-2.glb", "facial-hair_goatee-2-brown.glb"],
   ["facial-hair_goatee-5.glb", "facial-hair_goatee-5-brown.glb"],
   ["hair_taper-afro-1-blue.glb", "hair_taper-afro-2-blue.glb"],
+  ["headwear_baseball-giants.glb", "headwear_baseball-giants-black.glb"],
+  ["headwear_beach-umbrella.glb", "headwear_beach-umbrella-mixed.glb"],
+  ["headwear_spokemon.glb", "headwear_spokemon-mixed.glb"],
+  ["headwear_top-hat-1.glb", "headwear_top-hat-1-black.glb"],
 ];
 
 const filesToDelete = [
