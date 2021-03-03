@@ -17,11 +17,16 @@ const renames = [
   ["facial-hair_goatee-2.glb", "facial-hair_goatee-2-brown.glb"],
   ["facial-hair_goatee-5.glb", "facial-hair_goatee-5-brown.glb"],
   ["hair_taper-afro-1-blue.glb", "hair_taper-afro-2-blue.glb"],
+  ["headwear_baseball-giants.glb", "headwear_baseball-giants-black.glb"],
+  ["headwear_beach-umbrella.glb", "headwear_beach-umbrella-mixed.glb"],
+  ["headwear_spokemon.glb", "headwear_spokemon-mixed.glb"],
+  ["headwear_top-hat-1.glb", "headwear_top-hat-1-black.glb"],
 ];
 
 const filesToDelete = [
-  "facial-hair_mustache-2.glb",
-  "torso_style-1-ketchum.glb",
+  /facial-hair_mustache-2.glb/,
+  /torso_style-1-ketchum.glb/,
+  /hair_starter-locs/,
 ];
 
 function fixColorNames(filename) {
@@ -47,10 +52,12 @@ for (const [oldName, newName] of renames) {
   }
 }
 
-for (const fileToDelete of filesToDelete) {
-  const filePath = path.join(directory, fileToDelete);
-  if (fs.existsSync(filePath)) {
-    console.log(`deleting ${fileToDelete}`);
-    fs.unlinkSync(filePath);
+for (const filename of assetFileNames) {
+  if (filesToDelete.some(regex => regex.test(filename))) {
+    const filePath = path.join(directory, filename);
+    if (fs.existsSync(filePath)) {
+      console.log(`deleting ${filename}`);
+      fs.unlinkSync(filePath);
+    }
   }
 }
