@@ -5,7 +5,7 @@
     "build": "NODE_ENV=production webpack",
     "gen-assets": "node scripts/generate-assets.js",
     "fix-assets": "node scripts/fix-assets.js",
-    "clean-public": "rm -r public",
+    "clean-public": "rm -r -f public",
     "package-to-public": "npm run clean-public && mkdir public && cp -R dist/ public && cp index.html public/",
     "build-for-netlify": "npm run build && npm run package-to-public"
   },
