@@ -11,6 +11,7 @@ import { generateRandomConfig } from "../generate-random-config";
 import initialAssets from "../assets";
 import { isThumbnailMode } from "../utils";
 import debounce from "../utils/debounce";
+import { saveAvatarConfig, getAvatarConfig, getAvatarConfigSlotKeys } from "../persistence";
 
 // Used externally by the generate-thumbnails script
 const thumbnailMode = isThumbnailMode();
@@ -108,6 +109,18 @@ export function AvatarEditorContainer() {
   function randomizeConfig() {
     setAvatarConfig(generateRandomConfig(assets));
   }
+
+  function saveConfig(slotKey) {
+    saveAvatarConfig(slotKey, avatarConfig);
+  }
+
+  function loadConfig(slotKey) {
+    setAvatarConfig(getAvatarConfig(slotKey));
+  }
+
+  window.saveConfig = saveConfig; 
+  window.loadConfig = loadConfig;
+  window.listStoredConfigs = getAvatarConfigSlotKeys;
 
   return (
     <AvatarEditor
