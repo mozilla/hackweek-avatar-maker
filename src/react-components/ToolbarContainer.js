@@ -2,6 +2,7 @@ import React from "react";
 import { Toolbar } from "./Toolbar";
 import { UploadButton } from "./UploadButton";
 import { MoreMenu } from "./MoreMenu";
+import { AvatarPersistenceContainer } from "./AvatarPersistenceContainer";
 import { dispatch } from "../dispatch";
 import constants from "../constants";
 
@@ -21,6 +22,7 @@ export function ToolbarContainer({ onGLBUploaded, randomizeConfig }) {
         items={
           <>
             <UploadButton onGLBUploaded={onGLBUploaded} />
+            <AvatarPersistenceContainer />
             <a href="https://github.com/mozilla/hackweek-avatar-maker" target="_blank">
               GitHub
             </a>

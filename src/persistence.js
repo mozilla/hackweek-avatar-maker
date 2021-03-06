@@ -5,7 +5,7 @@ function getConfigFromLocalStorage() {
     if (stored) {
         return JSON.parse(stored);
     } else {
-        return { avatars: {} };
+        return { avatars: {}, uiEnabled: false };
     }
 }
 
@@ -57,4 +57,16 @@ export function getAvatarConfigSlotKeys() {
     const storedConfig = getConfigFromLocalStorage();
 
     return Object.keys(storedConfig.avatars);
+}
+
+export function avatarPersistenceUIEnabled(newValue) {
+
+    const storedConfig = getConfigFromLocalStorage();
+
+    if (newValue !== undefined) {
+        storedConfig.uiEnabled = newValue;
+        persistToLocalStorage(storedConfig);
+    } else {
+        return storedConfig.uiEnabled || false;
+    }
 }
