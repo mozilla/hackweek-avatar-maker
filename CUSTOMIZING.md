@@ -14,7 +14,7 @@ To add a custom avatar part to use in the editor:
 - name the file according to the editor's naming convention (see [Asset Names](#asset-names)),
 - use the `Upload Custom Part` button to add your model to the avatar.
 
-Each part of the avatar is designed to work with same skeleton. In order for your custom model to work correctly in the editor, you will need to bind your mesh to this skeleton. https://github.com/mozilla/hackweek-avatar-maker/blob/main/assets/blender/avatar-casual_share.zip
+Each part of the avatar is designed to work with same skeleton. In order for your custom model to work correctly in the editor, you will need to bind your mesh to this skeleton. https://github.com/mozilla/hackweek-avatar-maker/raw/main/assets/blender/avatar-casual_share.zip
 
 For more information on creating avatars for Hubs, you can consult the existing hubs docs for [creating custom avatars](https://hubs.mozilla.com/docs/creators-advanced-avatar-customization.html#modify-base-robot-template).
 
