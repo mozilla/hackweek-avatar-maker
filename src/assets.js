@@ -3692,6 +3692,15 @@ export default {
         "matchRandomizationToNull": true
       },
       {
+        "value": "torso_style-1-waistcoat-and-cravat",
+        "displayName": "Style 1 Waistcoat And Cravat",
+        "description": {
+          "Type": "style-1",
+          "Outfit": "waistcoat-and-cravat"
+        },
+        "matchRandomizationToNull": true
+      },
+      {
         "value": "torso_style-2-baseball-giants",
         "displayName": "Style 2 Baseball Giants",
         "description": {
@@ -3804,6 +3813,7 @@ export default {
           "tshirt-1-union-jack",
           "tshirt1-reactor",
           "ugly-christmas-1",
+          "waistcoat-and-cravat",
           "tshirt-1-baby-unicorn",
           "tshirt-1-heart-animated",
           "tshirt-1-heart",
