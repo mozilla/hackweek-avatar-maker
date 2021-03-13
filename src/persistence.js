@@ -1,4 +1,9 @@
+import { useState, useEffect } from 'react'
+import { simplePubSub } from "./utils/pub-sub";
+
 const storageKey = "avatarMaker";
+
+const slotKeyChange = simplePubSub();
 
 function getConfigFromLocalStorage() {
     const stored = localStorage.getItem(storageKey);
@@ -28,6 +33,7 @@ export function saveAvatarConfig(slotKey, avatarConfig) {
     storedConfig.avatars[slotKey] = avatarConfig;
 
     persistToLocalStorage(storedConfig);
+    slotKeyChange.publish();
 }
 
 /**
@@ -38,6 +44,7 @@ export function saveAvatarConfig(slotKey, avatarConfig) {
 export function getAvatarConfig(slotKey) {
     if (!window.localStorage) {
         console.log("No localStorage...bailing.");
+        return {};
     }
 
     const storedConfig = getConfigFromLocalStorage();
@@ -52,6 +59,7 @@ export function getAvatarConfig(slotKey) {
 export function getAvatarConfigSlotKeys() {
     if (!window.localStorage) {
         console.log("No localStorage...bailing.");
+        return [];
     }
 
     const storedConfig = getConfigFromLocalStorage();
@@ -70,3 +78,33 @@ export function avatarPersistenceUIEnabled(newValue) {
         return storedConfig.uiEnabled || false;
     }
 }
+
+
+// Expose the pieces that need to be reactive
+export function usePersistenceUIEnabled() {
+    const [storedValue, setStoredValue] = useState(avatarPersistenceUIEnabled());
+
+    const setValue = (value) => {
+        const valueToStore = value instanceof Function ? value(storedValue) : value;
+        setStoredValue(valueToStore);
+        avatarPersistenceUIEnabled(valueToStore);
+    };
+
+    return [storedValue, setValue];
+}
+
+export function useAvatarConfigSlotKeys() {
+    const [slotKeys, setSlotKeys] = useState(getAvatarConfigSlotKeys);
+
+    useEffect(() => {
+        //Subscribe to changes
+        const subscriptionId = slotKeyChange
+            .subscribe(() => setSlotKeys(getAvatarConfigSlotKeys()));
+
+        return function cleanup() {
+            slotKeyChange.unsubscribe(subscriptionId);
+        }
+    });
+
+    return slotKeys;
+} 
