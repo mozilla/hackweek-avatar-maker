@@ -1,15 +1,21 @@
 import React from "react";
-import { avatarPersistenceUIEnabled } from "../persistence";
+import { usePersistenceUIEnabled } from "../persistence";
+
+import { AvatarPersistenceSaved } from "./AvatarPersistenceSaved";
 
 export function AvatarPersistenceContainer() {
-    if (avatarPersistenceUIEnabled()) {
+    const [uiEnabled, setUIEnabled] = usePersistenceUIEnabled();
+
+    if (uiEnabled) {
         return (
-            <div>persistence</div>
+            <div>
+                <div>persistence</div>
+                <AvatarPersistenceSaved />
+            </div>
         )        
     } else {
         return (
             <></>
         )
     }
-
 }
