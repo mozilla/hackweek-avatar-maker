@@ -151,7 +151,7 @@ export function AvatarEditorContainer() {
         ),
         rightPanel: <AvatarPreviewContainer {...{ thumbnailMode, canvasUrl }} />,
         buttonTip: <ButtonTip {...tipState} />,
-        toolbar: <ToolbarContainer {...{ onGLBUploaded, randomizeConfig }} />,
+        toolbar: <ToolbarContainer {...{ onGLBUploaded, randomizeConfig, setAvatarConfig }} />,
       }}
     />
   );
