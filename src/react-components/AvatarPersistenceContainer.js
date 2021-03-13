@@ -8,8 +8,8 @@ export function AvatarPersistenceContainer() {
 
     if (uiEnabled) {
         return (
-            <div>
-                <div>persistence</div>
+            <div className="peristenceContainer">
+                <h2>Saved Avatars</h2>
                 <AvatarPersistenceSaved />
             </div>
         )        

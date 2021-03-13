@@ -1,17 +1,14 @@
 import React, { useLayoutEffect } from "react";
 import { useAvatarConfigSlotKeys } from "../persistence";
+import { AvatarPersistenceSavedItem } from "./AvatarPersistenceSavedItem";
 
 export function AvatarPersistenceSaved() {
     const avatarConfigSlotKeys = useAvatarConfigSlotKeys();
-
     const listItems = avatarConfigSlotKeys.map((key) => (
-        <li key={key}>{key}</li>
+        <AvatarPersistenceSavedItem slotKey={key} key={key} />
     ));
 
     return (
-        <ul>
-            {listItems}
-        </ul>
+        <ul>{listItems}</ul>
     )
-
 }
