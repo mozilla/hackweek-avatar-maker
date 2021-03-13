@@ -53,6 +53,23 @@ export function getAvatarConfig(slotKey) {
 }
 
 /**
+ * Deletes the specified Avatar config object
+ * @param {string} slotKey The key for the desired Avatar config
+ */
+export function deleteAvatarConfig(slotKey) {
+    if (!window.localStorage) {
+        console.log("No localStorage...bailing.");
+        return;
+    }
+
+    const storedConfig = getConfigFromLocalStorage();
+
+    delete storedConfig.avatars[slotKey];
+    persistToLocalStorage(storedConfig);
+    slotKeyChange.publish();
+}
+
+/**
  * Returns list of the Avatar slotKeys
  * @returns {Array} List of Avatar slotKeys that have stored data.
  */
