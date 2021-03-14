@@ -3,14 +3,14 @@ import { usePersistenceUIEnabled } from "../persistence";
 
 import { AvatarPersistenceSaved } from "./AvatarPersistenceSaved";
 
-export function AvatarPersistenceContainer({ setAvatarConfig }) {
+export function AvatarPersistenceContainer({ setAvatarConfig, avatarConfig }) {
     const [uiEnabled, setUIEnabled] = usePersistenceUIEnabled();
 
     if (uiEnabled) {
         return (
             <div className="peristenceContainer">
                 <h2>Saved Avatars</h2>
-                <AvatarPersistenceSaved {...{ setAvatarConfig }} />
+                <AvatarPersistenceSaved {...{ setAvatarConfig, avatarConfig }} />
             </div>
         )        
     } else {

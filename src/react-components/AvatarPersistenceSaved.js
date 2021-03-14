@@ -3,7 +3,7 @@ import { useAvatarConfigSlotKeys } from "../persistence";
 import { AvatarPersistenceSavedItem } from "./AvatarPersistenceSavedItem";
 import { AvatarPersistenceSaveAs } from "./AvatarPersistenceSaveAs";
 
-export function AvatarPersistenceSaved({ setAvatarConfig }) {
+export function AvatarPersistenceSaved({ setAvatarConfig, avatarConfig }) {
     const avatarConfigSlotKeys = useAvatarConfigSlotKeys();
     const listItems = avatarConfigSlotKeys.map((key) => (
         <AvatarPersistenceSavedItem slotKey={key} key={key} {...{ setAvatarConfig }} />
@@ -12,7 +12,7 @@ export function AvatarPersistenceSaved({ setAvatarConfig }) {
     return (
         <ul>
             {listItems}
-            <AvatarPersistenceSaveAs />
+            <AvatarPersistenceSaveAs {...{ avatarConfig }} />
         </ul>
     )
 }

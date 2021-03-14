@@ -14,7 +14,7 @@ function dispatchExportAvatar() {
   dispatch(constants.exportAvatar);
 }
 
-export function ToolbarContainer({ onGLBUploaded, randomizeConfig, setAvatarConfig }) {
+export function ToolbarContainer({ onGLBUploaded, randomizeConfig, setAvatarConfig, avatarConfig }) {
   return (
     <Toolbar>
       <span className="appName">Hackweek Avatar Maker</span>
@@ -22,7 +22,7 @@ export function ToolbarContainer({ onGLBUploaded, randomizeConfig, setAvatarConf
         items={
           <>
             <UploadButton onGLBUploaded={onGLBUploaded} />
-            <AvatarPersistenceContainer {...{ setAvatarConfig }} />
+            <AvatarPersistenceContainer {...{ setAvatarConfig, avatarConfig }} />
             <a href="https://github.com/mozilla/hackweek-avatar-maker" target="_blank">
               GitHub
             </a>
