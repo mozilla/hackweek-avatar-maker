@@ -284,6 +284,7 @@ button.primary:focus {
   border-radius: var(--border-radius);
   border: 2px solid grey;
   width: calc(100% - 6px);
+  margin-bottom: 8px;
 }
 
 .peristenceContainer h2 { 
@@ -293,8 +294,10 @@ button.primary:focus {
 
 .peristenceContainer ul {
   margin-top: 0;
+  margin-bottom: 4px;
   list-style: none;
   padding: 0;
+  width: 250px;
 }
 
 .peristenceContainer ul li {
@@ -303,6 +306,10 @@ button.primary:focus {
   align-items: center;
   text-decoration: none;
   padding: 4px;
+}
+
+.peristenceContainer ul li.saveAs input {
+  width: 150px;
 }
 
 .peristenceContainer ul li:hover {
