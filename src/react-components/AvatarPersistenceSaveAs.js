@@ -7,27 +7,45 @@ export function AvatarPersistenceSaveAs({ avatarConfig }) {
     const [adding, setAdding] = useState(false);
     const [name, setName] = useState('');
 
-    function toggleAdding() {
-        setAdding(!adding);
+    function openSaveAs() {
+        setAdding(true);
+    }
+
+    function cancel() {
+        setAdding(false);
+        setName('');
+    }
+
+    function cancelOnEscape(e) {
+        if (e.keyCode === 27) {
+            cancel();
+        }
     }
 
     function save() {
-        console.log(`save as '${name}'`);
         saveAvatarConfig(name, avatarConfig);
-        toggleAdding();
+        setAdding(false);
+        setName('');
+    }
+
+    function saveDisabled() {
+        return name === "";
     }
 
     if (adding) {
         return (
-            <li className="saveAs">
+            <li className="saveAs open">
                 <div>
-                    <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="Save Current Avatar as ..."/>
+                    <input type="text" value={name} autoFocus 
+                        onChange={e => setName(e.target.value)} 
+                        onKeyDown={cancelOnEscape}
+                        placeholder="Save Current Avatar as ..."/>
                 </div>
                 <div className="savedItemActions">
-                    <button className="savedItemAction" title="Cancel" onClick={toggleAdding}>
+                    <button className="savedItemAction" title="Cancel" onClick={cancel}>
                         <FontAwesomeIcon icon={ faWindowClose } />
                     </button>
-                    <button className="savedItemAction" title="Save" onClick={save} >
+                    <button className="savedItemAction" title="Save" onClick={save} disabled={saveDisabled()} >
                         <FontAwesomeIcon icon={ faSave } />
                     </button>
                 </div>
@@ -35,11 +53,9 @@ export function AvatarPersistenceSaveAs({ avatarConfig }) {
         )    
     } else {
         return (
-            <li>
-                <button onClick={toggleAdding}>Save Current As...</button>
+            <li className="saveAs closed">
+                <button onClick={openSaveAs}>Save Current As...</button>
             </li>
         )
     }
-    
-
 }
