@@ -1447,6 +1447,86 @@ export default {
         }
       },
       {
+        "value": "hair_short-wave-1-black",
+        "displayName": "Short Wave 1 Black",
+        "description": {
+          "Type": "short-wave-1",
+          "Color": "black"
+        }
+      },
+      {
+        "value": "hair_short-wave-1-blonde",
+        "displayName": "Short Wave 1 Blonde",
+        "description": {
+          "Type": "short-wave-1",
+          "Color": "blonde"
+        }
+      },
+      {
+        "value": "hair_short-wave-1-blue",
+        "displayName": "Short Wave 1 Blue",
+        "description": {
+          "Type": "short-wave-1",
+          "Color": "blue"
+        }
+      },
+      {
+        "value": "hair_short-wave-1-brown",
+        "displayName": "Short Wave 1 Brown",
+        "description": {
+          "Type": "short-wave-1",
+          "Color": "brown"
+        }
+      },
+      {
+        "value": "hair_short-wave-1-dark brown",
+        "displayName": "Short Wave 1 Dark brown",
+        "description": {
+          "Type": "short-wave-1",
+          "Color": "dark brown"
+        }
+      },
+      {
+        "value": "hair_short-wave-1-gray",
+        "displayName": "Short Wave 1 Gray",
+        "description": {
+          "Type": "short-wave-1",
+          "Color": "gray"
+        }
+      },
+      {
+        "value": "hair_short-wave-1-light brown",
+        "displayName": "Short Wave 1 Light brown",
+        "description": {
+          "Type": "short-wave-1",
+          "Color": "light brown"
+        }
+      },
+      {
+        "value": "hair_short-wave-1-pink",
+        "displayName": "Short Wave 1 Pink",
+        "description": {
+          "Type": "short-wave-1",
+          "Color": "pink"
+        }
+      },
+      {
+        "value": "hair_short-wave-1-red",
+        "displayName": "Short Wave 1 Red",
+        "description": {
+          "Type": "short-wave-1",
+          "Color": "red"
+        }
+      },
+      {
+        "value": "hair_short-wave-1-white",
+        "displayName": "Short Wave 1 White",
+        "description": {
+          "Type": "short-wave-1",
+          "Color": "white"
+        }
+      },
+      {
         "value": "hair_spikey-1-black",
         "displayName": "Spikey 1 Black",
         "description": {
@@ -1629,6 +1709,7 @@ export default {
           "pony-tail-1",
           "pony-tail-2",
           "pony-tail-3",
+          "short-wave-1",
           "spikey-1",
           "taper-afro-2"
         ],
@@ -3709,6 +3790,14 @@ export default {
         }
       },
       {
+        "value": "torso_style-2-blouse-1-purple",
+        "displayName": "Style 2 Blouse 1 Purple",
+        "description": {
+          "Type": "style-2",
+          "Outfit": "blouse-1-purple"
+        }
+      },
+      {
         "value": "torso_style-2-tshirt-1-baby-unicorn",
         "displayName": "Style 2 Tshirt 1 Baby Unicorn",
         "description": {
@@ -3814,6 +3903,7 @@ export default {
           "tshirt1-reactor",
           "ugly-christmas-1",
           "waistcoat-and-cravat",
+          "blouse-1-purple",
           "tshirt-1-baby-unicorn",
           "tshirt-1-heart-animated",
           "tshirt-1-heart",
@@ -4278,7 +4368,7 @@ export default {
         "value": null,
         "displayName": "None",
         "excludeFromRandomize": false,
-        "randomizationWeight": 5
+        "randomizationWeight": 6
       },
       {
         "value": "earring_hoop-high-left-silver",
@@ -4297,6 +4387,10 @@ export default {
         "value": "earring_hoop-small-both-gold",
         "displayName": "Hoop Small Both Gold",
         "bisectInThumbnail": true
+      },
+      {
+        "value": "earring_studded-hoops-silver",
+        "displayName": "Studded Hoops Silver"
       }
     ]
   },

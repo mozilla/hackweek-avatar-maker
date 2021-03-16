@@ -22,6 +22,7 @@ const renames = [
   ["headwear_spokemon.glb", "headwear_spokemon-mixed.glb"],
   ["headwear_top-hat-1.glb", "headwear_top-hat-1-black.glb"],
   ["torso_style1-waistcoat-and-cravat.glb", "torso_style-1-waistcoat-and-cravat.glb"],
+  ["torso_style2-blouse-1-purple.glb", "torso_style-2-blouse-1-purple.glb"],
 ];
 
 const filesToDelete = [
