@@ -157,7 +157,8 @@ const matchRandomizationToNull = [
   "torso_style-1-combat-vest-red", 
   "torso_style-1-sport-coat-1-dark", 
   "torso_style-1-sport-coat-1-gray", 
-  "torso_style-1-ugly-christmas-1"
+  "torso_style-1-ugly-christmas-1",
+  "torso_style-1-waistcoat-and-cravat",
 ];
 
 const categoriesToBisect = ["Hands", "Eyes", "Eyebrows"];

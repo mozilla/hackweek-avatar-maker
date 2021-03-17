@@ -11,6 +11,10 @@ export default {
     type: "boolean",
     description: "Don't ask about clearing the output directory",
   },
+  "only-new": {
+    type: "boolean",
+    description: "Only generate thumbnails for changed or new models. Implies --no-clean",
+  },
   "browser-logs": {
     alias: "b",
     type: "boolean",
