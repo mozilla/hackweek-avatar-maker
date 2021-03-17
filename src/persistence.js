@@ -92,7 +92,7 @@ export function avatarPersistenceUIEnabled(newValue) {
         storedConfig.uiEnabled = newValue;
         persistToLocalStorage(storedConfig);
     } else {
-        return storedConfig.uiEnabled || false;
+        return storedConfig.uiEnabled || true;
     }
 }
 

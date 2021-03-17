@@ -11,7 +11,7 @@ import { generateRandomConfig } from "../generate-random-config";
 import initialAssets from "../assets";
 import { isThumbnailMode } from "../utils";
 import debounce from "../utils/debounce";
-import { saveAvatarConfig, getAvatarConfig, getAvatarConfigSlotKeys, avatarPersistenceUIEnabled } from "../persistence";
+import { avatarPersistenceUIEnabled } from "../persistence";
 
 // Used externally by the generate-thumbnails script
 const thumbnailMode = isThumbnailMode();
@@ -110,17 +110,7 @@ export function AvatarEditorContainer() {
     setAvatarConfig(generateRandomConfig(assets));
   }
 
-  function saveConfig(slotKey) {
-    saveAvatarConfig(slotKey, avatarConfig);
-  }
-
-  function loadConfig(slotKey) {
-    setAvatarConfig(getAvatarConfig(slotKey));
-  }
-
-  window.saveConfig = saveConfig; 
-  window.loadConfig = loadConfig;
-  window.listStoredConfigs = getAvatarConfigSlotKeys;
+  //Ideally this doesn't belong here. Is just here to allow the Saved Avatar display to be disabled.
   window.avatarPersistenceUIEnabled = avatarPersistenceUIEnabled;
 
   return (
