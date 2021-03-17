@@ -18,9 +18,14 @@ const { argv } = yargs(hideBin(process.argv))
   .version(false)
   .parserConfiguration({ "boolean-negation": false });
 
+if (argv.onlyNew) argv.noClean = true;
+
 const host = argv.host || "localhost:8080";
 
 const outputPath = path.resolve(__dirname, "..", "..", "assets", "thumbnails");
+function outputPathFor(part) {
+  return path.join(outputPath, `${part}.jpg`);
+}
 
 if (!argv.dryRun) {
   if (fs.existsSync(outputPath)) {
@@ -77,7 +82,7 @@ if (!argv.dryRun) {
     const screenshotParams = { type: "jpeg", quality: 95 };
 
     if (!argv.dryRun) {
-      screenshotParams.path = path.join(outputPath, `${part}.jpg`);
+      screenshotParams.path = outputPathFor(part);
     }
 
     await result.screenshot(screenshotParams);
@@ -90,6 +95,20 @@ if (!argv.dryRun) {
       if (part.value === null) continue;
       thumbnailsToGenerate.push({ category, part: part.value });
     }
+  }
+
+  if (argv.onlyNew) {
+    thumbnailsToGenerate = thumbnailsToGenerate.filter(({part}) => {
+      const outputPath = outputPathFor(part);
+      const outputExists = fs.existsSync(outputPath);
+      if (!outputExists) return true;
+
+      const modelPath = path.resolve(__dirname, "..", "..", "assets", "models", `${part}.glb`);
+      const modelModified = fs.statSync(modelPath).mtime;
+      const outputModified = fs.statSync(outputPath).mtime;
+
+      return modelModified > outputModified;
+    });
   }
 
   if (argv.filter) {
