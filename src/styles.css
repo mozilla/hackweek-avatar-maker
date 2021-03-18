@@ -278,6 +278,74 @@ button.primary:focus {
   margin: 10px 0;
 }
 
+.peristenceContainer {
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--border-radius);
+  border: 2px solid grey;
+  width: calc(100% - 6px);
+  margin-bottom: 8px;
+  padding: 4px;
+}
+
+.peristenceContainer h2 {
+  color: grey;
+  text-align: center;
+  margin-bottom: 4px;
+}
+
+.peristenceContainer ul {
+  margin-top: 0;
+  margin-bottom: 4px;
+  list-style: none;
+  padding: 0;
+  width: 250px;
+}
+
+.peristenceContainer ul li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-decoration: none;
+  padding: 4px;
+  margin-left: -4px;
+  margin-right: 2px;
+}
+
+.peristenceContainer ul li.saveAs input {
+  width: 150px;
+}
+
+.peristenceContainer ul li:not(.saveAs):hover {
+  background-color: lightgrey;
+}
+
+.peristenceContainer ul li .savedItemAction {
+  padding: 4px 8px;
+}
+
+.peristenceContainer ul li .savedItemAction:last-of-type {
+  margin-right: 0;
+}
+
+.peristenceContainer ul li.saveAs.closed {
+  justify-content: center;
+}
+
+.peristenceContainer ul li.saveAs.closed button {
+  border-radius: 8px;
+  padding: 4px 22px;
+}
+
+.peristenceContainer button:disabled {
+  border-color: #d3d3d3a4;
+  color: #d3d3d3a4;
+}
+
+.peristenceContainer button:disabled:hover {
+  background-color: white;
+}
+
 @keyframes wave {
   from { background-position-y: 0 }
   to { background-position-y: 400px; }

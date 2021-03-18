@@ -11,6 +11,7 @@ import { generateRandomConfig } from "../generate-random-config";
 import initialAssets from "../assets";
 import { isThumbnailMode } from "../utils";
 import debounce from "../utils/debounce";
+import { avatarPersistenceUIEnabled } from "../persistence";
 
 // Used externally by the generate-thumbnails script
 const thumbnailMode = isThumbnailMode();
@@ -109,6 +110,9 @@ export function AvatarEditorContainer() {
     setAvatarConfig(generateRandomConfig(assets));
   }
 
+  //Ideally this doesn't belong here. Is just here to allow the Saved Avatar display to be disabled.
+  window.avatarPersistenceUIEnabled = avatarPersistenceUIEnabled;
+
   return (
     <AvatarEditor
       {...{
@@ -137,7 +141,7 @@ export function AvatarEditorContainer() {
         ),
         rightPanel: <AvatarPreviewContainer {...{ thumbnailMode, canvasUrl }} />,
         buttonTip: <ButtonTip {...tipState} />,
-        toolbar: <ToolbarContainer {...{ onGLBUploaded, randomizeConfig }} />,
+        toolbar: <ToolbarContainer {...{ onGLBUploaded, randomizeConfig, setAvatarConfig, avatarConfig }} />,
       }}
     />
   );
