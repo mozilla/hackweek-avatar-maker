@@ -2401,6 +2401,166 @@ export default {
           "Style": "style-15",
           "Color": "hazel"
         }
+      },
+      {
+        "value": "eyes_style-2-blue",
+        "displayName": "Style 2 Blue",
+        "description": {
+          "Style": "style-2",
+          "Color": "blue"
+        }
+      },
+      {
+        "value": "eyes_style-2-brown",
+        "displayName": "Style 2 Brown",
+        "description": {
+          "Style": "style-2",
+          "Color": "brown"
+        }
+      },
+      {
+        "value": "eyes_style-2-gray",
+        "displayName": "Style 2 Gray",
+        "description": {
+          "Style": "style-2",
+          "Color": "gray"
+        }
+      },
+      {
+        "value": "eyes_style-2-green",
+        "displayName": "Style 2 Green",
+        "description": {
+          "Style": "style-2",
+          "Color": "green"
+        }
+      },
+      {
+        "value": "eyes_style-2-hazel",
+        "displayName": "Style 2 Hazel",
+        "description": {
+          "Style": "style-2",
+          "Color": "hazel"
+        }
+      },
+      {
+        "value": "eyes_style-3-blue",
+        "displayName": "Style 3 Blue",
+        "description": {
+          "Style": "style-3",
+          "Color": "blue"
+        }
+      },
+      {
+        "value": "eyes_style-3-brown",
+        "displayName": "Style 3 Brown",
+        "description": {
+          "Style": "style-3",
+          "Color": "brown"
+        }
+      },
+      {
+        "value": "eyes_style-3-gray",
+        "displayName": "Style 3 Gray",
+        "description": {
+          "Style": "style-3",
+          "Color": "gray"
+        }
+      },
+      {
+        "value": "eyes_style-3-green",
+        "displayName": "Style 3 Green",
+        "description": {
+          "Style": "style-3",
+          "Color": "green"
+        }
+      },
+      {
+        "value": "eyes_style-3-hazel",
+        "displayName": "Style 3 Hazel",
+        "description": {
+          "Style": "style-3",
+          "Color": "hazel"
+        }
+      },
+      {
+        "value": "eyes_style-4-blue",
+        "displayName": "Style 4 Blue",
+        "description": {
+          "Style": "style-4",
+          "Color": "blue"
+        }
+      },
+      {
+        "value": "eyes_style-4-brown",
+        "displayName": "Style 4 Brown",
+        "description": {
+          "Style": "style-4",
+          "Color": "brown"
+        }
+      },
+      {
+        "value": "eyes_style-4-gray",
+        "displayName": "Style 4 Gray",
+        "description": {
+          "Style": "style-4",
+          "Color": "gray"
+        }
+      },
+      {
+        "value": "eyes_style-4-green",
+        "displayName": "Style 4 Green",
+        "description": {
+          "Style": "style-4",
+          "Color": "green"
+        }
+      },
+      {
+        "value": "eyes_style-4-hazel",
+        "displayName": "Style 4 Hazel",
+        "description": {
+          "Style": "style-4",
+          "Color": "hazel"
+        }
+      },
+      {
+        "value": "eyes_style-5-blue",
+        "displayName": "Style 5 Blue",
+        "description": {
+          "Style": "style-5",
+          "Color": "blue"
+        }
+      },
+      {
+        "value": "eyes_style-5-brown",
+        "displayName": "Style 5 Brown",
+        "description": {
+          "Style": "style-5",
+          "Color": "brown"
+        }
+      },
+      {
+        "value": "eyes_style-5-gray",
+        "displayName": "Style 5 Gray",
+        "description": {
+          "Style": "style-5",
+          "Color": "gray"
+        }
+      },
+      {
+        "value": "eyes_style-5-green",
+        "displayName": "Style 5 Green",
+        "description": {
+          "Style": "style-5",
+          "Color": "green"
+        }
+      },
+      {
+        "value": "eyes_style-5-hazel",
+        "displayName": "Style 5 Hazel",
+        "description": {
+          "Style": "style-5",
+          "Color": "hazel"
+        }
       }
     ],
     "description": {
@@ -2412,7 +2572,11 @@ export default {
           "style-12",
           "style-13",
           "style-14",
-          "style-15"
+          "style-15",
+          "style-2",
+          "style-3",
+          "style-4",
+          "style-5"
         ],
         "isPrimaryOption": true
       },
