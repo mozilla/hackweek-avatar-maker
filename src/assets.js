@@ -3920,6 +3920,30 @@ export default {
         }
       },
       {
+        "value": "torso_style-1-tshirt-pride01",
+        "displayName": "Style 1 Tshirt Pride01",
+        "description": {
+          "Type": "style-1",
+          "Outfit": "tshirt-pride01"
+        }
+      },
+      {
+        "value": "torso_style-1-tshirt-pride02",
+        "displayName": "Style 1 Tshirt Pride02",
+        "description": {
+          "Type": "style-1",
+          "Outfit": "tshirt-pride02"
+        }
+      },
+      {
+        "value": "torso_style-1-tshirt-pride03",
+        "displayName": "Style 1 Tshirt Pride03",
+        "description": {
+          "Type": "style-1",
+          "Outfit": "tshirt-pride03"
+        }
+      },
+      {
         "value": "torso_style-1-tshirt1-reactor",
         "displayName": "Style 1 Tshirt1 Reactor",
         "description": {
@@ -4026,6 +4050,30 @@ export default {
         }
       },
       {
+        "value": "torso_style-2-tshirt-pride01",
+        "displayName": "Style 2 Tshirt Pride01",
+        "description": {
+          "Type": "style-2",
+          "Outfit": "tshirt-pride01"
+        }
+      },
+      {
+        "value": "torso_style-2-tshirt-pride02",
+        "displayName": "Style 2 Tshirt Pride02",
+        "description": {
+          "Type": "style-2",
+          "Outfit": "tshirt-pride02"
+        }
+      },
+      {
+        "value": "torso_style-2-tshirt-pride03",
+        "displayName": "Style 2 Tshirt Pride03",
+        "description": {
+          "Type": "style-2",
+          "Outfit": "tshirt-pride03"
+        }
+      },
+      {
         "value": "torso_style-2-tshirt-union-jack",
         "displayName": "Style 2 Tshirt Union Jack",
         "description": {
@@ -4064,6 +4112,9 @@ export default {
           "tshirt-1-hubs-white",
           "tshirt-1-moz",
           "tshirt-1-union-jack",
+          "tshirt-pride01",
+          "tshirt-pride02",
+          "tshirt-pride03",
           "tshirt1-reactor",
           "ugly-christmas-1",
           "waistcoat-and-cravat",
