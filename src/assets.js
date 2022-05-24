@@ -3828,14 +3828,6 @@ export default {
         "excludeFromRandomize": true
       },
       {
-        "value": "torso_style-1-baseball-giants",
-        "displayName": "Style 1 Baseball Giants",
-        "description": {
-          "Type": "style-1",
-          "Outfit": "baseball-giants"
-        }
-      },
-      {
         "value": "torso_style-1-bowling-shirt-1-red",
         "displayName": "Style 1 Bowling Shirt 1 Red",
         "description": {
@@ -3970,14 +3962,6 @@ export default {
         "matchRandomizationToNull": true
       },
       {
-        "value": "torso_style-2-baseball-giants",
-        "displayName": "Style 2 Baseball Giants",
-        "description": {
-          "Type": "style-2",
-          "Outfit": "baseball-giants"
-        }
-      },
-      {
         "value": "torso_style-2-blouse-1-purple",
         "displayName": "Style 2 Blouse 1 Purple",
         "description": {
@@ -4101,7 +4085,6 @@ export default {
       },
       "Outfit": {
         "options": [
-          "baseball-giants",
           "bowling-shirt-1-red",
           "combat-vest-red",
           "sport-coat-1-dark",
@@ -4371,14 +4354,6 @@ export default {
         "randomizationWeight": 20
       },
       {
-        "value": "headwear_baseball-giants-black",
-        "displayName": "Baseball Giants Black",
-        "description": {
-          "Type": "baseball-giants",
-          "Color": "black"
-        }
-      },
-      {
         "value": "headwear_beach-umbrella-mixed",
         "displayName": "Beach Umbrella Mixed",
         "description": {
@@ -4512,7 +4487,6 @@ export default {
       "Type": {
         "options": [
           null,
-          "baseball-giants",
           "beach-umbrella",
           "beanie-1",
           "hijab",
@@ -4523,9 +4497,9 @@ export default {
       },
       "Color": {
         "options": [
-          "black",
           "mixed",
           "red",
+          "black",
           "blue",
           "gray",
           "lavender",
@@ -4544,12 +4518,12 @@ export default {
         "randomizationWeight": 20
       },
       {
-        "value": "eyewear_arnette",
-        "displayName": "Arnette"
-      },
-      {
         "value": "eyewear_aviators1",
         "displayName": "Aviators1"
+      },
+      {
+        "value": "eyewear_cool",
+        "displayName": "Cool"
       },
       {
         "value": "eyewear_glam-2",
@@ -4564,12 +4538,12 @@ export default {
         "displayName": "Metal 1"
       },
       {
-        "value": "eyewear_oakleys-red",
-        "displayName": "Oakleys Red"
-      },
-      {
         "value": "eyewear_punk-2",
         "displayName": "Punk 2"
+      },
+      {
+        "value": "eyewear_sports-red",
+        "displayName": "Sports Red"
       },
       {
         "value": "eyewear_wire-frame-1-gold",
