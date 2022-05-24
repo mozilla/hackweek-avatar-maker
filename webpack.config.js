@@ -31,8 +31,10 @@ module.exports = {
     ],
   },
   devServer: {
-    contentBase: "./",
-    publicPath: publicPath,
+    static: {
+      directory: "./",
+      publicPath: publicPath,
+    },
     host: "0.0.0.0",
   },
   optimization: {
