@@ -16,22 +16,28 @@ function dispatchExportAvatar() {
 export function ToolbarContainer({ onGLBUploaded, randomizeConfig }) {
   return (
     <Toolbar>
-      <span className="appName">Hackweek Avatar Maker</span>
-      <MoreMenu
-        items={
-          <>
-            <UploadButton onGLBUploaded={onGLBUploaded} />
-            <a href="https://github.com/mozilla/hackweek-avatar-maker" target="_blank">
-              GitHub
-            </a>
-          </>
-        }
-      ></MoreMenu>
-      <button onClick={randomizeConfig}>Randomize avatar</button>
-      <button onClick={dispatchResetView}>Reset camera view</button>
-      <button onClick={dispatchExportAvatar} className="primary">
-        Export avatar
-      </button>
+      <div className="toolbarContent">
+        <span className="appName">Hackweek Avatar Maker</span>
+        <MoreMenu
+          items={
+            <>
+              <UploadButton onGLBUploaded={onGLBUploaded} />
+              <a href="https://github.com/mozilla/hackweek-avatar-maker" target="_blank">
+                GitHub
+              </a>
+            </>
+          }
+        ></MoreMenu>
+        <button onClick={randomizeConfig}>Randomize avatar</button>
+        <button onClick={dispatchResetView}>Reset camera view</button>
+        <button onClick={dispatchExportAvatar} className="primary">
+          Export avatar
+        </button>
+      </div>
+      <div className="toolbarNotice">
+        <span>The 3D models used in this app are ©2020-2022 by individual <a href="https://www.mozilla.org" target="_blank" noreferrer>mozilla.org</a> contributors.
+          Content available under a <a href="https://www.mozilla.org/en-US/foundation/licensing/website-content/" target="_blank" noreferrer>Creative Commons license</a>.</span>
+      </div>
     </Toolbar>
   );
 }
