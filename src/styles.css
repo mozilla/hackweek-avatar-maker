@@ -202,15 +202,29 @@ label {
 }
 
 .toolbar {
+  background-color: var(--toolbar-bg-color);
+}
+
+.toolbarNotice {
+  display: flex;
+  justify-content: center;
+  padding: 0 1em;
+  padding-bottom: 10px;
+}
+.toolbarNotice * {
+  font-size: 9pt;
+}
+
+.toolbarContent {
   padding: 20px 20px;
+  padding-bottom: 5px;
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  background-color: var(--toolbar-bg-color);
   border-top: 2px solid lightgrey;
 }
 
-.toolbar button, .toolbar .uploadButton {
+.toolbarContent button, .toolbarContent .uploadButton {
   display: inline;
   background-color: white;
   border-radius: var(--border-radius);
@@ -221,10 +235,10 @@ label {
   font-weight: bold;
   white-space: nowrap;
 }
-.toolbar button:hover,
-.toolbar button:focus,
-.toolbar .uploadButton:hover,
-.toolbar .uploadButton:focus {
+.toolbarContent button:hover,
+.toolbarContent button:focus,
+.toolbarContent .uploadButton:hover,
+.toolbarContent .uploadButton:focus {
   background-color: lightgrey;
 }
 
@@ -239,7 +253,7 @@ button.primary:focus {
   border-color: lightblue;
 }
 
-.toolbar .uploadButton input {
+.toolbarContent .uploadButton input {
   display: none;
 }
 
@@ -299,8 +313,9 @@ button.primary:focus {
   #root {
     flex-direction: column;
   }
-  .toolbar {
+  .toolbarContent {
     padding: 20px 40px;
+    padding-bottom: 10px;
   }
   .appName {
     font-size: 24pt;

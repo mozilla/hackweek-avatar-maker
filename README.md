@@ -21,9 +21,13 @@ To create an avatar for Hubs:
 
 You can create custom components for the avatar by modeling the object in blender. While you can upload any .glb file as an accessory, using the base template for an avatar built with this editor will ensure that the uploaded custom component sits in the correct place on the avatar. More information can be found in the [customization guide](./CUSTOMIZING.md).
 
+## License
+
+The 3D models used in this app are ©2020-2022 by individual [mozilla.org](https://www.mozilla.org/) contributors, under a [Creative Commons Attribution-ShareAlike 3.0 license](https://www.mozilla.org/en-US/foundation/licensing/website-content/).
+
 ## About the editor
 
-We invite the community to use this editor as a template for creating and hosting new avatar tools. The code is released under the MPL 2.0 and we'd love to see what you make with it! Here's a bit about how the editor works:
+We invite the community to use this editor as a template for creating and hosting new avatar tools. The code is released under the [MPL 2.0 license](./LICENSE) and we'd love to see what you make with it! Here's a bit about how the editor works:
 
 - The avatar that you see is comprised of different pieces that were designed to work on the same skeleton and body format. [Models](https://github.com/mozilla/hackweek-avatar-maker/tree/main/assets/models) for each piece and category are saved with a specific naming convention, which allows the app to correctly put them into a category depending on where the accessory should be placed on the base model.
 
