@@ -54,7 +54,14 @@ export const exportGLTF = (function () {
   const exporter = new GLTFExporter();
   return function exportGLTF(object3D, { binary, animations }) {
     return new Promise((resolve) => {
-      exporter.parse(object3D, (gltf) => resolve({ gltf }), { binary, animations });
+      exporter.parse(
+        object3D,
+        (gltf) => resolve({ gltf }),
+        (error) => {
+          console.error(error);
+        },
+        { binary, animations }
+      );
     });
   };
 })();
