@@ -29,7 +29,6 @@ export function AvatarEditorContainer() {
     if (!thumbnailMode) {
       dispatch(constants.avatarConfigChanged, { avatarConfig: { ...avatarConfig, ...hoveredConfig } });
     }
-    dispatch(constants.reactIsLoaded);
   });
 
   // TODO: Save the wave to a static image, or actually do some interesting animation with it.

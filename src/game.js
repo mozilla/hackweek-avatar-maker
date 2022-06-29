@@ -27,7 +27,6 @@ window.combineCurrentAvatar = async function () {
 };
 
 const state = {
-  reactIsLoaded: false,
   shouldResize: true,
   didInit: false,
   scene: null,
@@ -59,9 +58,6 @@ window.gameState = state;
 
 window.addEventListener("resize", () => {
   state.shouldResize = true;
-});
-document.addEventListener(constants.reactIsLoaded, () => {
-  state.reactIsLoaded = true;
 });
 document.addEventListener(constants.avatarConfigChanged, (e) => {
   state.newAvatarConfig = e.detail.avatarConfig;
@@ -107,49 +103,67 @@ function resetView() {
   state.controls.reset();
 }
 
-function init() {
-  THREE.Cache.enabled = !isThumbnailMode();
-
-  const scene = new THREE.Scene();
-  state.scene = scene;
-
-  const skydome = createSkydome(isThumbnailMode() ? 2 : 400);
-  scene.add(skydome);
-
-  const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-  camera.position.set(0, 0.6, 1);
-  state.camera = camera;
-
-  const directionalLight = new THREE.DirectionalLight(0xffffff, 4.0);
-  directionalLight.position.set(10, 20, 5);
-  scene.add(directionalLight);
-
-  // TODO: Square this with react
-  const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById("scene"), antialias: true });
+function initRenderer(canvas) {
+  const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   renderer.physicallyCorrectLights = true;
   renderer.outputEncoding = THREE.sRGBEncoding;
   state.renderer = renderer;
+  state.shouldResize = true;
+  init(renderer);
+  renderer.setAnimationLoop(tick);
+}
 
-  state.clock = new THREE.Clock();
+function disposeRenderer() {
+  state.renderer.dispose();
+  state.renderer = null;
+  state.scene.environment = null;
+  state.envMap.dispose();
+  state.controls = null;
+}
+
+function init(renderer) {
+  if (!state.didInit) {
+    state.didInit = true;
+    THREE.Cache.enabled = !isThumbnailMode();
+
+    const scene = new THREE.Scene();
+    state.scene = scene;
+
+    const skydome = createSkydome(isThumbnailMode() ? 2 : 400);
+    scene.add(skydome);
+
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.set(0, 0.6, 1);
+    state.camera = camera;
+
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 4.0);
+    directionalLight.position.set(10, 20, 5);
+    scene.add(directionalLight);
+
+    state.clock = new THREE.Clock();
+
+    // TODO Remove this test code
+    state.testExportGroup = new THREE.Group();
+    scene.add(state.testExportGroup);
+
+    state.avatarGroup = new THREE.Group();
+    scene.add(state.avatarGroup);
+  }
 
   const sky = createSky();
   state.envMap = generateEnvironmentMap(sky, renderer);
+  sky.geometry.dispose();
+  sky.material.dispose();
+  state.scene.environment = state.envMap;
 
-  const controls = new OrbitControls(camera, renderer.domElement);
+  const controls = new OrbitControls(state.camera, renderer.domElement);
   controls.target = new THREE.Vector3(0, 0.5, 0);
   controls.update();
   controls.saveState();
   state.controls = controls;
   state.currentCameraPosition = new THREE.Vector3();
   state.prevCameraPosition = new THREE.Vector3();
-
-  // TODO Remove this test code
-  state.testExportGroup = new THREE.Group();
-  scene.add(state.testExportGroup);
-
-  state.avatarGroup = new THREE.Group();
-  scene.add(state.avatarGroup);
 }
 
 function playClips(scene, clips) {
@@ -158,7 +172,7 @@ function playClips(scene, clips) {
   const mixer = new THREE.AnimationMixer(scene);
 
   for (const clip of clips) {
-    const animation = scene.animations.find(a => a.name === clip)
+    const animation = scene.animations.find((a) => a.name === clip);
     if (animation) {
       const action = mixer.clipAction(animation);
       action.play();
@@ -180,7 +194,7 @@ function initializeGltf(key, gltf) {
   gltf.scene.traverse((obj) => {
     forEachMaterial(obj, (material) => {
       if (material.isMeshStandardMaterial) {
-        material.envMap = state.envMap;
+        // material.envMap = state.envMap; // this is now set on state.scene.environment
         material.envMapIntensity = 0.4;
         if (material.map) {
           material.map.anisotropy = state.renderer.capabilities.getMaxAnisotropy();
@@ -257,17 +271,6 @@ async function loadIntoGroup({ category, part, group, cached = true }) {
 }
 
 function tick(time) {
-  {
-    if (state.reactIsLoaded && !state.didInit) {
-      state.didInit = true;
-      init();
-    }
-    if (!state.didInit) {
-      requestAnimationFrame(tick);
-      return;
-    }
-  }
-
   {
     state.delta = state.clock.getDelta();
   }
@@ -355,7 +358,7 @@ function tick(time) {
 
       // Reset all idle eyes animations before cloning or exporting the avatar
       // so that we don't export it mid-blink.
-      Object.values(state.idleEyesMixers).forEach(mixer => {
+      Object.values(state.idleEyesMixers).forEach((mixer) => {
         mixer.setTime(0);
       });
 
@@ -432,10 +435,6 @@ function tick(time) {
   }
 
   {
-    window.requestAnimationFrame(tick);
-  }
-
-  {
     const { renderer, scene, camera, controls } = state;
     if (!state.quietMode || state.shouldRenderInQuietMode) {
       state.shouldRenderInQuietMode = false;
@@ -444,4 +443,5 @@ function tick(time) {
   }
 }
 
-window.requestAnimationFrame(tick);
+window.gameState.initRenderer = initRenderer;
+window.gameState.disposeRenderer = disposeRenderer;
