@@ -57,9 +57,9 @@ const state = {
 };
 window.gameState = state;
 
-window.onresize = () => {
+window.addEventListener("resize", () => {
   state.shouldResize = true;
-};
+});
 document.addEventListener(constants.reactIsLoaded, () => {
   state.reactIsLoaded = true;
 });
