@@ -127,7 +127,7 @@ function init() {
   // TODO: Square this with react
   const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById("scene"), antialias: true });
   renderer.physicallyCorrectLights = true;
-  renderer.gammaOutput = true;
+  renderer.outputEncoding = THREE.sRGBEncoding;
   state.renderer = renderer;
 
   state.clock = new THREE.Clock();
