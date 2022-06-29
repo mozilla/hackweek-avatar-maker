@@ -73,6 +73,21 @@ export async function combine({ avatar }) {
       delete geometry.attributes[`morphTarget${i}`];
       delete geometry.attributes[`morphNormal${i}`];
     }
+    // Computing tangents that was done in GLTFLoader in threejs 0.125.2 was removed in threejs r126 (https://github.com/mrdoob/three.js/pull/21186)
+    // The mergeSourceAttributes function will crash because it can't find the tangent attribute on some geometry.
+    // So putting back here the code that was executed in GLTFLoader 0.125.2:
+    const material = mesh.material;
+    if (
+      material.isMeshStandardMaterial === true &&
+      material.side === THREE.DoubleSide &&
+      geometry.getIndex() !== null &&
+      geometry.hasAttribute("position") === true &&
+      geometry.hasAttribute("normal") === true &&
+      geometry.hasAttribute("uv") === true &&
+      geometry.hasAttribute("tangent") === false
+    ) {
+      geometry.computeTangents();
+    }
   });
 
   const { source, dest } = mergeGeometry({ meshes });

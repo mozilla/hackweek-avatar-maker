@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { BufferGeometryUtils } from "three/examples/jsm/utils/BufferGeometryUtils";
+import { mergeBufferAttributes } from "three/examples/jsm/utils/BufferGeometryUtils";
 import constants from "./constants";
 import { GLTFCubicSplineInterpolant } from "./gltf-cubic-spline-interpolant";
 
@@ -39,7 +39,7 @@ function mergeSourceAttributes({ sourceAttributes }) {
 
   const destAttributes = {};
   Array.from(propertyNames.keys()).map((name) => {
-    destAttributes[name] = BufferGeometryUtils.mergeBufferAttributes(
+    destAttributes[name] = mergeBufferAttributes(
       allSourceAttributes.map((sourceAttributes) => sourceAttributes[name]).flat()
     );
   });
@@ -103,7 +103,7 @@ function mergeSourceMorphAttributes({
   propertyNames.forEach((propName) => {
     merged[propName] = [];
     Object.entries(destMorphTargetDictionary).forEach(([morphName, destMorphIndex]) => {
-      merged[propName][destMorphIndex] = BufferGeometryUtils.mergeBufferAttributes(unmerged[propName][destMorphIndex]);
+      merged[propName][destMorphIndex] = mergeBufferAttributes(unmerged[propName][destMorphIndex]);
     });
   });
 

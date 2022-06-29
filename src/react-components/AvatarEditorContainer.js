@@ -33,10 +33,13 @@ export function AvatarEditorContainer() {
   });
 
   // TODO: Save the wave to a static image, or actually do some interesting animation with it.
-  useEffect(async () => {
-    if (canvasUrl === null) {
-      setCanvasUrl(await generateWave());
+  useEffect(() => {
+    async function init() {
+      if (canvasUrl === null) {
+        setCanvasUrl(await generateWave());
+      }
     }
+    init();
   });
 
   function updateAvatarConfig(newConfig) {

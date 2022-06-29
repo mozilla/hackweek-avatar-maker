@@ -84,7 +84,7 @@ export const createTextureAtlas = (function () {
         context.globalCompositeOperation = image ? "multiply" : "source-over";
 
         const colorClone = mesh.material.color.clone();
-        colorClone.convertLinearToGamma();
+        colorClone.convertLinearToSRGB();
 
         context.fillStyle = `#${colorClone.getHexString()}`;
         context.fillRect(min.x * ATLAS_SIZE_PX, min.y * ATLAS_SIZE_PX, tileSize, tileSize);

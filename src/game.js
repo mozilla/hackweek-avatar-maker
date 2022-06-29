@@ -57,9 +57,9 @@ const state = {
 };
 window.gameState = state;
 
-window.onresize = () => {
+window.addEventListener("resize", () => {
   state.shouldResize = true;
-};
+});
 document.addEventListener(constants.reactIsLoaded, () => {
   state.reactIsLoaded = true;
 });
@@ -126,8 +126,9 @@ function init() {
 
   // TODO: Square this with react
   const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById("scene"), antialias: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   renderer.physicallyCorrectLights = true;
-  renderer.gammaOutput = true;
+  renderer.outputEncoding = THREE.sRGBEncoding;
   state.renderer = renderer;
 
   state.clock = new THREE.Clock();
